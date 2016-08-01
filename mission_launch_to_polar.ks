@@ -12,7 +12,7 @@ set main_sequence to list(
   lex(
     "Title", "Launch",
     "Function", launch@,
-    "Params", lex("TargetHeading", 90)
+    "Params", lex("TargetHeading", 90, "PitchExp", 0.5)
     ),
   lex(
     "Title", "Gravity Turn",

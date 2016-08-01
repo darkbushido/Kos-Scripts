@@ -8,11 +8,32 @@ run once ship_utils.
 run once atmospheric_launch.
 run once node_functions.
 run once hohmann_transfer.
+
+if core:volume:exists("mission.json") {
+  set mission to readjson("mission.json").
+} else {
+  set mission to lex("PitchExp", 0.4).
+}
+if mission:haskey("Target") and mission:haskey("Offset") {
+  set hohmann_lex to lex(
+    "Title",
+    "Hohmann Transfer to " + mission["Target"] + " Orbit Offset " + mission["Offset"],
+    "Function", hohmann_transfer@,
+    "Params", lex("Target", VESSEL(mission["Target"]), "Offset", mission["Offset"])
+  ).
+} else {
+  set hohmann_lex to lex(
+    "Title", "Hohmann Transfer to 1100k Orbit",
+    "Function", hohmann_transfer@,
+    "Params", lex("altitude", 1000000)
+  ).
+}
+
 set main_sequence to list(
   lex(
-    "Title", "Launch",
+    "Title", "Launch PitchExp:" + mission["PitchExp"],
     "Function", launch@,
-    "Params", lex("PitchExp", 0.30)
+    "Params", lex("PitchExp", mission["PitchExp"])
     ),
   lex(
     "Title", "Gravity Turn",
@@ -26,12 +47,7 @@ set main_sequence to list(
     "Title", "Execute Circularization Node",
     "Function", execute_node@
     ),
-  lex(
-    "Title", "Hohmann Transfer to 1100k Orbit",
-    "Function", hohmann_transfer@,
-    // "Params", lex("Target", VESSEL("RTCommSAT"), "Offset", 90)
-    "Params", lex("altitude", 1000000)
-  ),
+  hohmann_lex,
   lex(
     "Title", "Execute Manuver Node",
     "Function", execute_node@
