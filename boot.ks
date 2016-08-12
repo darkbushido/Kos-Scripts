@@ -50,7 +50,8 @@ IF ADDONS:RT:HASCONNECTION(SHIP) {
   // If we have a connection, see if there are new instructions. If so, download
   // and run them.
   for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-    if antenna:GETFIELD("status") = "Off" {
+    if antenna:GETFIELD("status") = "Off" and
+       antenna:allevents:CONTAINS("(callable) activate, is KSPEvent") {
       antenna:DOEVENT("activate").
     }
   }
