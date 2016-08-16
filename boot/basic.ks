@@ -16,26 +16,18 @@ FUNCTION NOTIFY {
 FUNCTION HAS_FILE {
   PARAMETER name.
   PARAMETER vol.
-  LOCAL allFiles to LIST().
 
   SWITCH TO vol.
-  LIST FILES IN allFiles.
-  FOR file IN allFiles {
-    IF file:NAME = name {
-      SWITCH TO 1.
-      RETURN TRUE.
-    }
-  }
-
-  SWITCH TO 1.
-  RETURN FALSE.
+  DECLARE LOCAL file_exists to exists(name).
+  switch to 1.
+  return file_exists.
 }
 
 // Get a file from KSC
 FUNCTION DOWNLOAD {
   PARAMETER name.
 
-  IF NOT HAS_FILE(name, 1) AND HAS_FILE(name, 0) { COPY name FROM 0. }
+  IF NOT HAS_FILE(name, 1) AND HAS_FILE(name, 0) { COPYPATH("0:/" + name, "1:/" + name ). }
 }
 
 // Format a Timestamp
@@ -45,8 +37,8 @@ FUNCTION TIMESTAMP {
 
 // THE ACTUAL BOOTUP PROCESS
 IF ADDONS:RT:HASCONNECTION(SHIP) {
-  DECLARE LOCAL updateScript TO SHIP:NAME + ".update.ks".
-  PRINT "Looking for " + updateScript.
+  DECLARE LOCAL updateScript TO SHIP:NAME + ".ks".
+  PRINT "Looking for /updates_pending/" + updateScript.
   // If we have a connection, see if there are new instructions. If so, download
   // and run them.
   for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
@@ -56,23 +48,23 @@ IF ADDONS:RT:HASCONNECTION(SHIP) {
     }
   }
 
-  IF HAS_FILE(updateScript, 0) {
-
-    DOWNLOAD(updateScript).
+  IF HAS_FILE("/updates_pending/" + updateScript, 0) {
+    DOWNLOAD("/updates_pending/" + updateScript).
     SWITCH TO 0.
-    RENAME updateScript TO SHIP:NAME + ".applied-" + TIMESTAMP() + ".ks".
+    MOVEPATH("/updates_pending/" + updateScript, "/updates_applied/" + updateScript).
     SWITCH TO 1.
     IF HAS_FILE("update.ks", 1) {
-      DELETE update.ks.
+      DELETEPATH("update.ks").
     }
-    RENAME updateScript TO "update.ks".
+    MOVEPATH("/updates_pending/" + updateScript, "update.ks").
     RUN update.ks.
-    DELETE update.ks.
+    DELETEPATH("update.ks").
   }
 }
 
 // If a startup.ks file exists on the disk, run that.
 IF HAS_FILE("startup.ks", 1) {
+  WAIT 5.
   RUN startup.ks.
 } ELSE {
   PRINT "REBOOTING in 10 Seconds.".

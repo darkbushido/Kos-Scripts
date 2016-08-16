@@ -28,16 +28,19 @@ function ensure_power {
 
 function enable_antennas {
   for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-    if antenna:GETFIELD("status") = "Off" {
+    if antenna:GETFIELD("status") = "Off"
       antenna:DOEVENT("activate").
-    }
   }
 }
 
 function disable_antennas {
   for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-    if antenna:GETFIELD("status") = "Operational"
-      antenna:DOEVENT("deactivate").
+    if not list("Reflectron DP-10", "Reflectron KR-7"):contains(antenna:part:title) {
+      if not (antenna:getfield("status") = "Off")
+        antenna:DOEVENT("deactivate").
+      print "Waiting to retract antenna " + antenna:part:title.
+      wait until antenna:getfield("status") = "Off".
+    }
   }
 }
 

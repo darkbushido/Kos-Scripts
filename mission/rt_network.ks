@@ -1,19 +1,18 @@
-DOWNLOAD("mission_runmodes.ks").
-DOWNLOAD("ship_utils.ks").
-DOWNLOAD("atmospheric_launch.ks").
-DOWNLOAD("node_functions.ks").
-DOWNLOAD("hohmann_transfer.ks").
-run once mission_runmodes.
-run once ship_utils.
-run once atmospheric_launch.
-run once node_functions.
-run once hohmann_transfer.
+set download_files to list(
+  "mission_runmodes.ks",
+  "ship_utils.ks",
+  "atmospheric_launch.ks",
+  "node_functions.ks",
+  "hohmann_transfer.ks"
+).
+for df in download_files {DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}
 
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").
 } else {
   set mission to lex("PitchExp", 0.4).
 }
+
 if mission:haskey("Target") and mission:haskey("Offset") {
   set hohmann_lex to lex(
     "Title",
@@ -44,15 +43,7 @@ set main_sequence to list(
     "Function", circularization@
     ),
   lex(
-    "Title", "Execute Circularization Node",
-    "Function", execute_node@
-    ),
-  lex(
-    "Title", "Create Parking Orbit Circularization Node",
-    "Function", circularization@
-    ),
-  lex(
-    "Title", "Execute Circularization Node",
+    "Title", "Execute Manuver Node",
     "Function", execute_node@
     ),
   lex(
@@ -60,7 +51,7 @@ set main_sequence to list(
     "Function", set_inc_lan@
     ),
   lex(
-    "Title", "Execute Circularization Node",
+    "Title", "Execute Manuver Node",
     "Function", execute_node@
     ),
   hohmann_lex,
@@ -84,9 +75,8 @@ set main_sequence to list(
 set events to lex(
   "Power Check", ensure_power@
 ).
-
-set start_time to ROUND(TIME:SECOND).
-
+set events to lex(
+  "Power Check", ensure_power@
+).
 run_mission(main_sequence, events).
-
 REBOOT.

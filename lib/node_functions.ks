@@ -16,7 +16,7 @@ function execute_node {
       SET startTime TO round(ts + nn:ETA - mnv_t/2,1).
     } else {
       print "stage does not have enough dV".
-      SET startTime TO round(ts + nn:ETA - mnv_t, 1).
+      SET startTime TO round(ts + nn:ETA - mnv_t*1.5, 1).
     }
     LOCK STEERING TO NEXTNODE:DELTAV.
   }
@@ -63,14 +63,23 @@ function circularization {
   mission["next"]().
 }
 
+
+
 function set_inc_lan {
   // Curtasy of https://www.reddit.com/user/G_Space
   // https://www.reddit.com/r/Kos/comments/3r5pbj/set_inclination_from_orbit_script/
   parameter mission.
   parameter params.
 
-  set incl_t to params["Inc"].
-  set lan_t to params["LAN"].
+  if params:HASKEY("Inc")
+    set incl_t to params["Inc"].
+  else
+    set incl_t to 0.
+
+  if params:HASKEY("LAN")
+    set lan_t to params["LAN"].
+  else
+    set lan_t to SHIP:OBT:LAN.
 
   local incl_i to SHIP:OBT:INCLINATION.
   local lan_i to SHIP:OBT:LAN.
