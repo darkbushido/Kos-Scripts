@@ -1,11 +1,14 @@
 set download_files to list(
-  "mission_runmodes.ks",
-  "ship_utils.ks",
   "atmospheric_launch.ks",
+  "hohmann_transfer.ks",
+  "mission_runmodes.ks",
   "node_functions.ks",
-  "hohmann_transfer.ks"
+  "ship_utils.ks"
 ).
-for df in download_files {DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}
+for df in download_files {
+  DOWNLOAD("lib/" + df).
+  RUNONCEPATH("lib/" + df).
+}
 
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").
@@ -13,18 +16,18 @@ if core:volume:exists("mission.json") {
   set mission to lex("PitchExp", 0.4).
 }
 
-if mission:haskey("Target") and mission:haskey("Offset") {
+if mission:haskey("Vessal") and mission:haskey("Offset") {
   set hohmann_lex to lex(
     "Title",
-    "Hohmann Transfer to " + mission["Target"] + " Orbit Offset " + mission["Offset"],
+    "Hohmann Transfer to " + mission["Vessal"] + " Orbit Offset " + mission["Offset"],
     "Function", hohmann_transfer@,
-    "Params", lex("Target", VESSEL(mission["Target"]), "Offset", mission["Offset"])
+    "Params", lex("Vessal", VESSEL(mission["Vessal"]), "Offset", mission["Offset"])
   ).
 } else {
   set hohmann_lex to lex(
-    "Title", "Hohmann Transfer to 1100k Orbit",
+    "Title", "Hohmann Transfer to 1000k Orbit",
     "Function", hohmann_transfer@,
-    "Params", lex("altitude", 1000000)
+    "Params", lex("Altitude", 1000000)
   ).
 }
 

@@ -15,8 +15,9 @@ function execute_node {
       print "we have enough dV".
       SET startTime TO round(ts + nn:ETA - mnv_t/2,1).
     } else {
-      print "stage does not have enough dV".
-      SET startTime TO round(ts + nn:ETA - mnv_t*1.5, 1).
+      local dvf to 1 + (stage_delta_v() / nndv:MAG).
+      print "stage does not have enough dV " + dvf.
+      SET startTime TO round(ts + nn:ETA - (mnv_t/2)*dvf , 1).
     }
     LOCK STEERING TO NEXTNODE:DELTAV.
   }
@@ -62,8 +63,6 @@ function circularization {
   ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
   mission["next"]().
 }
-
-
 
 function set_inc_lan {
   // Curtasy of https://www.reddit.com/user/G_Space

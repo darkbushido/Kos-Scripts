@@ -4,44 +4,68 @@ function hohmann_transfer {
 
   LOCAL time_to_burn to 0.
   LOCAL deltaV to 0.
-  LOCAL r1 TO ship:obt:semimajoraxis.
-  if params:haskey("altitude") and params:haskey("Longitude") {
-    local dalt to params["altitude"].
-    local lgt to params["Longitude"].
-    set r2 TO dalt + SHIP:OBT:BODY:RADIUS.
-    set period to 2 * CONSTANT:PI * SQRT(r2^3/LG).
-    set time_to_burn TO round(hohmann_time_until_phase_angle(r2, lgt, period),2).
-  } else if params:haskey("altitude") {
-    local dalt to params["altitude"].
-    set r2 TO dalt + SHIP:OBT:BODY:RADIUS.
-    set time_to_burn TO ETA:APOAPSIS.
-  } else if params:haskey("Target") {
-    set target_object to params["Target"].
-    set r2 TO target_object:obt:Semimajoraxis.
-    if params:haskey("Offset")
-      set lgt to target_object:Longitude + params["Offset"].
-    else
-      set lgt to target_object:Longitude.
-    set period to target_object:obt:Period.
-    set time_to_burn to round(hohmann_time_until_phase_angle(r2, lgt, period),2).
+  LOCAL target_object to ship.
+  if params:haskey("Body") {
+    set target_object to params["Body"].
+    set r2 to (target_object:OBT:SEMIMAJORAXIS -target:RADIUS -target_alt -
+      (target_object:SOIRADIUS/10) ).
+  } else if params:haskey("Vessal") {
+    set target_object to params["Vessal"].
+    set target_alt to target_object:OBT:SEMIMAJORAXIS - target_object:BODY:RADIUS.
+    set r2 to target_object:OBT:SEMIMAJORAXIS.
   } else {
-    print "MISSING PARAMS".
+    if params:haskey("Altitude") {
+      set target_alt to params["Altitude"].
+      set r2 TO target_alt + SHIP:OBT:BODY:RADIUS.
+    }
+    else {
+      set target_alt to 80000.
+      set r2 TO target_alt + SHIP:OBT:BODY:RADIUS.
+    }
   }
-  set deltaV TO hohmann_deltaV(r1, r2).
-  set nn to NODE(round(TIME:SECONDS,2) + time_to_burn, 0, 0, deltaV). wait 0.001.
-  ADD nn.
+
+  local r1 to SHIP:OBT:SEMIMAJORAXIS.
+
+  local transfer_time to constant():pi * sqrt((((r1 + r2)^3)/(8*target_object:BODY:MU))).
+  local phase_angle to (180*(1-(sqrt(((r1 + r2)/(2*r2))^3)))).
+  if params:haskey("Offset")
+    set Offset to params["Offset"].
+  else
+    set Offset to 0.
+  local actual_angle to mod(360 + (target_object:LONGITUDE + Offset) - SHIP:LONGITUDE,360) .
+  local d_angle to (mod(360 + actual_angle - phase_angle,360)).
+
+  local ship_ang to  360/SHIP:OBT:PERIOD.
+  local tgt_ang to  360/target_object:OBT:PERIOD.
+  local d_ang to ship_ang - tgt_ang.
+  if d_ang = 0
+    local d_time to eta:apoapsis.
+  else
+    local d_time to d_angle/d_ang.
+
+  local my_dV to sqrt (target_object:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
+
+  local my_node TO NODE(time:seconds+d_time, 0, 0, my_dV).
+  ADD my_node.
+
+  // fine tune the orbit
+  if params:haskey("Body") {
+    lock alt_after_mn to ORBITAT(SHIP,time+transfer_time):PERIAPSIS.
+  } else {
+    lock alt_after_mn to ORBITAT(SHIP,time+transfer_time):APOAPSIS.
+  }
+
+  local lock current_inclination to ORBITAT(SHIP,time+transfer_time):INCLINATION.
+  // We go higher, so we can set the new orbits with small retrograde burns at pe
+  print "Altitude after burn: " + alt_after_mn.
+  print "Target Altitude: " + target_alt.
+  until (abs(alt_after_mn - target_alt) < 100) {
+    if alt_after_mn < target_alt  {
+      set my_node:PROGRADE to my_node:PROGRADE + 0.01.
+    } else {
+      set my_node:PROGRADE to my_node:PROGRADE - 0.01.
+    }
+  }
+  print "Node Added".
   mission["next"]().
-}
-function hohmann_time_until_phase_angle {
-  parameter r2.
-  parameter target_longitude.
-  parameter period.
-  RETURN (( mod( 360+(mod(360 + target_longitude - ship:Longitude,360))
-- (180*(1-(sqrt(((ship:obt:Semimajoraxis + r2)/(2*r2))^3)))) ,360 ))/((360/ship:obt:Period)-(360/period))).
-}
-function hohmann_deltaV {
-  parameter r1.
-  parameter r2.
-  local deltaV is SQRT(SHIP:OBT:BODY:MU / r1) * (SQRT((2 * r2) / (r1 + r2)) - 1).
-  return deltaV.
 }

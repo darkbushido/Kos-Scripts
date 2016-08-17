@@ -47,7 +47,7 @@ function disable_antennas {
 function finished {
   parameter mission.
   parameter params.
-  delete startup.ks.
+  deletepath("startup.ks").
   mission["terminate"]().
 }
 

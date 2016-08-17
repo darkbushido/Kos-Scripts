@@ -46,9 +46,8 @@
       local file is core:volume:open("current_runmode.ks").
       file:clear().
       file:write("set n to " + n + ".").
-
-      display_runmodes_and_events.
       set runmode to n.
+      display_runmodes_and_events.
     }
 
     function indexof {
@@ -71,7 +70,6 @@
       display_runmodes_and_events.
     }
     function next {
-
       update_runmode(runmode + 1).
     }
     function switch_to {

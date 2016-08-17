@@ -8,7 +8,7 @@ DOWNLOAD("mission/rt_network.ks").
 MOVEPATH("mission/rt_network.ks", "startup.ks").
 set mission to lex(
   "PitchExp", 0.35,
-  "Target", "CommSat mk1",
+  "Vessal", "CommSat mk1",
   "Offset", 90 * 1
 ).
 writejson(mission, "mission.json").
