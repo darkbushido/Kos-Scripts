@@ -47,7 +47,7 @@ function launch {
   disable_antennas().
 
   set_stage_fairings(mission,"ModuleProceduralFairing").
-  lock steering to heading(SHIP:HEADING,90).
+  lock steering to heading(dir,89).
 
   set st to 1.
   if AVAILABLETHRUST = 0 {

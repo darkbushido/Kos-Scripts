@@ -5,23 +5,23 @@ function hohmann_transfer {
   LOCAL time_to_burn to 0.
   LOCAL deltaV to 0.
   LOCAL target_object to ship.
+
+  if params:haskey("Altitude")
+    set target_alt to params["Altitude"].
+  else
+    set target_alt to BODY:ATM:HEIGHT + 10000.
+
   if params:haskey("Body") {
     set target_object to params["Body"].
-    set r2 to (target_object:OBT:SEMIMAJORAXIS -target:RADIUS -target_alt -
-      (target_object:SOIRADIUS/10) ).
+    set r2 to (target_object:OBT:SEMIMAJORAXIS -target_object:RADIUS - (target_object:SOIRADIUS/10) ).
+    // -target_object:RADIUS -target_alt -
+    //   (target_object:SOIRADIUS/10)
   } else if params:haskey("Vessal") {
     set target_object to params["Vessal"].
     set target_alt to target_object:OBT:SEMIMAJORAXIS - target_object:BODY:RADIUS.
     set r2 to target_object:OBT:SEMIMAJORAXIS.
   } else {
-    if params:haskey("Altitude") {
-      set target_alt to params["Altitude"].
-      set r2 TO target_alt + SHIP:OBT:BODY:RADIUS.
-    }
-    else {
-      set target_alt to 80000.
-      set r2 TO target_alt + SHIP:OBT:BODY:RADIUS.
-    }
+    set r2 TO target_alt + SHIP:OBT:BODY:RADIUS.
   }
 
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
@@ -51,19 +51,24 @@ function hohmann_transfer {
   // fine tune the orbit
   if params:haskey("Body") {
     lock alt_after_mn to ORBITAT(SHIP,time+transfer_time):PERIAPSIS.
+    set step to 0.001.
+    set alt_acc to 1000.
   } else {
     lock alt_after_mn to ORBITAT(SHIP,time+transfer_time):APOAPSIS.
+    set step to 0.01.
+    set alt_acc to 100.
   }
 
   local lock current_inclination to ORBITAT(SHIP,time+transfer_time):INCLINATION.
   // We go higher, so we can set the new orbits with small retrograde burns at pe
   print "Altitude after burn: " + alt_after_mn.
   print "Target Altitude: " + target_alt.
-  until (abs(alt_after_mn - target_alt) < 100) {
+
+  until (abs(alt_after_mn - target_alt) < alt_acc) {
     if alt_after_mn < target_alt  {
-      set my_node:PROGRADE to my_node:PROGRADE + 0.01.
+      set my_node:PROGRADE to my_node:PROGRADE + step.
     } else {
-      set my_node:PROGRADE to my_node:PROGRADE - 0.01.
+      set my_node:PROGRADE to my_node:PROGRADE - step.
     }
   }
   print "Node Added".

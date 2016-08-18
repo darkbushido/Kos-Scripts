@@ -1,7 +1,7 @@
 set download_files to list(
   "mission_runmodes.ks",
   "ship_utils.ks",
-  "atmospheric_launch.ks",
+  "launch.ks",
   "node_functions.ks"
 ).
 for df in download_files {DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}

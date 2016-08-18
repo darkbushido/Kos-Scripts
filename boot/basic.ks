@@ -36,7 +36,7 @@ FUNCTION TIMESTAMP {
 }
 
 // THE ACTUAL BOOTUP PROCESS
-IF ADDONS:RT:HASCONNECTION(SHIP) {
+IF ADDONS:RT:AVAILABLE and ADDONS:RT:HASCONNECTION(SHIP) {
   DECLARE LOCAL updateScript TO SHIP:NAME + ".ks".
   PRINT "Looking for /updates_pending/" + updateScript.
   // If we have a connection, see if there are new instructions. If so, download

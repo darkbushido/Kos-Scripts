@@ -1,5 +1,5 @@
 set download_files to list(
-  "atmospheric_launch.ks",
+  "launch.ks",
   "hohmann_transfer.ks",
   "mission_runmodes.ks",
   "node_functions.ks",
@@ -27,7 +27,7 @@ if mission:haskey("Vessal") and mission:haskey("Offset") {
   set hohmann_lex to lex(
     "Title", "Hohmann Transfer to 1000k Orbit",
     "Function", hohmann_transfer@,
-    "Params", lex("Altitude", 1000000)
+    "Params", lex("Altitude", 750000)
   ).
 }
 
@@ -49,14 +49,6 @@ set main_sequence to list(
     "Title", "Execute Manuver Node",
     "Function", execute_node@
     ),
-  lex(
-    "Title", "Adjusting Inclination to 0",
-    "Function", set_inc_lan@
-    ),
-  lex(
-    "Title", "Execute Manuver Node",
-    "Function", execute_node@
-    ),
   hohmann_lex,
   lex(
     "Title", "Execute Manuver Node",
@@ -71,13 +63,18 @@ set main_sequence to list(
     "Function", execute_node@
     ),
   lex(
+    "Title", "Adjusting Inclination to 0",
+    "Function", set_inc_lan@
+    ),
+  lex(
+    "Title", "Execute Manuver Node",
+    "Function", execute_node@
+    ),
+  lex(
     "Title", "Finished",
     "Function", finished@
     )
   ).
-set events to lex(
-  "Power Check", ensure_power@
-).
 set events to lex(
   "Power Check", ensure_power@
 ).

@@ -1,2 +1,2 @@
-copy ballistic_launch_to_airfield from 0.
+COPYPATH("0:/ballistic_launch_to_airfield", "").
 run ballistic_launch_to_airfield.
