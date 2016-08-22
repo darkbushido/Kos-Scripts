@@ -8,7 +8,7 @@ DOWNLOAD("mission/science_body_flyby.ks").
 MOVEPATH("mission/science_body_flyby.ks", "startup.ks").
 set mission to lex(
   "PitchExp", 0.35,
-  "Body", "Minmus",
-  "Altitude", 100000
+  "Body", "Mun",
+  "Altitude", 15000
 ).
 writejson(mission, "mission.json").

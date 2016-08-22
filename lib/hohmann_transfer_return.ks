@@ -2,13 +2,13 @@ function hohmann_transfer_return {
   parameter mission.
   parameter params.
 
-  local target_periapsis is 37000.
+  local target_periapsis is 35000.
   // we want a hohmann transfer down to kerbin.
   local r1 to (BODY:OBT:SEMIMAJORAXIS - 1.5*SHIP:OBT:SEMIMAJORAXIS).
   local r2 to (BODY:BODY:RADIUS + target_periapsis ).
 
   local dv_hx_kerbin is BODY:OBT:VELOCITY:ORBIT:MAG * (sqrt((2*r2)/(r1 + r2)) -1).
-  local transfer_time to constant:pi * sqrt((((r1 + r2)^3)/(8*BODY:BODY:MU))).
+  set transfer_time to constant:pi * sqrt((((r1 + r2)^3)/(8*BODY:BODY:MU))).
 
   local r1 is SHIP:OBT:SEMIMAJORAXIS.
   local r2 is BODY:SOIRADIUS.

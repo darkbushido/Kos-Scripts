@@ -1,11 +1,31 @@
 SET LG to CONSTANT:G * (ship:body:mass / ship:body:radius ^2).
 SET startTime TO 0.
 set last_dv TO 0.
+set oldwp to 0.
+set oldwarp to warp.
+set message to "".
+set oldmessage to "".
 function execute_node {
   parameter mission.
   parameter params.
 
+  execute_node_raw(mission, params).
+  if not hasnode
+    mission["next"]().
+}
+function execute_node_raw {
+  parameter mission.
+  parameter params.
+
+  if params:haskey("Auto Stage")
+    mission["add_event"]("Auto Stage", auto_stage@).
+
   set ts to TIME:SECONDS.
+
+  if params:haskey("Warp")
+    set activate_warp to params["Warp"].
+  else
+    set activate_warp to false.
 
   local nn to NEXTNODE.
   if  startTime = 0 {
@@ -17,51 +37,138 @@ function execute_node {
     } else {
       local dvf to 1 + (stage_delta_v() / nndv:MAG).
       print "stage does not have enough dV " + dvf.
-      SET startTime TO round(ts + nn:ETA - (mnv_t/2)*dvf , 1).
+      SET startTime TO round(ts + nn:ETA - ((mnv_t *dvf)/2) , 1).
     }
-    LOCK STEERING TO NEXTNODE:DELTAV.
+    LOCK STEERING TO nn:DELTAV.
   }
 
   if ts >= startTime {
-    LOCK THROTTLE TO MAX(MIN(nn:DELTAV:MAG/20, 1),0).
-  } else if abs(nndv:DIRECTION:pitch - facing:pitch) > 0.1
-    OR abs(nndv:DIRECTION:yaw - facing:yaw) > 0.1 {
+    LOCK THROTTLE TO MAX(MIN(nn:DELTAV:MAG/10, 1),0).
+  } else  if VANG(SHIP:FACING:VECTOR, nn:BURNVECTOR) > 2 {
+    set message to "Waiting to Align, Alignment Error: " + ROUND(VANG(SHIP:FACING:VECTOR, nn:BURNVECTOR), 2).
+    if activate_warp = true {
+      set warp to 0.
+      set oldwarp to warp.
+    }
     wait 1.
-  } else if ts < startTime - 10 {
-    wait 5.
+  } else if ts < startTime - 30 {
+    if activate_warp = true {
+      local rt to (startTime - 30) - ts.
+      local wp to 0.
+      if rt > 100000 { set wp to 7. }
+      else if rt > 10000  { set wp to 6. }
+      else if rt > 1000   { set wp to 5. }
+      else if rt > 100    { set wp to 4. }
+      else if rt > 50     { set wp to 3. }
+      else if rt > 10     { set wp to 2. }
+      else if rt > 5      { set wp to 1. }
+      if wp <> oldwp OR warp <> wp {
+        set warp to wp.
+        wait 0.1.
+        set oldwp to wp.
+        set oldwarp to warp.
+      }
+      wait 0.1.
+    } else { wait 5.}
   }
 
   if vdot(nn:burnvector, nndv) < 0.1 {
     LOCK THROTTLE TO 0.
     UNLOCK STEERING.
     REMOVE nn.
+    mission["remove_event"]("Auto Stage").
     SET startTime TO 0.
     SET SHIP:CONTROL:PILOTMAINTHROTTLE TO 0.
-    mission["next"]().
   }
+}
+
+function manuver_alt_verification {
+  parameter mission.
+  parameter params.
+
+  LOCK STEERING TO RETROGRADE.
+
+  if params:haskey("Body")
+    local target_body to params["Body"].
+  else
+    local target_body to Mun.
+  if params:haskey("Delay")
+    local node_delay to params["Delay"].
+  else
+    local node_delay to 300.
+  if params:haskey("Altitude")
+    local target_alt is params["Altitude"].
+  else
+    local target_alt is 35000.
+  if params:haskey("Direction")
+    local d to params["Direction"].
+  else
+    local d to "Out".
+
+  if not ship:obt:hasnextpatch {
+    set nn to NODE(time:seconds + 600, 0, 0, 1).
+    add nn.
+
+    until nn:obt:hasnextpatch {
+      print nn:PROGRADE + " " + APOAPSIS.
+      if APOAPSIS < target_body:altitude {
+        set nn:PROGRADE to nn:PROGRADE + 0.01.
+      } else {
+        set nn:PROGRADE to nn:PROGRADE - 0.01.
+      }
+    }
+  }
+
+  if ship:obt:hasnextpatch {
+    set manuver_time to ship:obt:nextpatcheta + 60.
+    if not HASNODE {
+      set nn to NODE(time:seconds + (manuver_time/4)*3, 0, 0, 1).
+      add nn.
+    }
+
+    local lock current_alt to ORBITAT(SHIP,time+manuver_time):PERIAPSIS.
+
+    until abs (current_alt - target_alt) < 1000 {
+      print nn:PROGRADE + " " + current_alt.
+      if current_alt < target_alt {
+        set nn:PROGRADE to nn:PROGRADE + 0.01.
+      } else {
+        set nn:PROGRADE to nn:PROGRADE - 0.01.
+      }
+    }
+  }
+
+  mission["next"]().
 }
 
 function circularization {
   parameter mission.
   parameter params.
 
-  if NOT params:HASKEY("Mode")
-    params:ADD("Mode", "apoapsis").
-  LOCAL co TO ship:orbit.
-  LOCAL cobr to co:body:radius.
-  if params["Mode"] = "apoapsis" {
-    set cot to co:apoapsis.
-    set ttb to ETA:APOAPSIS.
-  } else if params["Mode"] = "pariapsis" {
-    set cot to co:periapsis.
-    set ttb to ETA:PERIAPSIS.
+  if HASNODE {
+    execute_node_raw(mission, params).
+  } else if ship:obt:SEMIMAJORAXIS > 100000 and ship:obt:ECCENTRICITY < 0.001 {
+    mission["next"]().
+  } else if ship:obt:SEMIMAJORAXIS > 50000 and ship:obt:ECCENTRICITY < 0.005 {
+    mission["next"]().
+  } else {
+    if NOT params:HASKEY("Mode")
+      params:ADD("Mode", "apoapsis").
+    LOCAL co TO ship:orbit.
+    LOCAL cobr to co:body:radius.
+    if params["Mode"] = "apoapsis" {
+      set cot to co:apoapsis.
+      set ttb to ETA:APOAPSIS.
+    } else if params["Mode"] = "pariapsis" {
+      set cot to co:periapsis.
+      set ttb to ETA:PERIAPSIS.
+    }
+    LOCAL cotcobr to (cot + cobr).
+    LOCAL deltaV to 0.
+    LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
+    LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
+    ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
   }
-  LOCAL cotcobr to (cot + cobr).
-  LOCAL deltaV to 0.
-  LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
-  LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
-  ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
-  mission["next"]().
 }
 
 function set_inc_lan {

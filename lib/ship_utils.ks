@@ -19,6 +19,24 @@ function auto_stage {
   }
 }
 
+function drop_empty_tanks {
+  parameter mission.
+  set current_drop_tank_exists to false.
+  set drop_tanks to ship:partsnamed("LTS1.side").
+
+  for dt in drop_tanks {
+    if dt:stage = stage:number -1 {
+      set current_drop_tank to dt.
+      set current_drop_tank_exists to true.
+    }
+  }
+
+  if current_drop_tank_exists = true and current_drop_tank:resources[0]:amount = 0 {
+    if stage:ready
+      stage.
+  }
+}
+
 function ensure_power {
   parameter mission.
 

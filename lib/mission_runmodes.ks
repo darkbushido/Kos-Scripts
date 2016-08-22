@@ -61,13 +61,17 @@
 
     function add_event {
       parameter name, delegate.
-      set events[name] to delegate.
-      display_runmodes_and_events.
+      if not events:HASKEY(name) {
+        events:add(name, delegate).
+        display_runmodes_and_events.
+      }
     }
     function remove_event {
       parameter name.
-      events:remove(name).
-      display_runmodes_and_events.
+      if events:HASKEY(name) {
+        events:remove(name).
+        display_runmodes_and_events.
+      }
     }
     function next {
       update_runmode(runmode + 1).

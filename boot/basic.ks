@@ -35,18 +35,19 @@ FUNCTION TIMESTAMP {
   RETURN TIME:YEAR + "-" + TIME:DAY + "-" + TIME:HOUR + "-" + TIME:MINUTE + "-" + TIME:SECOND.
 }
 
+for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
+  if antenna:GETFIELD("status") = "Off" and
+     antenna:allevents:CONTAINS("(callable) activate, is KSPEvent") {
+    antenna:DOEVENT("activate").
+  }
+}
+
 // THE ACTUAL BOOTUP PROCESS
 IF ADDONS:RT:AVAILABLE and ADDONS:RT:HASCONNECTION(SHIP) {
   DECLARE LOCAL updateScript TO SHIP:NAME + ".ks".
   PRINT "Looking for /updates_pending/" + updateScript.
   // If we have a connection, see if there are new instructions. If so, download
   // and run them.
-  for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-    if antenna:GETFIELD("status") = "Off" and
-       antenna:allevents:CONTAINS("(callable) activate, is KSPEvent") {
-      antenna:DOEVENT("activate").
-    }
-  }
 
   IF HAS_FILE("/updates_pending/" + updateScript, 0) {
     DOWNLOAD("/updates_pending/" + updateScript).

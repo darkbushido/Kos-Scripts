@@ -45,10 +45,6 @@ set main_sequence to list(
     "Title", "Create Parking Orbit Circularization Node",
     "Function", circularization@
     ),
-  lex(
-    "Title", "Execute Manuver Node",
-    "Function", execute_node@
-    ),
   hohmann_lex,
   lex(
     "Title", "Execute Manuver Node",
@@ -57,10 +53,6 @@ set main_sequence to list(
   lex(
     "Title", "Create Parking Orbit Circularization Node",
     "Function", circularization@
-    ),
-  lex(
-    "Title", "Execute Manuver Node",
-    "Function", execute_node@
     ),
   lex(
     "Title", "Adjusting Inclination to 0",

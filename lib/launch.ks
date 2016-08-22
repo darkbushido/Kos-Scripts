@@ -28,8 +28,8 @@ function launch {
   else
     SET pitch_exp to 0.40.
   print incl_init.
-  if params:haskey("TargetAltitude")
-    set target_alt to params["TargetAltitude"].
+  if params:haskey("Altitude")
+    set target_alt to params["Altitude"].
   else
     set target_alt to (SHIP:BODY:ATM:HEIGHT + 10000).
 
@@ -53,6 +53,7 @@ function launch {
   if AVAILABLETHRUST = 0 {
     STAGE.
   }
+  mission["remove_event"]("Drop Empty Tanks").
   mission["add_event"]("Auto Stage", auto_stage@).
   mission["next"]().
 }
@@ -72,6 +73,7 @@ function gravity_turn {
     panels on.
     mission["remove_event"]("Update Throttle").
     mission["add_event"]("Power Check", ensure_power@).
+    mission["add_event"]("Drop Empty Tanks", drop_empty_tanks@).
     lock throttle to 0.
     mission["next"]().
   }
@@ -87,7 +89,7 @@ function stage_fairings {
   if fs = (STAGE:NUMBER - 1) AND alt:radar > (BODY:ATM:HEIGHT - 1000) {
     STAGE.
     panels on.
-    mission["remove_event"]("Stage Fairings").
+    mission["remove_event"]("Stage Fairings: " + fs).
   }
 
 }
