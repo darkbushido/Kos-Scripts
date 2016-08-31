@@ -1,20 +1,17 @@
 set download_files to list(
-  "launch.ks",
-  "land.ks",
+  "circle_nav.ks",
   "collect_science.ks",
   "hohmann_transfer.ks",
   "hohmann_transfer_return.ks",
+  "land.ks",
+  "launch.ks",
   "mission_runmodes.ks",
   "node_functions.ks",
+  "ship_utils.ks",
   "soi_change.ks",
-  "ship_utils.ks"
+  "time_to.ks"
 ).
-for df in download_files {
-  DOWNLOAD("lib/" + df).
-}
-for df in download_files {
-  RUNONCEPATH("lib/" + df).
-}
+for df in download_files {print "Downloading: " + df. DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}
 
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").
@@ -38,9 +35,9 @@ else
   set target_lat to 0.
 
 if mission:haskey("Lng")
-  set target_lat to mission["Lng"].
+  set target_lng to mission["Lng"].
 else
-  set target_lat to 0.
+  set target_lng to 0.
 
 set hohmann_lex to lex(
   "Title",
@@ -98,14 +95,21 @@ set main_sequence to list(
     "Params", lex("Mode", "pariapsis", "Warp", true)
     ),
   lex(
-   "Title", "Land at Lat: " + target_lat + " Lng:" + target_lng,
-   "Function", land_at_position@,
-   "Params", lex("Lat", target_lat, "Lng", target_lng)
-  ),
+   "Title", "DeOrbit to Lat: " + target_lat + " Lng: " + target_lng,
+   "Function", deorbit_to_position@,
+   "Params", lex("LandAt", latlng(target_lat,target_lng), "Warp", true)
+    ),
   lex(
-    "Title", "Launch with Pitch: " + mission["PitchExp"],
-    "Function", launch@,
-    "Params", lex("PitchExp", mission["PitchExp"])
+   "Title", "Suicide Burn",
+   "Function", suicide_burn@
+    ),
+  lex(
+    "Title", "Collect Science",
+    "Function", collect_science_step@
+    ),
+  lex(
+    "Title", "Launch",
+    "Function", launch@
     ),
   lex(
     "Title", "Gravity Turn",
@@ -142,7 +146,6 @@ set main_sequence to list(
   )
 ).
 set events to lex(
-  "Collect Science", collect_science@,
   "Power Check", ensure_power@,
   "Drop Empty Tanks", drop_empty_tanks@
 ).

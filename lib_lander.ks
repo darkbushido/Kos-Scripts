@@ -17,26 +17,26 @@ function get_burn_t_ff {
 	local dv_new is 0.
 	local dv_change is dv.
 	local dv_total is 0.
-	
+
 	local eng_stats to get_engine_stats().
 	local ch_rate is eng_stats[2].
 	local v_e is eng_stats[3].
-	
+
 	until dv_change < 0.001 {
- 
+
 		set dv_total to dv_total + dv_change.
 		set t_burn to SHIP:MASS*(1 - e^(-dv_total/v_e))/ch_rate.
 		set dv_new to g_mean * t_burn.
 		set dv_change to abs(dv_new - dv_old).
 		set dv_old to dv_new.
-	
+
 	}
 	print "burn_time FF: " + round (t_burn,2).
 	return t_burn+0.06.
 }
 
-// 
-// Returns the altitude above sea level, when the burn has to start. 
+//
+// Returns the altitude above sea level, when the burn has to start.
 // returns a few meter extra to soften the landing.
 function get_burn_height {
 	parameter r_from,r_to.
@@ -62,11 +62,11 @@ function get_burn_height {
 	local lock v_burn to sqrt((2*BODY:MU*(r_from - r_burn))/(r_from * r_burn)).
 	local t to get_burn_t_ff(r_from,r_burn).
 
-// These are all equivalent 	
-//	local lock stopping_dist to v_burn*t + (grav_mean_b*t^2)/2 - (t*v_e - t*v_e * (ln(M/(M-t*ch_rate))/(M/(M-t*ch_rate)-1))). 
-//	local lock stopping_dist to v_burn*t + (0.5* grav_mean_b * (t^2)) - ((v_e * M/ch_rate) * ((1 - ch_rate * t/M) * ln(1 - ch_rate*t/M) + (ch_rate*t/M))). 
+// These are all equivalent
+//	local lock stopping_dist to v_burn*t + (grav_mean_b*t^2)/2 - (t*v_e - t*v_e * (ln(M/(M-t*ch_rate))/(M/(M-t*ch_rate)-1))).
+//	local lock stopping_dist to v_burn*t + (0.5* grav_mean_b * (t^2)) - ((v_e * M/ch_rate) * ((1 - ch_rate * t/M) * ln(1 - ch_rate*t/M) + (ch_rate*t/M))).
 	local lock stopping_dist to v_burn*t + (grav_mean_b*t^2)/2 - (v_e*(t - M/ch_rate) *ln(M/(M-t*ch_rate)) + v_e*t) .
-	
+
 	until abs ( r_burn_delta ) < 0.1 {
 
 		set t to get_burn_t_ff(r_from,r_burn).
@@ -100,24 +100,20 @@ function stop_at{
 	parameter spot.
 
 	local node_lng to mod(360+Body:ROTATIONANGLE+spot:LNG,360).
-	
+
 	set_inc_lan_i(spot:LAT,node_lng-90,false).
 	local my_node to NEXTNODE.
 	// change node_eta to adjust for rotation:
 	local t_wait_burn to my_node:ETA + OBT:PERIOD/4.
-	
+
 	local rot_angle to t_wait_burn*360/Body:ROTATIONPERIOD.
 	remove my_node.
 	set_inc_lan_i(spot:LAT,node_lng-90+rot_angle,false).
 	run_node().
 
-	local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
-	local ship_2_node to mod((720 + node_lng+rot_angle - ship_ref),360).
-	local node_eta to ship_2_node*OBT:PERIOD/360.
-	local my_node to NODE(time:seconds + node_eta,0,0,-SHIP:VELOCITY:SURFACE:MAG).
-	ADD my_node.
-	
-	run_stopping_node(spot). 
+
+
+	run_stopping_node(spot).
 }
 
 
@@ -135,7 +131,7 @@ function run_stopping_node{
 
 	local lock down_vector to vdot (UP:VECTOR,SHIP:VELOCITY:SURFACE)*UP:VECTOR.
 	local lock burn_vector  to (-1* (SHIP:VELOCITY:SURFACE - down_vector)).
-	
+
 	local lock np to lookdirup(burn_vector, ship:facing:topvector).
 	lock steering to np.
 	print "waiting for the ship to turn".
@@ -162,7 +158,7 @@ function run_stopping_node{
 
 	local done to false.
 	local max_acc is 0.
-	
+
 	until done
 	{
 		//recalculate current max_acceleration, as it changes while we burn through fuel
@@ -188,7 +184,7 @@ function run_stopping_node{
 	remove nd.
 	print "Vessel Stopped".
 
-	
+
 	//set throttle to 0 just in case.
 	set SHIP:CONTROL:PILOTMAINTHROTTLE to 0.
 	unlock throttle.
@@ -201,18 +197,18 @@ function do_suecide_burn{
 	gear on.
 
 	RCS on.
-	// we can compote our virtual starting height from a degenerated elliptic Orbit with semimajoraxis = r_start/2 and the vis-viva equation 
+	// we can compote our virtual starting height from a degenerated elliptic Orbit with semimajoraxis = r_start/2 and the vis-viva equation
 	local v_now to SHIP:VELOCITY:SURFACE:MAG.
 	local r_now to SHIP:ALTITUDE + BODY:RADIUS.
 	local mu to BODY:MU.
 	local r_from to ((2*mu*r_now)/((2*mu) - (r_now * v_now^2))).
 
 	local r_to to BODY:RADIUS + target_spot:TERRAINHEIGHT. // ALT:RADAR only works within 5000m. We need more.
-	local burn_heigt to get_burn_height(r_from,r_to).	
+	local burn_heigt to get_burn_height(r_from,r_to).
 	local full_burn_time to get_burn_t_ff(r_from,(BODY:RADIUS+burn_heigt)).
 
-	
-	// check for fuel: STAGE:OXIDIZER + STAGE:LIQUIDFUEL * 0.05 
+
+	// check for fuel: STAGE:OXIDIZER + STAGE:LIQUIDFUEL * 0.05
 	local engine_stats to get_engine_stats.
 	local burn_rate to engine_stats[2].
 	local fuel_in_stage to (STAGE:OXIDIZER + STAGE:LIQUIDFUEL) * 0.005.
@@ -236,11 +232,11 @@ function do_suecide_burn{
 	}
 
 	// try to land exactly where we want to
-	local lock dist to (SHIP:GEOPOSITION:POSITION - target_spot:POSITION)/(ship:maxthrust/ship:mass). 
+	local lock dist to (SHIP:GEOPOSITION:POSITION - target_spot:POSITION)/(ship:maxthrust/ship:mass).
 	lock steering to (-1* (SHIP:VELOCITY:SURFACE + dist) ).
 // use this for the challenge :-)
 //	lock steering to (-1* (SHIP:VELOCITY:SURFACE) ).
-	
+
 	wait until SHIP:ALTITUDE < (burn_heigt+(SHIP:OBT:VELOCITY:SURFACE:MAG*10)).
 
 	set r_to to BODY:RADIUS + SHIP:GEOPOSITION:TERRAINHEIGHT.
@@ -250,7 +246,7 @@ function do_suecide_burn{
 	wait until SHIP:ALTITUDE < (burn_heigt+(SHIP:OBT:VELOCITY:SURFACE:MAG*3)).
 	set r_to to BODY:RADIUS + SHIP:GEOPOSITION:TERRAINHEIGHT.
 	set burn_heigt to get_burn_height(r_from,r_to).
-	
+
 	global do_trigger to true.
 		// set up trigger; stop deaccelerating when we are below 4m/s
 	when do_trigger AND  SHIP:OBT:VELOCITY:SURFACE:MAG < 4 AND NOT (SHIP:STATUS = "LANDED") then {
@@ -268,14 +264,14 @@ function do_suecide_burn{
 	when do_trigger AND ALT:RADAR < 100 then {
 		lock steering to (-1*SHIP:VELOCITY:SURFACE ).
 	}
-		
+
 	print "trigger setup complete, start burn in 3s".
 	// start the burn.
 	wait until SHIP:ALTITUDE < burn_heigt.
 	lock THROTTLE to 1.0.
 
 	wait until ((ALT:RADAR < 0.5) OR (SHIP:STATUS = "LANDED") OR (SHIP:OBT:VELOCITY:SURFACE:MAG < 1.0)).
-	
+
 	lock THROTTLE to 0.
 	unlock steering.
 	set do_trigger to false.
@@ -291,5 +287,5 @@ function do_suecide_burn{
 // unused Code
 //local q is r_to/r_from.
 //local time_to_impact is sqrt(r_from^3/(2*BODY:MU)) * (sqrt(q*(1-q)) + (Constant:DegToRad*arccos(sqrt(q)))).
-//print "time_to_impact:  " + round(time_to_impact,1). 
+//print "time_to_impact:  " + round(time_to_impact,1).
 //

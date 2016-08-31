@@ -9,10 +9,7 @@ set download_files to list(
   "soi_change.ks",
   "ship_utils.ks"
 ).
-for df in download_files {
-  DOWNLOAD("lib/" + df).
-  RUNONCEPATH("lib/" + df).
-}
+for df in download_files {print "Downloading: " + df. DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}
 
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").

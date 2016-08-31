@@ -7,14 +7,12 @@ function set_stage_fairings {
   if SHIP:MODULESNAMED(module_name):LENGTH > 0 {
     set fs to 100.
     for fm in SHIP:MODULESNAMED(module_name) {
-      if fm:PART:STAGE < fs {
+      if fm:PART:STAGE < fs
         set fs to fm:PART:STAGE.
-      }
     }
     mission["add_event"]("Stage Fairings: " + fs, stage_fairings@).
   }
 }
-
 function launch {
   parameter mission.
   parameter params.
@@ -60,16 +58,14 @@ function launch {
 function gravity_turn {
   parameter mission.
   parameter params.
-
   if ALTITUDE > 1000 AND start_turn = FALSE {
     set start_turn to TRUE.
     LOCK pitch to 90.0 - (90.0 * (alt:radar / target_alt)^pitch_exp).
     LOCK STEERING to heading(dir, pitch).
     mission["add_event"]("Update Throttle", update_throttle@).
   } else if ALTITUDE > BODY:ATM:HEIGHT {
-    if stage_delta_v() < 75 {
+    if stage_delta_v() < 75
       STAGE. WAIT 1.
-    }
     panels on.
     mission["remove_event"]("Update Throttle").
     mission["add_event"]("Power Check", ensure_power@).

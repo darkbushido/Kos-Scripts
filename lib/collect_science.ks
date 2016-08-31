@@ -13,9 +13,18 @@ for module_name in DMMS {
   }
 }
 
+function collect_science_step {
+  parameter mission.
+  parameter params.
+
+  collect_science(mission).
+  wait 5.
+  collect_science(mission).
+  mission["next"]().
+}
+
 function collect_science {
   parameter mission.
-  // parameter params.
   if warp = 0 {
     set round_time to FLOOR(TIME:SECOND).
     if (MOD(round_time, 5) = 0) AND NOT (last_runtime = round_time)  {

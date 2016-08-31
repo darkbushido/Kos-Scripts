@@ -47,10 +47,10 @@ function hohmann_transfer {
 
   local my_dV to sqrt (ship:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
 
-  local my_node TO NODE(time:seconds+d_time, 0, 0, my_dV).
-  ADD my_node.
+  local nn TO NODE(time:seconds+d_time, 0, 0, my_dV).
+  ADD nn.
 
-  lock steering to my_node:DELTAV.
+  lock steering to nn:DELTAV.
   // fine tune the orbit
   if params:haskey("Body") {
     lock alt_after_mn to ORBITAT(SHIP,time+transfer_time):PERIAPSIS.
@@ -62,11 +62,25 @@ function hohmann_transfer {
     set alt_acc to 100.
   }
 
-  until (abs(alt_after_mn - target_alt) < alt_acc) {
-    if alt_after_mn < target_alt  {
-      set my_node:PROGRADE to my_node:PROGRADE + step.
+  if not nn:obt:hasnextpatch {
+    until nn:obt:hasnextpatch {
+      if nn:obt:APOAPSIS < target_body:altitude {
+        set nn:PROGRADE to nn:PROGRADE + 0.1.
+      } else {
+        set nn:PROGRADE to nn:PROGRADE - 0.1.
+      }
+    }
+  }
+
+  until (abs(alt_after_mn - target_alt) < alt_acc) and nn:obt:nextpatch:inclination < 45 {
+    if nn:obt:hasnextpatch and nn:obt:nextpatch:inclination > 90 {
+      set nn:PROGRADE to nn:PROGRADE - step.
     } else {
-      set my_node:PROGRADE to my_node:PROGRADE - step.
+      if alt_after_mn < target_alt {
+        set nn:PROGRADE to nn:PROGRADE - step.
+      } else {
+        set nn:PROGRADE to nn:PROGRADE + step.
+      }
     }
   }
 

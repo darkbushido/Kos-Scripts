@@ -35,20 +35,8 @@ FUNCTION TIMESTAMP {
   RETURN TIME:YEAR + "-" + TIME:DAY + "-" + TIME:HOUR + "-" + TIME:MINUTE + "-" + TIME:SECOND.
 }
 
-for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-  if antenna:GETFIELD("status") = "Off" and
-     antenna:allevents:CONTAINS("(callable) activate, is KSPEvent") {
-    antenna:DOEVENT("activate").
-  }
-}
-
-// THE ACTUAL BOOTUP PROCESS
-IF ADDONS:RT:AVAILABLE and ADDONS:RT:HASCONNECTION(SHIP) {
-  DECLARE LOCAL updateScript TO SHIP:NAME + ".ks".
+function download_updates {
   PRINT "Looking for /updates_pending/" + updateScript.
-  // If we have a connection, see if there are new instructions. If so, download
-  // and run them.
-
   IF HAS_FILE("/updates_pending/" + updateScript, 0) {
     DOWNLOAD("/updates_pending/" + updateScript).
     SWITCH TO 0.
@@ -61,6 +49,20 @@ IF ADDONS:RT:AVAILABLE and ADDONS:RT:HASCONNECTION(SHIP) {
     RUN update.ks.
     DELETEPATH("update.ks").
   }
+}
+// THE ACTUAL BOOTUP PROCESS
+DECLARE LOCAL updateScript TO SHIP:NAME + ".ks".
+IF ADDONS:RT:AVAILABLE {
+  for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
+    if antenna:GETFIELD("status") = "Off" and
+       antenna:allevents:CONTAINS("(callable) activate, is KSPEvent") {
+      antenna:DOEVENT("activate").
+    }
+  }
+  if ADDONS:RT:HASCONNECTION(SHIP)
+    download_updates.
+} else {
+  download_updates.
 }
 
 // If a startup.ks file exists on the disk, run that.

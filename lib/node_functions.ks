@@ -35,16 +35,15 @@ function execute_node_raw {
       print "we have enough dV".
       SET startTime TO round(ts + nn:ETA - mnv_t/2,1).
     } else {
-      local dvf to 1 + (stage_delta_v() / nndv:MAG).
-      print "stage does not have enough dV " + dvf.
-      SET startTime TO round(ts + nn:ETA - ((mnv_t *dvf)/2) , 1).
+      print "stage does not have enough dV".
+      SET startTime TO round(ts + nn:ETA - (mnv_t * .6) , 1).
     }
     LOCK STEERING TO nn:DELTAV.
   }
 
   if ts >= startTime {
-    LOCK THROTTLE TO MAX(MIN(nn:DELTAV:MAG/10, 1),0).
-  } else  if VANG(SHIP:FACING:VECTOR, nn:BURNVECTOR) > 2 {
+    LOCK THROTTLE TO MAX(MIN(nn:DELTAV:MAG/2, 1),0).
+  } else if VANG(SHIP:FACING:VECTOR, nn:BURNVECTOR) > 4 {
     set message to "Waiting to Align, Alignment Error: " + ROUND(VANG(SHIP:FACING:VECTOR, nn:BURNVECTOR), 2).
     if activate_warp = true {
       set warp to 0.
@@ -122,18 +121,24 @@ function manuver_alt_verification {
   if ship:obt:hasnextpatch {
     set manuver_time to ship:obt:nextpatcheta + 60.
     if not HASNODE {
-      set nn to NODE(time:seconds + (manuver_time/4)*3, 0, 0, 1).
+      set nn to NODE(time:seconds + (manuver_time/4)*3, 0, 0, 0).
       add nn.
+    } else {
+      set nn to nextnode.
     }
 
     local lock current_alt to ORBITAT(SHIP,time+manuver_time):PERIAPSIS.
 
-    until abs (current_alt - target_alt) < 1000 {
-      print nn:PROGRADE + " " + current_alt.
-      if current_alt < target_alt {
-        set nn:PROGRADE to nn:PROGRADE + 0.01.
+    until abs(current_alt - target_alt) < 1000 and nn:obt:nextpatch:inclination < 20 {
+      print "Alt: " + round(abs(current_alt - target_alt),2) + " Inc: " + nn:obt:nextpatch:inclination.
+      if nn:obt:nextpatch:inclination > 90 {
+        set nn:PROGRADE to nn:PROGRADE - 0.1.
       } else {
-        set nn:PROGRADE to nn:PROGRADE - 0.01.
+        if current_alt < target_alt {
+          set nn:PROGRADE to nn:PROGRADE - 0.01.
+        } else {
+          set nn:PROGRADE to nn:PROGRADE +  0.01.
+        }
       }
     }
   }
@@ -168,6 +173,7 @@ function circularization {
     LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
     LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
     ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
+    params:ADD("Mode", "apoapsis").
   }
 }
 
@@ -186,6 +192,14 @@ function set_inc_lan {
     set lan_t to params["LAN"].
   else
     set lan_t to SHIP:OBT:LAN.
+
+  set_inc_lan_raw(incl_t,lan_t).
+  mission["next"]().
+}
+
+function set_inc_lan_raw {
+  local parameter incl_t.
+  local parameter lan_t.
 
   local incl_i to SHIP:OBT:INCLINATION.
   local lan_i to SHIP:OBT:LAN.
@@ -218,7 +232,6 @@ function set_inc_lan {
 
   local inc_node to NODE(node_eta, 0, dvtgt * cos(d_inc/2), 0 - abs(dvtgt * sin(d_inc/2))).
   ADD inc_node.
-  mission["next"]().
 }
 
 function eta_true_anom {
