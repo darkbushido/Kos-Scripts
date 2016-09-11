@@ -173,7 +173,6 @@ function circularization {
     LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
     LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
     ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
-    params:ADD("Mode", "apoapsis").
   }
 }
 

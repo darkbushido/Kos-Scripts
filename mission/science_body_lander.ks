@@ -5,6 +5,7 @@ set download_files to list(
   "hohmann_transfer_return.ks",
   "land.ks",
   "launch.ks",
+  "lazcalc.ks",
   "mission_runmodes.ks",
   "node_functions.ks",
   "ship_utils.ks",
@@ -16,7 +17,7 @@ for df in download_files {print "Downloading: " + df. DOWNLOAD("lib/" + df). RUN
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").
 } else {
-  set mission to lex("PitchExp", 0.4).
+  set mission to lex("PitchExp", 0.4, "Target", Mun).
 }
 
 if mission:haskey("Body")
@@ -59,7 +60,7 @@ set main_sequence to list(
   lex(
     "Title", "Launch with Pitch: " + mission["PitchExp"],
     "Function", launch@,
-    "Params", lex("PitchExp", mission["PitchExp"])
+    "Params", lex("PitchExp", mission["PitchExp"], "Body", target_body)
     ),
   lex(
     "Title", "Gravity Turn",

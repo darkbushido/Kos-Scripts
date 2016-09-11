@@ -16,20 +16,31 @@ function set_stage_fairings {
 function launch {
   parameter mission.
   parameter params.
-  if params:haskey("Inclination")
-    set incl_init to arcsin( cos(params["Inclination"]) /cos(SHIP:LATITUDE) ).
-  else
-    set incl_init to 90.
 
   if params:haskey("PitchExp")
     set pitch_exp to params["PitchExp"].
   else
     SET pitch_exp to 0.40.
-  print incl_init.
+
   if params:haskey("Altitude")
     set target_alt to params["Altitude"].
   else
     set target_alt to (SHIP:BODY:ATM:HEIGHT + 10000).
+
+  if params:haskey("Inclination") {
+    set lazcalc_data to LAZcalc_init(target_alt, params["Inclination"]).
+    set incl_init to LAZcalc(lazcalc_data).
+  }
+  else {
+    set incl_init to 90.
+  }
+
+  if params:haskey("Body") {
+    set lazcalc_data to LAZcalc_init(target_alt, params["Body"]:obt:Inclination).
+    set incl_init to LAZcalc(lazcalc_data).
+    print "Waiting for Launch Window".
+    warpto(launchwindow(params["Body"])).
+  }
 
   SET Kp TO 0.01. SET Ki TO 0.006. SET Kd TO 0.006.
   SET PID TO PIDLOOP(Kp, Ki, Kd, 0, 1). SET PID:SETPOINT TO target_alt.
@@ -88,4 +99,21 @@ function stage_fairings {
     mission["remove_event"]("Stage Fairings: " + fs).
   }
 
+}
+
+FUNCTION launchWindow {
+  PARAMETER tgt. //In your case you won't have a target; I imagine you'll want params to be LAN and Inc of target orbit.
+  LOCAL lat IS SHIP:LATITUDE.
+  LOCAL eclipticNormal IS VCRS(tgt:POSITION - tgt:OBT:BODY:POSITION, tgt:PROGRADE:FOREVECTOR):NORMALIZED.
+  LOCAL planetNormal IS HEADING(0,lat):VECTOR.
+  LOCAL bodyInc IS VANG(planetNormal, eclipticNormal).
+  LOCAL beta IS ARCCOS(MAX(-1,MIN(1,COS(bodyInc) * SIN(lat) / SIN(bodyInc)))).
+  LOCAL intersectdir IS VCRS(planetNormal, eclipticNormal):NORMALIZED.
+  LOCAL intersectpos IS -VXCL(planetNormal, eclipticNormal):NORMALIZED.
+  LOCAL launchtimedir IS (intersectdir * SIN(beta) + intersectpos * COS(beta)) * COS(lat) + SIN(lat) * planetNormal.
+  LOCAL launchtime IS VANG(launchtimedir, SHIP:POSITION - BODY:POSITION) / 360 * BODY:ROTATIONPERIOD.
+  if VCRS(launchtimedir, SHIP:POSITION - BODY:POSITION)*planetNormal < 0 {//Exclude this to only launch north
+      SET launchtime TO BODY:ROTATIONPERIOD - launchtime.
+  }
+  RETURN TIME:SECONDS+launchtime.
 }

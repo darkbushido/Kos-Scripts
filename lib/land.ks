@@ -50,35 +50,20 @@ function deorbit_to_position {
     set_inc_lan_raw(coordinates:Lat,node_lng-90+rot_angle).
   } else if landing_phase = 1 {
     print "Setting Up DeOrbit Burn".
-
-    local node_lng to mod(360+Body:ROTATIONANGLE+coordinates:LNG,360).
-
-    set_inc_lan_raw(coordinates:LAT,node_lng-90).
-    local my_node to NEXTNODE.
-    // change node_eta to adjust for rotation:
-    local t_wait_burn to my_node:ETA + OBT:PERIOD/4.
-
-    local rot_angle to t_wait_burn*360/Body:ROTATIONPERIOD.
-    remove my_node.
-    set_inc_lan_raw(coordinates:LAT,node_lng-90+rot_angle).
-    remove nextnode.
-
-    local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
-    local ship_2_node to mod((720 + node_lng+rot_angle - ship_ref),360).
-    local node_eta to ship_2_node*OBT:PERIOD/360.
-
-    local my_node to NODE(time:seconds + node_eta,0,0,-SHIP:VELOCITY:SURFACE:MAG).
-    ADD my_node.
-
-    local tti to timeToImpact(true)[1] - (time:seconds + my_node:eta).
-    remove my_node.
-    local p2 to SHIP:BODY:GEOPOSITIONOF(POSITIONAT(SHIP,tti)).
-    local distance to circle_distance(coordinates, p2, body:radius).
-    local old_distance to constant:pi() * 2 * body:radius.
-
-    local my_node to NODE(time:seconds + node_eta,0,0,-SHIP:VELOCITY:SURFACE:MAG).
-    ADD my_node.
-
+    local r1 to SHIP:OBT:SEMIMAJORAXIS.
+    local r2 TO SHIP:OBT:BODY:RADIUS.
+    local transfer_time to constant():pi * sqrt((((r1 + r2)^3)/(8*ship:BODY:MU))).
+    local phase_angle to (180*(1-(sqrt(((r1 + r2)/(2*r2))^3)))).
+    local actual_angle to mod(360 + (coordinates:LNG) - SHIP:LONGITUDE,360) .
+    local d_angle to (mod(360 + actual_angle - phase_angle,360)).
+    local ship_ang to  360/SHIP:OBT:PERIOD.
+    local tgt_ang to  360/SHIP:BODY:ROTATIONPERIOD.
+    local d_ang to ship_ang - tgt_ang.
+    local d_time to d_angle/d_ang.
+    // local my_dV to sqrt (ship:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
+    local my_dV to -SHIP:VELOCITY:SURFACE:MAG.
+    local nn TO NODE(time:seconds+d_time, 0, 0, my_dV).
+    ADD nn.
   } else if landing_phase > 1 {
     print "Finished with DeOrbit Burn".
     set landing_phase to 0.
