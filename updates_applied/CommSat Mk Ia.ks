@@ -4,7 +4,6 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-DOWNLOAD("mission/rt_network.ks").
-MOVEPATH("mission/rt_network.ks", "startup.ks").
+COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
 set mission to lex("PitchExp", 0.35).
 writejson(mission, "mission.json").

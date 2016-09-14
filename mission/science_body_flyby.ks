@@ -1,15 +1,14 @@
 set download_files to list(
-  "launch.ks",
-  "land.ks",
-  "collect_science.ks",
-  "hohmann_transfer.ks",
-  "hohmann_transfer_return.ks",
-  "mission_runmodes.ks",
-  "node_functions.ks",
-  "soi_change.ks",
-  "ship_utils.ks"
+  "launch_at_inc.ks","land.ks","collect_science.ks","hohmann_transfer.ks",
+  "hohmann_transfer_return.ks","mission_runmodes.ks","node_functions.ks",
+  "soi_change.ks","ship_utils.ks", "lazcalc.ks"
 ).
-for df in download_files {print "Downloading: " + df. DOWNLOAD("lib/" + df). RUNONCEPATH("lib/" + df).}
+for df in download_files {
+  if not exists("1:/lib/" + df)
+    COPYPATH("0:/lib/" + df, "1:/lib/" + df).
+  RUNONCEPATH("1:/lib/" + df).
+}
+
 
 if core:volume:exists("mission.json") {
   set mission to readjson("mission.json").
@@ -46,7 +45,7 @@ set main_sequence to list(
   lex(
     "Title", "Launch with Pitch: " + mission["PitchExp"],
     "Function", launch@,
-    "Params", lex("PitchExp", mission["PitchExp"])
+    "Params", lex("PitchExp", mission["PitchExp"], "Body", target_body)
     ),
   lex(
     "Title", "Gravity Turn",

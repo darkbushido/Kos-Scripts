@@ -50,20 +50,14 @@ function deorbit_to_position {
     set_inc_lan_raw(coordinates:Lat,node_lng-90+rot_angle).
   } else if landing_phase = 1 {
     print "Setting Up DeOrbit Burn".
-    local r1 to SHIP:OBT:SEMIMAJORAXIS.
-    local r2 TO SHIP:OBT:BODY:RADIUS.
-    local transfer_time to constant():pi * sqrt((((r1 + r2)^3)/(8*ship:BODY:MU))).
-    local phase_angle to (180*(1-(sqrt(((r1 + r2)/(2*r2))^3)))).
-    local actual_angle to mod(360 + (coordinates:LNG) - SHIP:LONGITUDE,360) .
-    local d_angle to (mod(360 + actual_angle - phase_angle,360)).
-    local ship_ang to  360/SHIP:OBT:PERIOD.
-    local tgt_ang to  360/SHIP:BODY:ROTATIONPERIOD.
-    local d_ang to ship_ang - tgt_ang.
-    local d_time to d_angle/d_ang.
-    // local my_dV to sqrt (ship:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
-    local my_dV to -SHIP:VELOCITY:SURFACE:MAG.
-    local nn TO NODE(time:seconds+d_time, 0, 0, my_dV).
-    ADD nn.
+
+    local node_lng to mod(360+Body:ROTATIONANGLE+coordinates:LNG,360).
+  	local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
+    local ship_2_node to mod((720 + node_lng+rot_angle - ship_ref),360).
+    local node_eta to ship_2_node*OBT:PERIOD/360.
+    local my_node to NODE(time:seconds + node_eta,0,0,-SHIP:VELOCITY:SURFACE:MAG).
+  	ADD my_node.
+
   } else if landing_phase > 1 {
     print "Finished with DeOrbit Burn".
     set landing_phase to 0.
@@ -82,7 +76,7 @@ function suicide_burn {
     SET thrott TO 0.
     LOCK THROTTLE TO thrott.
     set PID to PIDLOOP(0.1, 0.06, 0.06, 0, 1).
-    set PID:SETPOING to -0.5.
+    set PID:SETPOINT to -0.5.
     set suice_burn_setup to true.
   } else if time_to_impact(1) <= MNV_TIME(-ship:verticalspeed) {
     set warp to 0.

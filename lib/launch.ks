@@ -2,118 +2,66 @@ set st to 0.
 lock throttle to st.
 set start_turn to FALSE.
 function set_stage_fairings {
-  parameter mission.
-  parameter module_name.
-  if SHIP:MODULESNAMED(module_name):LENGTH > 0 {
+  parameter m, mn.
+  if SHIP:MODULESNAMED(mn):LENGTH > 0 {
     set fs to 100.
-    for fm in SHIP:MODULESNAMED(module_name) {
+    for fm in SHIP:MODULESNAMED(mn) {
       if fm:PART:STAGE < fs
         set fs to fm:PART:STAGE.
     }
-    mission["add_event"]("Stage Fairings: " + fs, stage_fairings@).
+    m["add_event"]("Stage Fairings: " + fs, stage_fairings@).
   }
 }
 function launch {
-  parameter mission.
-  parameter params.
-
-  if params:haskey("PitchExp")
-    set pitch_exp to params["PitchExp"].
-  else
-    SET pitch_exp to 0.40.
-
-  if params:haskey("Altitude")
-    set target_alt to params["Altitude"].
-  else
-    set target_alt to (SHIP:BODY:ATM:HEIGHT + 10000).
-
-  if params:haskey("Inclination") {
-    set lazcalc_data to LAZcalc_init(target_alt, params["Inclination"]).
-    set incl_init to LAZcalc(lazcalc_data).
-  }
-  else {
-    set incl_init to 90.
-  }
-
-  if params:haskey("Body") {
-    set lazcalc_data to LAZcalc_init(target_alt, params["Body"]:obt:Inclination).
-    set incl_init to LAZcalc(lazcalc_data).
-    print "Waiting for Launch Window".
-    warpto(launchwindow(params["Body"])).
-  }
-
+  parameter m, p.
+  SET pe to 0.40.
+  if p:haskey("PitchExp")
+    set pe to p["PitchExp"].
+  set ta to (SHIP:BODY:ATM:HEIGHT + 10000).
+  if p:haskey("Altitude")
+    set ta to p["Altitude"].
   SET Kp TO 0.01. SET Ki TO 0.006. SET Kd TO 0.006.
   SET PID TO PIDLOOP(Kp, Ki, Kd, 0, 1). SET PID:SETPOINT TO target_alt.
-
-  local PI to constant():PI.
-
-  local v_eqrot to 2* PI * SHIP:BODY:RADIUS / SHIP:BODY:ROTATIONPERIOD.
-  local v_orbit to sqrt ( SHIP:BODY:MU / target_alt).
-
-  set dir to arctan ((v_orbit * sin(incl_init) - v_eqrot*cos(SHIP:LATITUDE) ) /( v_orbit *cos(incl_init) )  ).
-
-  mission["remove_event"]("Power Check").
+  m["remove_event"]("Power Check").
   disable_antennas().
-
   set_stage_fairings(mission,"ModuleProceduralFairing").
-  lock steering to heading(dir,89).
-
+  lock steering to heading(90,85).
   set st to 1.
   if AVAILABLETHRUST = 0 {
     STAGE.
   }
-  mission["remove_event"]("Drop Empty Tanks").
-  mission["add_event"]("Auto Stage", auto_stage@).
-  mission["next"]().
+  m["remove_event"]("Drop Empty Tanks").
+  m["add_event"]("Auto Stage", auto_stage@).
+  m["next"]().
 }
 function gravity_turn {
-  parameter mission.
-  parameter params.
+  parameter m, p.
   if ALTITUDE > 1000 AND start_turn = FALSE {
     set start_turn to TRUE.
-    LOCK pitch to 90.0 - (90.0 * (alt:radar / target_alt)^pitch_exp).
-    LOCK STEERING to heading(dir, pitch).
+    LOCK pitch to 90.0 - (90.0 * (alt:radar / ta)^pe).
+    LOCK STEERING to heading(90, pitch).
     mission["add_event"]("Update Throttle", update_throttle@).
   } else if ALTITUDE > BODY:ATM:HEIGHT {
     if stage_delta_v() < 75
       STAGE. WAIT 1.
     panels on.
-    mission["remove_event"]("Update Throttle").
-    mission["add_event"]("Power Check", ensure_power@).
-    mission["add_event"]("Drop Empty Tanks", drop_empty_tanks@).
+    m["remove_event"]("Update Throttle").
+    m["add_event"]("Power Check", ensure_power@).
+    m["add_event"]("Drop Empty Tanks", drop_empty_tanks@).
     lock throttle to 0.
-    mission["next"]().
+    m["next"]().
   }
 }
-
 function update_throttle {
-  parameter mission.
+  parameter m.
   set st TO PID:UPDATE(TIME:SECONDS, APOAPSIS).
 }
 function stage_fairings {
-  parameter mission.
+  parameter m.
 
   if fs = (STAGE:NUMBER - 1) AND alt:radar > (BODY:ATM:HEIGHT - 1000) {
     STAGE.
     panels on.
-    mission["remove_event"]("Stage Fairings: " + fs).
+    m["remove_event"]("Stage Fairings: " + fs).
   }
-
-}
-
-FUNCTION launchWindow {
-  PARAMETER tgt. //In your case you won't have a target; I imagine you'll want params to be LAN and Inc of target orbit.
-  LOCAL lat IS SHIP:LATITUDE.
-  LOCAL eclipticNormal IS VCRS(tgt:POSITION - tgt:OBT:BODY:POSITION, tgt:PROGRADE:FOREVECTOR):NORMALIZED.
-  LOCAL planetNormal IS HEADING(0,lat):VECTOR.
-  LOCAL bodyInc IS VANG(planetNormal, eclipticNormal).
-  LOCAL beta IS ARCCOS(MAX(-1,MIN(1,COS(bodyInc) * SIN(lat) / SIN(bodyInc)))).
-  LOCAL intersectdir IS VCRS(planetNormal, eclipticNormal):NORMALIZED.
-  LOCAL intersectpos IS -VXCL(planetNormal, eclipticNormal):NORMALIZED.
-  LOCAL launchtimedir IS (intersectdir * SIN(beta) + intersectpos * COS(beta)) * COS(lat) + SIN(lat) * planetNormal.
-  LOCAL launchtime IS VANG(launchtimedir, SHIP:POSITION - BODY:POSITION) / 360 * BODY:ROTATIONPERIOD.
-  if VCRS(launchtimedir, SHIP:POSITION - BODY:POSITION)*planetNormal < 0 {//Exclude this to only launch north
-      SET launchtime TO BODY:ROTATIONPERIOD - launchtime.
-  }
-  RETURN TIME:SECONDS+launchtime.
 }

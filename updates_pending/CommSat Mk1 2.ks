@@ -4,13 +4,10 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-DOWNLOAD("mission/science_body_lander.ks").
-MOVEPATH("mission/science_body_lander.ks", "startup.ks").
+COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
 set mission to lex(
   "PitchExp", 0.35,
-  "Body", "Minmus",
-  "Altitude", 15000,
-  "Lat", 0,
-  "Lng", 0
+  "Vessal", "CommSat mk1",
+  "Offset", 120 * 1
 ).
 writejson(mission, "mission.json").

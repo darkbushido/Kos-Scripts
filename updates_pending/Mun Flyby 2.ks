@@ -4,8 +4,7 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-DOWNLOAD("mission/science_body_flyby.ks").
-MOVEPATH("mission/science_body_flyby.ks", "startup.ks").
+COPYPATH("0:/mission/science_body_flyby.ks", "1:/startup.ks").
 set mission to lex(
   "PitchExp", 0.35,
   "Body", "Mun",
