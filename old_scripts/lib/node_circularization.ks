@@ -19,7 +19,6 @@ function circularization {
       set ttb to ETA:PERIAPSIS.
     }
     LOCAL cotcobr to (cot + cobr).
-    LOCAL deltaV to 0.
     LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
     LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
     ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).

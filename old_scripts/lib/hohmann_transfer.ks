@@ -29,8 +29,8 @@ function hohmann_transfer {
     set da to (mod(360 + aa - pa,360)).
     set sa to  360/SHIP:OBT:PERIOD.
     set tgta to  360/trgt:OBT:PERIOD.
-    set d_ang to ship_ang - tgt_ang.
-    set d_time to d_angle/d_ang.
+    set d_ang to sa - tgta.
+    set d_time to da/d_ang.
   } else {
     set d_time to eta:apoapsis.
   }

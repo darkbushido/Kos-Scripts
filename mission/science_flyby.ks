@@ -3,16 +3,21 @@ local ship_utils is import("lib/ship_utils.ks").
 local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
-local PARKING_ALTITUDE is 80000.
-local TARGET_ALTITUDE is 750000.
+local PARKING_ALTITUDE is BODY:ATM:HEIGHT + 10000.
+local TARGET_BODY is Mun.
 if core:volume:exists("params.json") {
   set params to readjson("params.json").
 }
-if defined(params) and params:haskey("Altitude")
+if defined(params) {
+  if params:haskey("Altitude")
+    set TARGET_ALTITUDE to params["Altitude"].
+  if params:haskey("Body")
+    set TARGET_BODY to body(params["Body"])
+}
+  and params:haskey("Altitude")
   set TARGET_ALTITUDE to params["Altitude"].
 
-print TARGET_ALTITUDE.
-local rt_network_mission is mission(mission_definition@).
+local science_flyby is mission(mission_definition@).
 function mission_definition {
   parameter seq, ev, next.
   SET prevThrust TO AVAILABLETHRUST.
@@ -34,8 +39,8 @@ function mission_definition {
   seq:add(launch@).
   function launch {
     stage. wait 5.
-    lock pct_alt to alt:radar / TARGET_ALTITUDE.
-    lock target_pitch to 90 - (90* pct_alt^0.3).
+    lock pct_alt to (alt:radar / PARKING_ALTITUDE).
+    lock target_pitch to 90 - (90* pct_alt^0.35).
     lock steering to heading(90, target_pitch).
     if not ev:haskey("AutoStage")
       ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -67,23 +72,24 @@ function mission_definition {
       node_exec["circularize"]().
     }
   }
-  seq:add(hohmann_transfer@).
-  function hohmann_transfer {
-    local r1 to SHIP:OBT:SEMIMAJORAXIS.
-    local r2 TO TARGET_ALTITUDE + SHIP:OBT:BODY:RADIUS.
-    local d_time to eta:apoapsis.
-    if defined(params) and params:haskey("Vessel")
-      set d_time to hohmann["time"](r1,r2, params["Vessel"],params["Offset"]).
-    hohmann["transfer"](r1,r2,d_time).
-    node_exec["exec"](true).
-    next().
-  }
-  seq:add(circularize@).
   seq:add(set_inc_lan@).
   function set_inc_lan {
     node_set_inc_lan["node"]().
     node_exec["exec"](true).
     next().
   }
+  // seq:add(hohmann_transfer@).
+  // function hohmann_transfer {
+  //   local r1 to SHIP:OBT:SEMIMAJORAXIS.
+  //   local r2 TO TARGET_ALTITUDE + SHIP:OBT:BODY:RADIUS.
+  //   local d_time to eta:apoapsis.
+  //   if defined(params) and params:haskey("Body")
+  //     set d_time to hohmann["time"](r1,r2, params["Body"]).
+  //   hohmann["transfer"](r1,r2,d_time).
+  //   node_exec["exec"](true).
+  //   next().
+  // }
+  // seq:add(circularize@).
+
 }
-export(rt_network_mission).
+export(science_flyby).

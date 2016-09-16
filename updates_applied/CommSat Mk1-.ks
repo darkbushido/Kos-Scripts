@@ -5,5 +5,3 @@ for file in fileList {
   }
 }
 COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
-set p to lex("PitchExp", 0.35).
-writejson(p, "params.json").

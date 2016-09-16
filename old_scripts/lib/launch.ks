@@ -1,4 +1,4 @@
-set st to 0.
+ cvcz set st to 0.
 lock throttle to st.
 set start_turn to FALSE.
 function set_stage_fairings {

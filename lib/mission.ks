@@ -19,7 +19,7 @@
     d(s,e,n).
     return{
       until r>=s:length{s[r]().
-        for v in e:values v().
+        for k in e:keys e[k]().
         wait 0.
       }
     }.

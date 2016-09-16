@@ -1,11 +1,11 @@
 @LAZYGLOBAL off.
 clearscreen.
 set ship:control:pilotmainthrottle to 0.
-lock steering to sun:position.
+lock steering to lookdirup(v(0,1,0), sun:position).
 function download_updates {
-  parameter us.
+  local us to ship:name + ".ks".
   PRINT "Looking for /updates_pending/" + us.
-  if not exists("1:/knu.ks")
+  if not exists("1:/lib/knu.ks")
     copypath("0:/lib/knu.ks", "1:/lib/knu.ks").
   runpath("1:/lib/knu.ks").
   IF exists("0:/updates_pending/" + us) {
@@ -13,21 +13,20 @@ function download_updates {
       DELETEPATH("1:/update.ks").
     COPYPATH("0:/updates_pending/" + us, "1:/update.ks").
     MOVEPATH("0:/updates_pending/" + us, "0:/updates_applied/" + us).
-    RUNPATH("update.ks").
-    DELETEPATH("update.ks").
+    RUNPATH("1:/update.ks").
+    DELETEPATH("1:/update.ks").
   }
 }
-
-local us to ship:name + ".ks".
+wait until ship:unpacked.
 if addons:rt:available {
   for a in SHIP:ModulesNamed("ModuleRTAntenna") {
     if a:GETFIELD("status") = "Off" and a:allevents:CONTAINS("(callable) activate, is KSPEvent")
       a:DOEVENT("activate").
   }
   if addons:rt:hasconnection(ship)
-    download_updates(us).
+    download_updates().
 } else {
-  download_updates(us).
+  download_updates().
 }
 if exists("1:/startup.ks") {
   wait 5. import("startup.ks")().

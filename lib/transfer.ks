@@ -1,8 +1,6 @@
 {
   local INFINITY is 2^64.
   local transfer is lex(
-    "exec", exec@,
-    "freeze", freeze@,
     "seek_SOI", seek_SOI@,
     "seek", seek@
   ).
@@ -66,24 +64,6 @@
   function separation_at {
     parameter target_body, at_time.
     return (positionat(ship, at_time) - positionat(target_body, at_time)):mag.
-  }
-  function exec {
-    parameter autowarp is 0, n is nextnode,
-              v is n:burnvector,
-              starttime is time:seconds + n:eta - mnv_time(v:mag)/2.
-    lock steering to n:burnvector.
-    if autowarp warpto(starttime - 30).
-    wait until time:seconds >= starttime.
-    lock throttle to min(mnv_time(n:burnvector:mag), 1).
-    until vdot(n:burnvector, v) < 0 {
-      if ship:maxthrust < 0.1 stage.
-      wait 0.1.
-      if ship:maxthrust < 0.1 { break. }
-    }
-    lock throttle to 0.
-    unlock steering.
-    remove nextnode.
-    wait 0.
   }
   function mnv_time {
     parameter dV.
