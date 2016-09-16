@@ -13,8 +13,8 @@
     wait until time:seconds >= starttime.
     lock throttle to min(mnv_time(n:burnvector:mag/2), 1).
     until vdot(n:burnvector, v) < 0 {
-      if ship:maxthrust < 0.1 stage.
-      wait 0.1.
+      if ship:maxthrust < 0.1
+        stage. wait 0.1.
       if ship:maxthrust < 0.1 { break. }
     }
     lock throttle to 0.
@@ -47,9 +47,11 @@
       set isp to isp + en:isp.
       set engine_count to engine_count + 1.
     }
-    set isp to isp / engine_count.
-    set thrust to thrust * 1000.
-    return g * m * isp * (1 - e^(-dV/(g*isp))) / thrust.
+    if engine_count > 0 {
+      set isp to isp / engine_count.
+      set thrust to thrust * 1000.
+      return g * m * isp * (1 - e^(-dV/(g*isp))) / thrust.
+    } else { return 0.}
   }
   export(node_exec).
 }

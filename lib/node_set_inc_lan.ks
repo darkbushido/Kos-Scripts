@@ -1,6 +1,6 @@
 {
   local node_inc is lex(
-    "node", create_node@
+    "create_node", create_node@
   ).
   function create_node {
     parameter incl_t is 0, lan_t is SHIP:OBT:LAN.
@@ -44,6 +44,7 @@
       local my_time_in_orbit to ((OBT:MEANANOMALYATEPOCH)*OBT:PERIOD /360).
       set node_eta to mod(OBT:PERIOD + time_2_anom - my_time_in_orbit,OBT:PERIOD) .
     }
+    return TIME:SECONDS + node_eta.
   }
   export(node_inc).
 }
