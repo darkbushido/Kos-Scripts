@@ -5,7 +5,8 @@ for file in fileList {
   }
 }
 COPYPATH("0:/mission/science_flyby.ks", "1:/startup.ks").
-// set params to lex(
-//   "Body", "Mun"
-// ).
-// writejson(params, "params.json").
+set params to lex(
+  "Body", "Minmus",
+  "Altitude", 15000
+).
+writejson(params, "params.json").

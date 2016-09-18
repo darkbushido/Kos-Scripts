@@ -77,8 +77,8 @@ function mission_definition {
     else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
     else node_exec["circularize"]().
   }
-  seq:add(set_inc_lan@).
-  function set_inc_lan {
+  seq:add(set_trgt_inc_lan@).
+  function set_trgt_inc_lan {
     node_set_inc_lan["create_node"](target_body:obt:inclination, target_body:obt:lan).
     node_exec["exec"](true).
     next().
@@ -127,16 +127,27 @@ function mission_definition {
     science["science"]().
     next().
   }
-  seq:add(return_correction@).
-  function return_correction {
-    set ct to time:seconds + eta:periapsis.
-    local data is list(0).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 10).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 1).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 0.1).
-    local nn to nextnode.
-    if nn:deltav:mag < 1 remove nn.
-    else node_exec["exec"](true).
+  seq:add(circularize_pe@).
+  function circularize_pe {
+    local sma to ship:obt:SEMIMAJORAXIS.
+    local ecc to ship:obt:ECCENTRICITY.
+    print round(sma).
+    if hasnode node_exec["exec"](true).
+    else if (ecc < 0.001) or (600000 > sma and ecc < 0.005) next().
+    else node_exec["circularize"](true).
+  }
+  seq:add(set_trgt_inc_lan@).
+  function set_trgt_inc_lan {
+    node_set_inc_lan["create_node"](target_body:obt:inclination, target_body:obt:lan).
+    node_exec["exec"](true).
+    next().
+  }
+  seq:add(hohmann_return@).
+  function hohmann_return {
+    hohmann["return"]().
+    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, target_periapsis), 10).
+    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, target_periapsis), 1).
+    node_exec["exec"](true).
     next().
   }
   seq:add(collect_science@).

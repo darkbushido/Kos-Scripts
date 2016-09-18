@@ -57,7 +57,7 @@ function science_value {
         SM:transmit.
       else if SMS[SM:PART:NAME]:LENGTH > 1
         SMS[SM:PART:NAME]:REMOVE(0).
-      else if (not SM:RERUNNABLE) OR  SM:INOPERABLE
+      else if (not SM:RERUNNABLE) OR SM:INOPERABLE
         SMS:REMOVE(SM:part:name).
       else
         PRINT "OH SHIT WHATS GOING ON? " + title.

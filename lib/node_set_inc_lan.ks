@@ -1,6 +1,7 @@
 {
   local node_inc is lex(
-    "create_node", create_node@
+    "create_node", create_node@,
+    "true_anom", eta_true_anom@
   ).
   function create_node {
     parameter incl_t is 0, lan_t is SHIP:OBT:LAN.

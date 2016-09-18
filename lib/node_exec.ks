@@ -6,13 +6,13 @@
   function exec {
     parameter autowarp is 0, n is nextnode,
               v is n:burnvector,
-              starttime is (time:seconds + n:eta - mnv_time(v:mag)/2).
+              starttime is (time:seconds + n:eta - mnv_time(v:mag)*0.5).
     lock steering to n:burnvector.
     wait until VANG(SHIP:FACING:VECTOR, n:BURNVECTOR) < 1.
     if autowarp warpto(starttime - 30).
     wait until time:seconds >= starttime.
     lock throttle to min(mnv_time(n:burnvector:mag/2), 1).
-    until vdot(n:burnvector, v) < 0 {
+    until vdot(n:burnvector, v) < 0.01 {
       if ship:maxthrust < 0.1
         stage. wait 0.1.
       if ship:maxthrust < 0.1 { break. }

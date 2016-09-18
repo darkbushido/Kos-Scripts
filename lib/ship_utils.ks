@@ -11,10 +11,10 @@
       set prevThrust TO AVAILABLETHRUST.
     if NOT STAGE:READY {}
     else if AVAILABLETHRUST = 0 {
-      set st TO THROTTLE.
+      local t TO THROTTLE.
       LOCK THROTTLE TO 0.
       WAIT 1. STAGE. WAIT 1.
-      LOCK THROTTLE TO st.
+      LOCK THROTTLE TO t.
       set prevThrust TO AVAILABLETHRUST.
     } else if AVAILABLETHRUST < (prevThrust - 10) {
       STAGE. WAIT 1.
@@ -57,7 +57,7 @@
         ELSE SET mDotTotal TO mDotTotal + t / eng:ISP.
       }
     }
-    IF mDotTotal > 0 set avgIsp IS thrustTotal/mDotTotal.
+    IF mDotTotal > 0 set avgIsp to thrustTotal/mDotTotal.
     LOCAL deltaV IS avgIsp * LG * ln(SHIP:MASS / (SHIP:MASS-fuel_mass)).
     RETURN deltaV.
   }

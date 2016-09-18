@@ -9,7 +9,8 @@
     local my_dV to sqrt (ship:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
     local nn TO NODE(time:seconds+d_time, 0, 0, my_dV).
     ADD nn.
-    lock steering to nn:DELTAV.
+    local dv to nn:deltav.
+    lock steering to dv.
   }
   function transfer_return {
     parameter trgt_per is 30000.
@@ -19,22 +20,23 @@
     local r1 is SHIP:OBT:SEMIMAJORAXIS.
     local r2 is BODY:SOIRADIUS.
     local mu to BODY:MU.
-    local ejection_vel is sqrt((r1*(r2*v2^2 - 2 * mu) + 2*r2*mu ) / (r1*r2) ).
-    local delta_v to  abs(SHIP:OBT:VELOCITY:ORBIT:MAG-ejection_vel).
-    local vel_vector is SHIP:VELOCITY:ORBIT:VEC.
-    set vel_vector:MAG to (vel_vector:MAG + delta_v).
-    local ship_pos_orbit_vector is SHIP:Position - BODY:Position.
-    local angular_momentum_h is (vcrs(vel_vector,ship_pos_orbit_vector)):MAG.
-    local spec_energy is ((vel_vector:MAG^2)/2) - (BODY:MU/SHIP:OBT:SEMIMAJORAXIS).
-    local ecc is sqrt(1 + ((2*spec_energy*angular_momentum_h^2)/BODY:MU^2)).
-    local launch_angle is arcsin(1/ecc).
-    local body_orbit_direction is BODY:ORBIT:VELOCITY:ORBIT:DIRECTION:YAW.
-    local ship_orbit_direction is SHIP:ORBIT:VELOCITY:ORBIT:DIRECTION:YAW.
-    local launch_point_dir is (body_orbit_direction - 180 + launch_angle).
-    local node_eta is mod((360+ ship_orbit_direction - launch_point_dir),360)/360 * SHIP:OBT:PERIOD.
-    local my_node to NODE(time:seconds + node_eta, 0, 0, delta_v).
-    ADD my_node.
-    lock steering to nn:DELTAV.
+    local ev is sqrt((r1*(r2*v2^2 - 2 * mu) + 2*r2*mu ) / (r1*r2) ).
+    local dv to  abs(SHIP:OBT:VELOCITY:ORBIT:MAG-ev).
+    local vv is SHIP:VELOCITY:ORBIT:VEC.
+    set vv:MAG to (vv:MAG + dv).
+    local spov is SHIP:Position - BODY:Position.
+    local amh is (vcrs(vv,spov)):MAG.
+    local se is ((vv:MAG^2)/2) - (BODY:MU/SHIP:OBT:SEMIMAJORAXIS).
+    local ecc is sqrt(1 + ((2*se*amh^2)/BODY:MU^2)).
+    local la is arcsin(1/ecc).
+    local bod is BODY:ORBIT:VELOCITY:ORBIT:DIRECTION:YAW.
+    local sod is SHIP:ORBIT:VELOCITY:ORBIT:DIRECTION:YAW.
+    local lpd is (bod - 180 + la).
+    local node_eta is mod((360+ sod - lpd),360)/360 * SHIP:OBT:PERIOD.
+    local nn to NODE(time:seconds + node_eta, 0, 0, dv).
+    ADD nn. wait 0.1.
+    local dv to nn:deltav.
+    lock steering to dv.
   }
   function transfer_time {
     parameter r1, r2, trgt, offset is 0.
