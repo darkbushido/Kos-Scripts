@@ -4,10 +4,10 @@ set ship:control:pilotmainthrottle to 0.
 lock steering to lookdirup(v(0,1,0), sun:position).
 function download_updates {
   local us to ship:name + ".ks".
-  PRINT "Looking for /updates_pending/" + us.
   if not exists("1:/lib/knu.ks")
     copypath("0:/lib/knu.ks", "1:/lib/knu.ks").
   runpath("1:/lib/knu.ks").
+  PRINT "Looking for /updates_pending/" + us.
   IF exists("0:/updates_pending/" + us) {
     IF exists("1:/update.ks")
       DELETEPATH("1:/update.ks").
@@ -23,8 +23,11 @@ if addons:rt:available {
     if a:GETFIELD("status") = "Off" and a:allevents:CONTAINS("(callable) activate, is KSPEvent")
       a:DOEVENT("activate").
   }
-  if addons:rt:hasconnection(ship)
-    download_updates().
+  if addons:rt:hasconnection(ship) { download_updates(). }
+  else if exists("1:/lib/knu.ks") {
+    runpath("1:/lib/knu.ks").
+    print "No Connection, running startup.ks".
+  }
 } else {
   download_updates().
 }

@@ -29,7 +29,7 @@ function mission_definition {
     ship_utils["disable"]().
     set ship:control:pilotmainthrottle to 0.
     lock throttle to PID:UPDATE(TIME:SECONDS, APOAPSIS).
-    lock steering to heading(90, 90).
+    lock steering to heading(90, 89).
     wait 1.
     next().
   }

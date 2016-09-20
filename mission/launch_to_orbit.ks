@@ -4,21 +4,23 @@ local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local lazcalc is import("lib/lazcalc.ks").
+local hillclimb is import("lib/hillclimb.ks").
+local fitness is import("lib/fitness_orbit.ks").
 local parking_alt is BODY:ATM:HEIGHT + 10000.
 local target_ecc to 0.
 local target_sma to 650000.
 local target_inc to 0.
-local target_lan to 0.
+local target_lan to SHIP:OBT:LAN.
 local target_agp to 0.
-local target_pe_alt to (1 - target_ecc) * target_sma
-    - ship:body:radius.
-local target_ap_alt to (1 + target_ecc) * target_sma
-    - ship:body:radius.
+local pitch_exp to 0.35.
+local target_pe_alt to (1 - target_ecc) * target_sma - ship:body:radius.
+local target_ap_alt to (1 + target_ecc) * target_sma - ship:body:radius.
 
 if core:volume:exists("params.json") {
   set params to readjson("params.json").
 }
 if defined(params) {
+  print params.
   if params:haskey("Alt") set target_alt to params["Alt"].
   if params:haskey("ECC") set target_ecc to params["ECC"].
   if params:haskey("SMA") set target_sma to params["SMA"].
@@ -27,6 +29,7 @@ if defined(params) {
   if params:haskey("INC") set target_inc to params["INC"].
   if params:haskey("LAN") set target_lan to params["LAN"].
   if params:haskey("AgP") set target_agp to params["AgP"].
+  if params:haskey("PitchExp") set pitch_exp to params["PitchExp"].
 }
 
 local launch_to_orbit_mission is mission(mission_definition@).
@@ -38,12 +41,6 @@ function mission_definition {
   SET PID:SETPOINT TO parking_alt.
   SET thrott to 0.
 
-  seq:add(launch_window@).
-  function launch_window {
-    if not target_lan = 0
-      lazcalc["LAN"](target_lan).
-    next().
-  }
   seq:add(prelaunch@).
   function prelaunch {
     ev:remove("Power").
@@ -51,16 +48,19 @@ function mission_definition {
     set ship:control:pilotmainthrottle to 0.
     lock throttle to PID:UPDATE(TIME:SECONDS, APOAPSIS).
     local dir to lazcalc["LAZ"](parking_alt, target_inc).
-    lock steering to heading(dir, 89).
-    wait 1.
+    lock steering to heading(dir, 88).
     next().
   }
   seq:add(launch@).
   function launch {
-    stage. wait 5.
-    lock pct_alt to alt:radar / parking_alt.
-    lock target_pitch to 90 - (90* pct_alt^0.25).
     local dir to lazcalc["LAZ"](parking_alt, target_inc).
+    if not target_inc = 0 {
+      set dir to lazcalc["LAZ"](parking_alt, target_inc).
+      print dir.
+    }
+    stage. wait 10.
+    lock pct_alt to (alt:radar / parking_alt).
+    lock target_pitch to 90 - (90* pct_alt^pitch_exp).
     lock steering to heading(dir, target_pitch).
     if not ev:haskey("AutoStage")
       ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -69,31 +69,28 @@ function mission_definition {
   seq:add(coast_to_atm@).
   function coast_to_atm {
     if alt:radar > body:atm:height {
-      unlock throttle.
-      set throttle to 0.
+      set warp to 0.
+      lock throttle to 0.
       if not ev:haskey("Power")
         ev:add("Power", ship_utils["power"]).
       if ev:haskey("AutoStage")
         ev:remove("AutoStage").
-      wait 0. stage. wait 0.
+      wait 2. stage. wait 1.
       panels on.
       next().
     }
   }
-  seq:add(circularize@).
-  function circularize {
+  seq:add(circularize_ap@).
+  function circularize_ap {
     local sma to ship:obt:SEMIMAJORAXIS.
     local ecc to ship:obt:ECCENTRICITY.
-    if hasnode {
-      node_exec["exec"](true).
-    } else if (ecc < 0.001) or (sma < 70000 and ecc < 0.005) {
-      next().
-    } else {
-      node_exec["circularize"]().
-    }
+    if hasnode node_exec["exec"](true).
+    else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+    else node_exec["circularize"]().
   }
   seq:add(set_inc_lan@).
   function set_inc_lan {
+    print target_inc.
     node_set_inc_lan["create_node"](target_inc, target_lan).
     node_exec["exec"](true).
     next().
@@ -102,13 +99,29 @@ function mission_definition {
   function hohmann_transfer {
     local r1 to SHIP:OBT:SEMIMAJORAXIS.
     local r2 TO target_sma.
-    local d_time to node_set_inc_lan["true_anom"](target_agp).
-    if defined(params) and params:haskey("Vessel")
-      set d_time to hohmann["time"](r1,r2, params["Vessel"],params["Offset"]).
+    local d_time to time:seconds + eta:periapsis.
     hohmann["transfer"](r1,r2,d_time).
+    local nn to nextnode.
+    local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    set data to hillclimb["seek"](data, fitness["apoapsis_fit"](d_time, target_ap_alt), 1).
+    set data to hillclimb["seek"](data, fitness["apoapsis_fit"](d_time, target_ap_alt), 0.1).
     node_exec["exec"](true).
     next().
   }
+  seq:add(circularize_ap@).
+  function circularize_ap {
+    local sma to ship:obt:SEMIMAJORAXIS.
+    local ecc to ship:obt:ECCENTRICITY.
+    if hasnode node_exec["exec"](true).
+    else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+    else node_exec["circularize"]().
+  }
+  seq:add(finish@).
+  function finish {
+    deletepath("startup.ks").
+    reboot.
+  }
+
 
 }
 export(launch_to_orbit_mission).

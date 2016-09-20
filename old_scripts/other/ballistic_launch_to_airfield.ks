@@ -8,15 +8,17 @@ set airfield to LATLNG(-1.52,288.09).
 // set lng_adjust to (distance_traveled/circ) *360.
 
 // lock steering to heading( LATLNG(airfield:lat, airfield:lng + lng_adjust):heading, 84.10).
-lock steering to heading( airfield:heading-3, 48).
+set airfield to LATLNG(-1.52,288.09).
+lock steering to heading( airfield:heading-3, 32).
 stage.
 wait 10.
-
 wait until AVAILABLETHRUST = 0.
 lock steering to SRFPROGRADE.
-
 wait 18.
 stage.
 wait eta:apoapsis.
-stage.
+set warp to 0.
+wait 22.
 lock steering to srfretrograde.
+wait 15.
+stage.

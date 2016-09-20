@@ -14,6 +14,7 @@ if core:volume:exists("params.json") {
   set params to readjson("params.json").
 }
 if defined(params) {
+  print params.
   if params:haskey("Altitude") set target_periapsis to params["Altitude"].
   if params:haskey("Body") set target_body to body(params["Body"]).
 }

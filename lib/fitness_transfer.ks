@@ -1,8 +1,21 @@
 {
   local fitness is lex(
+    "inclination_fit", inclination_fit@,
     "periapsis_fit", periapsis_fit@,
     "correction_fit", correction_fit@
   ).
+  function inclination_fit {
+    parameter target_body, target_inc.
+    function fitness_fn {
+      parameter data.
+      local maneuver is make_node(data).
+      remove_any_nodes().
+      add maneuver. wait 0.01.
+      if not t_to(maneuver, target_body) return -2^64.
+      return -abs(target_inc - maneuver:orbit:nextpatch:inclination).
+    }
+    return fitness_fn@.
+  }
   function periapsis_fit {
     parameter target_body, target_periapsis.
     function fitness_fn {

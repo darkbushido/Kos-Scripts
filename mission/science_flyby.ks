@@ -14,6 +14,7 @@ if core:volume:exists("params.json") {
   set params to readjson("params.json").
 }
 if defined(params) {
+  print params.
   if params:haskey("Altitude") set target_periapsis to params["Altitude"].
   if params:haskey("Body") set target_body to body(params["Body"]).
 }
@@ -91,6 +92,8 @@ function mission_definition {
     hohmann["transfer"](r1,r2,d_time).
     local nn to nextnode.
     local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, 178), 1).
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, 178), 0.1).
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 1).
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 0.1).
     node_exec["exec"](true).

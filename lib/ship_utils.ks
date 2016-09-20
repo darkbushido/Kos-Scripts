@@ -21,8 +21,8 @@
       set prevThrust TO AVAILABLETHRUST.
   }}
   function power {
-    if SHIP:ELECTRICCHARGE < 30 disable().
-    else if SHIP:ELECTRICCHARGE >= 50 enable().
+    if SHIP:ELECTRICCHARGE < 50 disable().
+    else if SHIP:ELECTRICCHARGE >= 200 enable().
   }
   function enable {
     if ADDONS:RT:AVAILABLE {
@@ -32,7 +32,7 @@
   function disable {
     if ADDONS:RT:AVAILABLE {
       for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-        if not list("Reflectron DP-10", "Reflectron KR-7"):contains(antenna:part:title) {
+        if not list("Reflectron DP-10"):contains(antenna:part:title) {
           if not (antenna:getfield("status") = "Off") antenna:DOEVENT("deactivate").
             wait until antenna:getfield("status") = "Off".
   }}}}
