@@ -48,8 +48,6 @@ function mission_definition {
     if alt:radar > body:atm:height {
       unlock throttle.
       set throttle to 0.
-      if not ev:haskey("Power")
-        ev:add("Power", ship_utils["power"]).
       if ev:haskey("AutoStage")
         ev:remove("AutoStage").
       wait 0. stage. wait 0.
