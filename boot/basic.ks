@@ -24,15 +24,16 @@ if addons:rt:available {
       a:DOEVENT("activate").
   }
   if addons:rt:hasconnection(ship) { download_updates(). }
-  else if exists("1:/lib/knu.ks") {
-    runpath("1:/lib/knu.ks").
-    print "No Connection, running startup.ks".
-  }
+  else if exists("1:/lib/knu.ks") { runpath("1:/lib/knu.ks"). print "No Connection, running startup.ks".}
+  else { print "No Connection, No knu.ks". }
 } else {
   download_updates().
 }
 if exists("1:/startup.ks") {
   wait 5. import("startup.ks")().
 } else {
-  wait 10. reboot.
+  print "No startup.ks, rebooting in 10s".
+  wait 10.
+  print "Rebooting now".
+  reboot.
 }
