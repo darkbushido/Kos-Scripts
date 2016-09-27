@@ -67,6 +67,12 @@ function mission_definition {
       node_exec["circularize"]().
     }
   }
+  seq:add(set_inc_lan@).
+  function set_inc_lan {
+    node_set_inc_lan["create_node"]().
+    node_exec["exec"](true).
+    next().
+  }
   seq:add(hohmann_transfer@).
   function hohmann_transfer {
     local r1 to SHIP:OBT:SEMIMAJORAXIS.
@@ -85,12 +91,6 @@ function mission_definition {
     next().
   }
   seq:add(circularize@).
-  seq:add(set_inc_lan@).
-  function set_inc_lan {
-    node_set_inc_lan["create_node"]().
-    node_exec["exec"](true).
-    next().
-  }
   seq:add(finish@).
   function finish {
     deletepath("startup.ks").
