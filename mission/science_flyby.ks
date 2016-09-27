@@ -9,6 +9,7 @@ local science is import("lib/science.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local parking_alt is BODY:ATM:HEIGHT + 10000.
 local target_periapsis is 30000.
+local pitch_exp is 0.25.
 local target_body is Mun.
 if core:volume:exists("params.json") {
   set params to readjson("params.json").
@@ -17,6 +18,7 @@ if defined(params) {
   print params.
   if params:haskey("Altitude") set target_periapsis to params["Altitude"].
   if params:haskey("Body") set target_body to body(params["Body"]).
+  if params:haskey("PitchExp") set pitch_exp to params["PitchExp"].
 }
 print target_body.
 local science_flyby is mission(mission_definition@).
@@ -50,7 +52,7 @@ function mission_definition {
     }
     stage. wait 10.
     lock pct_alt to (alt:radar / parking_alt).
-    lock target_pitch to 90 - (90* pct_alt^0.25).
+    lock target_pitch to 90 - (90* pct_alt^pitch_exp).
     lock steering to heading(dir, target_pitch).
     if not ev:haskey("AutoStage")
       ev:add("AutoStage", ship_utils["auto_stage"]).
