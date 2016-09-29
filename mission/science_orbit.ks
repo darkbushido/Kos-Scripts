@@ -9,6 +9,8 @@ local science is import("lib/science.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local parking_alt is BODY:ATM:HEIGHT + 10000.
 local target_periapsis is 30000.
+local target_inc is 2.
+local pitch_exp is 0.25.
 local target_body is Mun.
 if core:volume:exists("params.json") {
   set params to readjson("params.json").
@@ -16,7 +18,9 @@ if core:volume:exists("params.json") {
 if defined(params) {
   print params.
   if params:haskey("Altitude") set target_periapsis to params["Altitude"].
+  if params:haskey("Inc") set target_inc to params["Inc"].
   if params:haskey("Body") set target_body to body(params["Body"]).
+  if params:haskey("PitchExp") set pitch_exp to params["PitchExp"].
 }
 print target_body.
 local science_flyby is mission(mission_definition@).
@@ -50,7 +54,7 @@ function mission_definition {
     }
     stage. wait 10.
     lock pct_alt to (alt:radar / parking_alt).
-    lock target_pitch to 90 - (90* pct_alt^0.25).
+    lock target_pitch to 90 - (90* pct_alt^pitch_exp).
     lock steering to heading(dir, target_pitch).
     if not ev:haskey("AutoStage")
       ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -78,8 +82,8 @@ function mission_definition {
     else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
     else node_exec["circularize"]().
   }
-  seq:add(set_trgt_inc_lan@).
-  function set_trgt_inc_lan {
+  seq:add(set_inc_lan@).
+  function set_inc_lan {
     node_set_inc_lan["create_node"](target_body:obt:inclination, target_body:obt:lan).
     node_exec["exec"](true).
     next().
@@ -92,6 +96,10 @@ function mission_definition {
     hohmann["transfer"](r1,r2,d_time).
     local nn to nextnode.
     local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    print "Inclination Fitness".
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, target_inc), 1).
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, target_inc), 0.1).
+    print "Periapsis Fitness".
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 1).
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 0.1).
     node_exec["exec"](true).
@@ -99,12 +107,12 @@ function mission_definition {
   }
   seq:add(hohmann_correction@).
   function hohmann_correction {
-    set ct to time:seconds + (eta:transition * .3).
+    set ct to time:seconds + (eta:transition * 0.7).
     local data is list(0).
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 1).
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 0.1).
     local nn to nextnode.
-    if nn:deltav:mag < 1 remove nn.
+    if nn:deltav:mag < 0.1 remove nn.
     next().
   }
   seq:add(exec_node@).
@@ -132,26 +140,44 @@ function mission_definition {
   function circularize_pe {
     local sma to ship:obt:SEMIMAJORAXIS.
     local ecc to ship:obt:ECCENTRICITY.
-    print round(sma).
-    if hasnode node_exec["exec"](true).
+    if hasnode node_exec["exec"]().
     else if (ecc < 0.001) or (600000 > sma and ecc < 0.005) next().
     else node_exec["circularize"](true).
   }
-  seq:add(set_trgt_inc_lan@).
-  function set_trgt_inc_lan {
-    node_set_inc_lan["create_node"](target_body:obt:inclination, target_body:obt:lan).
-    node_exec["exec"](true).
-    next().
-  }
-  seq:add(hohmann_return@).
-  function hohmann_return {
-    hohmann["return"]().
-    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, target_periapsis), 10).
-    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, target_periapsis), 1).
+  seq:add(set_inc_lan_to_eq@).
+  function set_inc_lan_to_eq {
+    local orbit_inc to 0.
+    if abs(ship:orbit:inclination-180) < 15 {
+      set orbit_inc to 180.
+    }
+    node_set_inc_lan["create_node"](orbit_inc).
     node_exec["exec"](true).
     next().
   }
   seq:add(collect_science@).
+  seq:add(hohmann_return@).
+  function hohmann_return {
+    print "Homann Return".
+    hohmann["return"]().
+    local nn to nextnode.
+    local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 10).
+    hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 1).
+    node_exec["exec"](true).
+    next().
+  }
+  seq:add(return_correction@).
+  function return_correction {
+    set ct to time:seconds + (eta:transition * 0.7).
+    local data is list(0).
+    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 10).
+    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 1).
+    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 0.1).
+    local nn to nextnode.
+    if nn:deltav:mag < 0.1 remove nn.
+    else node_exec["exec"](true).
+    next().
+  }
   seq:add(wait_for_return_soi_change@).
   function wait_for_return_soi_change {
     wait 5.
@@ -165,6 +191,7 @@ function mission_definition {
   function atmo_reentry {
     lock steering to lookdirup(v(0,1,0), sun:position).
     if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+      print "Entering Atmo".
       lock steering to srfretrograde.
       until stage:number = 1 {
         if STAGE:READY {STAGE.}
@@ -178,7 +205,7 @@ function mission_definition {
       unlock steering.
       CHUTESSAFE ON.
     }
-    if status = "Landed" {
+    if list("Landed","Splashed"):contains(status) {
       ev:add("Power", ship_utils["power"]). wait 5.
       next().
   }}
