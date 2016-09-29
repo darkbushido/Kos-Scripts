@@ -9,6 +9,7 @@ local science is import("lib/science.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local parking_alt is BODY:ATM:HEIGHT + 10000.
 local target_periapsis is 30000.
+local target_inc is 178.
 local pitch_exp is 0.25.
 local target_body is Mun.
 if core:volume:exists("params.json") {
@@ -17,6 +18,7 @@ if core:volume:exists("params.json") {
 if defined(params) {
   print params.
   if params:haskey("Altitude") set target_periapsis to params["Altitude"].
+  if params:haskey("Inc") set target_inc to params["Inc"].
   if params:haskey("Body") set target_body to body(params["Body"]).
   if params:haskey("PitchExp") set pitch_exp to params["PitchExp"].
 }
@@ -94,8 +96,10 @@ function mission_definition {
     hohmann["transfer"](r1,r2,d_time).
     local nn to nextnode.
     local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, 178), 1).
-    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, 178), 0.1).
+    print "Inclination Fitness".
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, target_inc), 1).
+    set data to hillclimb["seek"](data, fitness["inclination_fit"](target_body, target_inc), 0.1).
+    print "Periapsis Fitness".
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 1).
     set data to hillclimb["seek"](data, fitness["periapsis_fit"](target_body, target_periapsis), 0.1).
     node_exec["exec"](true).
@@ -103,12 +107,12 @@ function mission_definition {
   }
   seq:add(hohmann_correction@).
   function hohmann_correction {
-    set ct to time:seconds + (eta:transition * .3).
+    set ct to time:seconds + (eta:transition * 0.7).
     local data is list(0).
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 1).
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 0.1).
     local nn to nextnode.
-    if nn:deltav:mag < 1 remove nn.
+    if nn:deltav:mag < 0.1 remove nn.
     next().
   }
   seq:add(exec_node@).
@@ -140,8 +144,8 @@ function mission_definition {
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 1).
     set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 0.1).
     local nn to nextnode.
-    if nn:deltav:mag < 1 remove nn.
-    else node_exec["exec"](true).
+    if nn:deltav:mag < 0.1 remove nn.
+    else node_exec["exec"]().
     next().
   }
   seq:add(collect_science@).
@@ -158,6 +162,7 @@ function mission_definition {
   function atmo_reentry {
     lock steering to lookdirup(v(0,1,0), sun:position).
     if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+      print "Entering Atmo".
       lock steering to srfretrograde.
       until stage:number = 1 {
         if STAGE:READY {STAGE.}
@@ -171,7 +176,7 @@ function mission_definition {
       unlock steering.
       CHUTESSAFE ON.
     }
-    if status = "Landed" {
+    if list("Landed","Splashed"):contains(status) {
       ev:add("Power", ship_utils["power"]). wait 5.
       next().
   }}
