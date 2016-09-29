@@ -162,7 +162,6 @@ function mission_definition {
   function atmo_reentry {
     lock steering to lookdirup(v(0,1,0), sun:position).
     if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
-      print "Entering Atmo".
       lock steering to srfretrograde.
       until stage:number = 1 {
         if STAGE:READY {STAGE.}
