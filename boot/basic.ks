@@ -17,6 +17,22 @@ function download_updates {
     DELETEPATH("1:/update.ks").
   }
 }
+
+local s is stack().
+local d is lex().
+global import is{
+  parameter n.
+  s:push(n).
+  if not exists("1:/"+n)
+    copypath("0:/"+n,"1:/"+n).
+  runpath("1:/"+n).
+  return d[n].
+}.
+global export is{
+  parameter v.
+  set d[s:pop()] to v.
+}.
+
 wait until ship:unpacked.
 if addons:rt:available {
   for a in SHIP:ModulesNamed("ModuleRTAntenna") {
@@ -24,8 +40,7 @@ if addons:rt:available {
       a:DOEVENT("activate").
   }
   if addons:rt:hasconnection(ship) { download_updates(). }
-  else if exists("1:/lib/knu.ks") { runpath("1:/lib/knu.ks"). print "No Connection, running startup.ks".}
-  else { print "No Connection, No knu.ks". }
+  else { print "No Connection, Running startup.ks". }
 } else {
   download_updates().
 }
