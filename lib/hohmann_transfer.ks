@@ -15,7 +15,7 @@
   function transfer_return {
     parameter trgt_per is 30000.
     local r1 to (BODY:OBT:SEMIMAJORAXIS - 1.5*SHIP:OBT:SEMIMAJORAXIS).
-    local r2 to (BODY:BODY:RADIUS + target_periapsis ).
+    local r2 to (BODY:BODY:RADIUS + trgt_per ).
     local v2 is BODY:OBT:VELOCITY:ORBIT:MAG * (sqrt((2*r2)/(r1 + r2)) -1).
     local r1 is SHIP:OBT:SEMIMAJORAXIS.
     local r2 is BODY:SOIRADIUS.
@@ -35,8 +35,6 @@
     local node_eta is mod((360+ sod - lpd),360)/360 * SHIP:OBT:PERIOD.
     local nn to NODE(time:seconds + node_eta, 0, 0, dv).
     ADD nn. wait 0.1.
-    local dv to nn:deltav.
-    lock steering to dv.
   }
   function transfer_time {
     parameter r1, r2, trgt, offset is 0.
@@ -47,7 +45,11 @@
     local sa to  360/SHIP:OBT:PERIOD.
     local ta to  360/trgt:OBT:PERIOD.
     local d_ang to sa - ta.
-    return da/d_ang.
+    if da/d_ang > 300
+      return da/d_ang.
+    else
+      return ship:orbit:period + da/d_ang.
+
   }
   export(hohmann_transfer).
 }
