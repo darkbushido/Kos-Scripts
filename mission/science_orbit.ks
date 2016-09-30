@@ -109,8 +109,12 @@ function mission_definition {
   function hohmann_correction {
     set ct to time:seconds + (eta:transition * 0.7).
     local data is list(0).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 1).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, target_body, target_periapsis), 0.1).
+    print "Correction Inclination Fitness".
+    set data to hillclimb["seek"](data, fitness["correction_inc_fit"](ct, target_body, target_inc), 1).
+    set data to hillclimb["seek"](data, fitness["correction_inc_fit"](ct, target_body, target_inc), 0.1).
+    print "Correction Periapsis Fitness".
+    set data to hillclimb["seek"](data, fitness["correction_per_fit"](ct, target_body, target_periapsis), 1).
+    set data to hillclimb["seek"](data, fitness["correction_per_fit"](ct, target_body, target_periapsis), 0.1).
     local nn to nextnode.
     if nn:deltav:mag < 0.1 remove nn.
     next().
@@ -170,9 +174,9 @@ function mission_definition {
   function return_correction {
     set ct to time:seconds + (eta:transition * 0.7).
     local data is list(0).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 10).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 1).
-    set data to hillclimb["seek"](data, fitness["correction_fit"](ct, kerbin, 30000), 0.1).
+    set data to hillclimb["seek"](data, fitness["correction_per_fit"](ct, kerbin, 30000), 10).
+    set data to hillclimb["seek"](data, fitness["correction_per_fit"](ct, kerbin, 30000), 1).
+    set data to hillclimb["seek"](data, fitness["correction_per_fit"](ct, kerbin, 30000), 0.1).
     local nn to nextnode.
     if nn:deltav:mag < 0.1 remove nn.
     else node_exec["exec"](true).

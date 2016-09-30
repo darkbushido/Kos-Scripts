@@ -3,7 +3,7 @@ I'm collecting all of the license headers hear so they dont take up space in the
 boot/basic.ks
 lib/fitness_orbit.ks
 lib/fitness_transfer.ks
-lib/knu.ks
+lib/knu.ks -- moved to boot/basic.ks
 lib/mission.ks
 lib/node_exec.ks
 lib/transfer.ks

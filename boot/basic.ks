@@ -4,7 +4,6 @@ set ship:control:pilotmainthrottle to 0.
 lock steering to lookdirup(v(0,1,0), sun:position).
 function download_updates {
   local us to ship:name + ".ks".
-  runpath("1:/lib/knu.ks").
   PRINT "Looking for /updates_pending/" + us.
   IF exists("0:/updates_pending/" + us) {
     IF exists("1:/update.ks")

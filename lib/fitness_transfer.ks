@@ -2,7 +2,8 @@
   local fitness is lex(
     "inclination_fit", inclination_fit@,
     "periapsis_fit", periapsis_fit@,
-    "correction_fit", correction_fit@
+    "correction_inc_fit", correction_inc_fit@,
+    "correction_per_fit", correction_per_fit@
   ).
   function inclination_fit {
     parameter target_body, target_inc.
@@ -12,7 +13,7 @@
       remove_any_nodes().
       add maneuver. wait 0.01.
       if not t_to(maneuver, target_body) return -2^64.
-      return -abs(target_inc - maneuver:orbit:nextpatch:inclination).
+      return gaussian(maneuver:orbit:nextpatch:inclination, target_inc, 360).
     }
     return fitness_fn@.
   }
@@ -24,11 +25,26 @@
       remove_any_nodes().
       add maneuver. wait 0.01.
       if not t_to(maneuver, target_body) return -2^64.
-      return -abs(maneuver:orbit:nextpatch:periapsis - target_periapsis).
+      return gaussian(maneuver:orbit:nextpatch:periapsis, target_periapsis, 2^32).
     }
     return fitness_fn@.
   }
-  function correction_fit {
+  function correction_inc_fit {
+    parameter ct, target_body, target_inc.
+    function fitness_fn {
+      parameter data.
+      if data = 0
+        return -2^64.
+      local maneuver is make_node(list(ct,0,0,data[0])).
+      local fitness is 0.
+      remove_any_nodes().
+      add maneuver. wait 0.01.
+      if not t_to(maneuver, target_body) return -2^64.
+      return gaussian(maneuver:orbit:nextpatch:inclination, target_inc, 360).
+    }
+    return fitness_fn@.
+  }
+  function correction_per_fit {
     parameter ct, target_body, target_periapsis.
     function fitness_fn {
       parameter data.
@@ -39,7 +55,7 @@
       remove_any_nodes().
       add maneuver. wait 0.01.
       if not t_to(maneuver, target_body) return -2^64.
-      return -abs(maneuver:orbit:nextpatch:periapsis - target_periapsis).
+      return gaussian(maneuver:orbit:nextpatch:periapsis, target_periapsis, 2^32).
     }
     return fitness_fn@.
   }
@@ -56,6 +72,10 @@
       set ms to slope_at(tb, mt).
     }
     return sep_at(tb, mt).
+  }
+  function gaussian {
+    parameter value, target, width.
+    return constant:e^(-1 * (value-target)^2 / (2*width^2)).
   }
   function slope_at {parameter tb, at_t. return (sep_at(tb, at_t + 1) - sep_at(tb, at_t - 1)) / 2.}
   function sep_at {parameter tb, at_t. return (positionat(ship, at_t) - positionat(tb, at_t)):mag.}

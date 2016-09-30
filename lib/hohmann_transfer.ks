@@ -9,8 +9,6 @@
     local my_dV to sqrt (ship:BODY:MU/r1) * (sqrt((2* r2)/(r1 + r2)) - 1).
     local nn TO NODE(time:seconds+d_time, 0, 0, my_dV).
     ADD nn.
-    local dv to nn:deltav.
-    lock steering to dv.
   }
   function transfer_return {
     parameter trgt_per is 30000.
