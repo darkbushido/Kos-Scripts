@@ -8,6 +8,6 @@ COPYPATH("0:/mission/science_flyby.ks", "1:/startup.ks").
 set params to lex(
   "Body", "Minmus",
   "Altitude", 15000,
-  "PitchExp", 0.26
+  "PitchExp", 0.27
 ).
 writejson(params, "params.json").
