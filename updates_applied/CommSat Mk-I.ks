@@ -5,3 +5,7 @@ for file in fileList {
   }
 }
 COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
+set params to lex(
+  "NextShip", "CommSat Mk-I"
+).
+writejson(params, "params.json").

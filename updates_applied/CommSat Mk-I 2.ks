@@ -7,6 +7,7 @@ for file in fileList {
 COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
 set params to lex(
   "Vessel", vessel("CommSat Mk-I"),
-  "Offset", 120 * 2
+  "Offset", 120 * 2,
+  "NextShip", "CommSat Mk-II"
 ).
 writejson(params, "params.json").
