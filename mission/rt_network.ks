@@ -94,6 +94,16 @@ function mission_definition {
   seq:add(finish@).
   function finish {
     deletepath("startup.ks").
+    if defined(params) {
+      if params:haskey("NextShip") {
+        local template to KUniverse:GETCRAFT(params["NextShip"], "VAB").
+        KUniverse:LAUNCHCRAFT(template).
+      } else if params:haskey("SwitchToShp") {
+        KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
+      }
+    }
+
+
     reboot.
   }
 }
