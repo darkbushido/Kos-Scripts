@@ -1,9 +1,15 @@
 @LAZYGLOBAL off.
 clearscreen.
+wait until ship:unpacked.
+wait 0.
 set ship:control:pilotmainthrottle to 0.
-lock steering to lookdirup(v(0,1,0), sun:position).
+local ALL_PROCESSORS to list().
+LIST PROCESSORS IN ALL_PROCESSORS.
+if ALL_PROCESSORS:Length = 1 or core:tag="Main"
+  lock steering to lookdirup(v(0,1,0), sun:position).
 function download_updates {
-  local us to ship:name + ".ks".
+  if core:tag = "" local us to ship:name + ".ks".
+  else local us to ship:name + "-" + core:tag + ".ks".
   PRINT "Looking for /updates_pending/" + us.
   IF exists("0:/updates_pending/" + us) {
     IF exists("1:/update.ks")
@@ -29,8 +35,6 @@ global export is{
   parameter v.
   set d[s:pop()] to v.
 }.
-
-wait until ship:unpacked.
 if addons:rt:available {
   for a in SHIP:ModulesNamed("ModuleRTAntenna") {
     if a:GETFIELD("status") = "Off" and a:allevents:CONTAINS("(callable) activate, is KSPEvent")
