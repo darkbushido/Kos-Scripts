@@ -6,7 +6,8 @@ for file in fileList {
 }
 COPYPATH("0:/mission/launch_to_orbit.ks", "1:/startup.ks").
 set params to lex(
-  "SMA", 1350000,
+  "Apa", 500000,
+  "Pea", 500000,
   "INC", 90,
   "PitchExp", 0.5
 ).
