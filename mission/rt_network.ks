@@ -93,6 +93,7 @@ function mission_definition {
   seq:add(circularize@).
   seq:add(finish@).
   function finish {
+    ship_utils["enable"]().
     deletepath("startup.ks").
     if defined(params) {
       if params:haskey("NextShip") {
@@ -102,8 +103,6 @@ function mission_definition {
         KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
       }
     }
-
-
     reboot.
   }
 }
