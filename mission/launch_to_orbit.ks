@@ -10,7 +10,6 @@ local parking_alt is BODY:ATM:HEIGHT + 10000.
 local target_ecc to 0.
 local target_sma to 650000.
 local target_inc to 0.
-local target_lan to SHIP:OBT:LAN.
 local target_agp to 0.
 local pitch_exp to 0.35.
 local target_pe_alt to (1 - target_ecc) * target_sma - ship:body:radius.
@@ -90,31 +89,29 @@ function mission_definition {
   }
   seq:add(set_inc_lan@).
   function set_inc_lan {
-    print target_inc.
+    if not defined(target_lan)
+      set target_lan to SHIP:OBT:LAN.
     node_set_inc_lan["create_node"](target_inc, target_lan).
     node_exec["exec"](true).
     next().
   }
-  seq:add(hohmann_transfer@).
-  function hohmann_transfer {
-    local r1 to SHIP:OBT:SEMIMAJORAXIS.
-    local r2 TO target_sma.
+  seq:add(adjust_apoapsis@).
+  function adjust_apoapsis {
     local d_time to time:seconds + eta:periapsis.
-    hohmann["transfer"](r1,r2,d_time).
-    local nn to nextnode.
-    local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    local data to list(d_time, 0, 0, 0).
     set data to hillclimb["seek"](data, fitness["apoapsis_fit"](d_time, target_ap_alt), 1).
     set data to hillclimb["seek"](data, fitness["apoapsis_fit"](d_time, target_ap_alt), 0.1).
     node_exec["exec"](true).
     next().
   }
-  seq:add(circularize_ap@).
-  function circularize_ap {
-    local sma to ship:obt:SEMIMAJORAXIS.
-    local ecc to ship:obt:ECCENTRICITY.
-    if hasnode node_exec["exec"](true).
-    else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
-    else node_exec["circularize"]().
+  seq:add(adjust_periapsis@).
+  function adjust_periapsis {
+    local d_time to time:seconds + eta:periapsis.
+    local data to list(d_time, 0, 0, 0).
+    set data to hillclimb["seek"](data, fitness["periapsis_fit"](d_time, target_pe_alt), 1).
+    set data to hillclimb["seek"](data, fitness["periapsis_fit"](d_time, target_pe_alt), 0.1).
+    node_exec["exec"](true).
+    next().
   }
   seq:add(finish@).
   function finish {
