@@ -3,16 +3,10 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2016.10.06.10.08.18",
+	"version": "2016.11.24.03.56.42",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
-		{
-			"name": "DMagicOrbitalScience"
-		},
-		{
-			"name": "StationScience"
-		},
 		{
 			"name": "AlternateResourcePanel"
 		},
@@ -38,7 +32,7 @@
 			"name": "FirespitterCore"
 		},
 		{
-			"name": "SmokeScreen"
+			"name": "ChopShop"
 		},
 		{
 			"name": "ProgressParser"
@@ -50,10 +44,13 @@
 			"name": "Ceteras-Suit-Pack"
 		},
 		{
-			"name": "ChopShop"
+			"name": "NMSG"
 		},
 		{
 			"name": "ContractConfigurator-ContractPack-SCANsat"
+		},
+		{
+			"name": "DMagicOrbitalScience"
 		},
 		{
 			"name": "DockingPortAlignmentIndicator"
@@ -83,13 +80,10 @@
 			"name": "TextureReplacer"
 		},
 		{
-			"name": "CommunityResourcePack"
+			"name": "kOS"
 		},
 		{
 			"name": "HyperEdit"
-		},
-		{
-			"name": "Impact"
 		},
 		{
 			"name": "ContractConfigurator-RemoteTech"
@@ -128,9 +122,6 @@
 			"name": "PilotAssistant"
 		},
 		{
-			"name": "RealPlume-StockConfigs"
-		},
-		{
 			"name": "PreciseManeuver"
 		},
 		{
@@ -138,9 +129,6 @@
 		},
 		{
 			"name": "InterstellarFuelSwitch"
-		},
-		{
-			"name": "RealPlume"
 		},
 		{
 			"name": "PortraitStats"
@@ -152,10 +140,10 @@
 			"name": "AmbientLightAdjustment"
 		},
 		{
-			"name": "ReentryParticleEffect"
+			"name": "RoutineMissionManager"
 		},
 		{
-			"name": "RoutineMissionManager"
+			"name": "StationScience"
 		},
 		{
 			"name": "InterstellarFuelSwitch-Core"
@@ -215,13 +203,10 @@
 			"name": "Toolbar"
 		},
 		{
-			"name": "AutoAsparagus"
+			"name": "Chatterer"
 		},
 		{
-			"name": "SmartStage"
-		},
-		{
-			"name": "kOS"
+			"name": "ContractConfigurator-RoverMissionsRedux"
 		},
 		{
 			"name": "BetterBurnTime"
@@ -230,10 +215,10 @@
 			"name": "ContractConfigurator-AnomalySurveyor"
 		},
 		{
-			"name": "ContractConfigurator-KerbinSpaceStation"
+			"name": "ContractConfigurator-CleverSats"
 		},
 		{
-			"name": "ContractConfigurator-Tourism"
+			"name": "PartOrganizer"
 		},
 		{
 			"name": "KerbalEngineerRedux"
@@ -263,22 +248,19 @@
 			"name": "ToughLove"
 		},
 		{
-			"name": "NMSG"
+			"name": "FinalFrontier"
 		},
 		{
-			"name": "ContractConfigurator-CleverSats"
+			"name": "ContractConfigurator-KerbinSpaceStation"
 		},
 		{
-			"name": "ContractConfigurator-FieldResearch"
-		},
-		{
-			"name": "ContractConfigurator-GrandTours"
+			"name": "RoverScienceRevisited"
 		},
 		{
 			"name": "ContractConfigurator-KerbalAcademy"
 		},
 		{
-			"name": "ContractConfigurator-RoverMissionsRedux"
+			"name": "CommunityResourcePack"
 		},
 		{
 			"name": "ContractConfigurator-UnmannedContracts"
@@ -296,7 +278,58 @@
 			"name": "DMagicScienceAnimate"
 		},
 		{
-			"name": "FinalFrontier"
+			"name": "AutomatedScienceSampler"
+		},
+		{
+			"name": "KerboKatzUtilities"
+		},
+		{
+			"name": "SAVE"
+		},
+		{
+			"name": "SmokeScreen"
+		},
+		{
+			"name": "PersistentDynamicPodNames"
+		},
+		{
+			"name": "TweakScale"
+		},
+		{
+			"name": "BonVoyage"
+		},
+		{
+			"name": "Mk2Expansion"
+		},
+		{
+			"name": "PhoenixIndustriesBoosters"
+		},
+		{
+			"name": "PhoenixIndustriesCargoResupplySystem"
+		},
+		{
+			"name": "PhoenixIndustriesFlags"
+		},
+		{
+			"name": "AdditionalProgressionContracts"
+		},
+		{
+			"name": "KEI"
+		},
+		{
+			"name": "IndicatorLights"
+		},
+		{
+			"name": "TacFuelBalancer"
+		},
+		{
+			"name": "StageRecovery"
+		},
+		{
+			"name": "KRASH"
+		},
+		{
+			"name": "MagiCore"
 		}
 	]
 }
