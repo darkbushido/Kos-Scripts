@@ -1,0 +1,18 @@
+atmo_launch: &ATMOLAUNCH
+  - pre_launch
+  - launch
+  - coast_to_atm
+  - circularize_at_apoapsis
+return_to_kerbin: &RETURNTOKERBIN
+  - wait_for_soi_change_kerbin
+  - atmo_reentry
+moon_flyby:
+  - *ATMOLAUNCH
+  - hohmann_transfer
+  - hohmann_correction
+  - exec_node
+  - wait_for_soi_change_tbody
+  - collect_science
+  - free_return_correction
+  - collect_science
+  - *RETURNTOKERBIN
