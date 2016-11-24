@@ -7,6 +7,6 @@ for file in fileList {
 COPYPATH("0:/mission/science_flyby.ks", "1:/startup.ks").
 set params to lex(
   "Body", "Mun",
-  "PitchExp", 0.275
+  "PitchExp", 0.43
 ).
 writejson(params, "params.json").
