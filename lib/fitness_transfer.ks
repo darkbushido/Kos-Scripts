@@ -1,11 +1,11 @@
 {
   local fitness is lex(
-    "inclination_fit", inclination_fit@,
-    "periapsis_fit", periapsis_fit@,
-    "correction_inc_fit", correction_inc_fit@,
-    "correction_per_fit", correction_per_fit@
+    "inc_fit", inc_fit@,
+    "per_fit", per_fit@,
+    "c_inc_fit", c_inc_fit@,
+    "c_per_fit", c_per_fit@
   ).
-  function inclination_fit {
+  function inc_fit {
     parameter target_body, target_inc.
     function fitness_fn {
       parameter data.
@@ -17,7 +17,7 @@
     }
     return fitness_fn@.
   }
-  function periapsis_fit {
+  function per_fit {
     parameter target_body, target_periapsis.
     function fitness_fn {
       parameter data.
@@ -29,7 +29,7 @@
     }
     return fitness_fn@.
   }
-  function correction_inc_fit {
+  function c_inc_fit {
     parameter ct, target_body, target_inc.
     function fitness_fn {
       parameter data.
@@ -44,7 +44,7 @@
     }
     return fitness_fn@.
   }
-  function correction_per_fit {
+  function c_per_fit {
     parameter ct, target_body, target_periapsis.
     function fitness_fn {
       parameter data.

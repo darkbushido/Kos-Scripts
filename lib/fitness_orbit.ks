@@ -1,9 +1,9 @@
 {
   local fitness is lex(
-    "apoapsis_fit", apoapsis_fit@,
-    "periapsis_fit", periapsis_fit@
+    "apo_fit", apo_fit@,
+    "per_fit", per_fit@
   ).
-  function apoapsis_fit {
+  function apo_fit {
     parameter t, target_ap.
     function fitness_fn {
       parameter data.
@@ -14,7 +14,7 @@
     }
     return fitness_fn@.
   }
-  function periapsis_fit {
+  function per_fit {
     parameter t, target_pe.
     function fitness_fn {
       parameter data.
@@ -26,8 +26,8 @@
     return fitness_fn@.
   }
   function make_node {
-    parameter maneuver.
-    return node(maneuver[0], maneuver[1], maneuver[2], maneuver[3]).
+    parameter d.
+    return node(d[0], d[1], d[2], d[3]).
   }
   function remove_any_nodes {until not hasnode {remove nextnode. wait 0.01.}}
   export(fitness).

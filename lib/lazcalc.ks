@@ -6,33 +6,30 @@
   ).
 
   FUNCTION LAZcalc {
-    PARAMETER desiredAlt,desiredInc.
-
-    LOCAL launchLatitude IS SHIP:LATITUDE.
-    IF desiredAlt <= 0 {
-      PRINT "Target altitude cannot be below sea level". SET launchAzimuth TO 1/0.
+    PARAMETER dAlt,dInc.
+    LOCAL lLat IS SHIP:LATITUDE.
+    IF dAlt <= 0 {
+      PRINT "Target altitude cannot be below sea level". SET lAz TO 1/0.
     }
-    LOCAL launchNode TO "Ascending".
-    IF desiredInc < 0 {
-      SET launchNode TO "Descending".
-      SET desiredInc TO ABS(desiredInc).
+    LOCAL lN TO "Ascending".
+    IF dInc < 0 {
+      SET lN TO "Descending".
+      SET dInc TO ABS(dInc).
     }.
-    IF ABS(launchLatitude) > desiredInc {
-      SET desiredInc TO ABS(launchLatitude).
-      HUDTEXT("Inclination impossible from current latitude, setting for lowest possible inclination.", 10, 2, 30, RED, FALSE).
+    IF ABS(lLat) > dInc {
+      SET dInc TO ABS(lLat).
     }.
-    IF 180 - ABS(launchLatitude) < desiredInc {
-      SET desiredInc TO 180 - ABS(launchLatitude).
-      HUDTEXT("Inclination impossible from current latitude, setting for highest possible inclination.", 10, 2, 30, RED, FALSE).
+    IF 180 - ABS(lLat) < dInc {
+      SET dInc TO 180 - ABS(lLat).
     }.
-    LOCAL equatorialVel IS (2 * CONSTANT():Pi * BODY:RADIUS) / BODY:ROTATIONPERIOD.
-    LOCAL targetOrbVel IS SQRT(BODY:MU/ (BODY:RADIUS + desiredAlt)).
-    LOCAL inertialAzimuth IS ARCSIN(MAX(MIN(COS(desiredInc) / COS(SHIP:LATITUDE), 1), -1)).
-    LOCAL VXRot IS targetOrbVel * SIN(inertialAzimuth) - equatorialVel * COS(launchLatitude).
-    LOCAL VYRot IS targetOrbVel * COS(inertialAzimuth).
+    LOCAL eV IS (2 * CONSTANT():Pi * BODY:RADIUS) / BODY:ROTATIONPERIOD.
+    LOCAL tOV IS SQRT(BODY:MU/ (BODY:RADIUS + dAlt)).
+    LOCAL iAz IS ARCSIN(MAX(MIN(COS(dInc) / COS(SHIP:LATITUDE), 1), -1)).
+    LOCAL VXRot IS tOV * SIN(iAz) - eV * COS(lLat).
+    LOCAL VYRot IS tOV * COS(iAz).
     LOCAL Azimuth IS MOD(ARCTAN2(VXRot, VYRot) + 360, 360).
-    IF launchNode = "Ascending" { RETURN Azimuth. }
-    ELSE IF launchNode = "Descending" {
+    IF lN = "Ascending" { RETURN Azimuth. }
+    ELSE IF lN = "Descending" {
       IF Azimuth <= 90 RETURN 180 - Azimuth.
       ELSE IF Azimuth >= 270 RETURN 540 - Azimuth.
     }
@@ -40,16 +37,16 @@
   FUNCTION launch_window {
     PARAMETER tgt.
     LOCAL lat IS SHIP:LATITUDE.
-    LOCAL eclipticNormal IS VCRS(tgt:POSITION - tgt:OBT:BODY:POSITION, tgt:PROGRADE:FOREVECTOR):NORMALIZED.
-    LOCAL planetNormal IS HEADING(0,lat):VECTOR.
-    LOCAL bodyInc IS VANG(planetNormal, eclipticNormal).
+    LOCAL eN IS VCRS(tgt:POSITION - tgt:OBT:BODY:POSITION, tgt:PROGRADE:FOREVECTOR):NORMALIZED.
+    LOCAL pN IS HEADING(0,lat):VECTOR.
+    LOCAL bodyInc IS VANG(pN, eN).
     LOCAL beta IS ARCCOS(MAX(-1,MIN(1,COS(bodyInc) * SIN(lat) / SIN(bodyInc)))).
-    LOCAL intersectdir IS VCRS(planetNormal, eclipticNormal):NORMALIZED.
-    LOCAL intersectpos IS -VXCL(planetNormal, eclipticNormal):NORMALIZED.
-    LOCAL launchtimedir IS (intersectdir * SIN(beta) + intersectpos * COS(beta)) * COS(lat) + SIN(lat) * planetNormal.
+    LOCAL intersectdir IS VCRS(pN, eN):NORMALIZED.
+    LOCAL intersectpos IS -VXCL(pN, eN):NORMALIZED.
+    LOCAL launchtimedir IS (intersectdir * SIN(beta) + intersectpos * COS(beta)) * COS(lat) + SIN(lat) * pN.
     LOCAL launchtime IS VANG(launchtimedir, SHIP:POSITION - BODY:POSITION) / 360 * BODY:ROTATIONPERIOD.
     LOCAL incl_t is tgt:obt:inclination.
-    if VCRS(launchtimedir, SHIP:POSITION - BODY:POSITION)*planetNormal < 0 {
+    if VCRS(launchtimedir, SHIP:POSITION - BODY:POSITION)*pN < 0 {
       print "VCRS is less then 0".
       set incl_t to incl_t * -1.
       SET launchtime TO BODY:ROTATIONPERIOD - launchtime.
