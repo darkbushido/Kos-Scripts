@@ -4,7 +4,7 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/science_flyby.ks", "1:/startup.ks").
+COPYPATH("0:/mission/moon_flyby.ks", "1:/startup.ks").
 set params to lex(
   "Body", "Minmus",
   "Altitude", 15000,
