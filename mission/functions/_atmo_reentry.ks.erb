@@ -1,0 +1,17 @@
+function atmo_reentry {
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+    lock steering to srfretrograde.
+    until stage:number = 1 {
+      if STAGE:READY {STAGE.}
+      else {wait 1.}
+    }
+    ev:remove("Power"). ship_utils["disable"](). wait 5.
+  } else if not ev:haskey("Power") {
+    ev:add("Power", ship_utils["power"]). wait 5.
+  }
+  if (NOT CHUTESSAFE) { unlock steering.CHUTESSAFE ON. }
+  if list("Landed","Splashed"):contains(status) {
+    ev:add("Power", ship_utils["power"]). wait 5.
+    next().
+}}

@@ -1,0 +1,9 @@
+function free_return_correction {
+  local ct to time:seconds + eta:periapsis.
+  local data is list(0).
+  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 10).
+  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 1).
+  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 0.1).
+  node_exec["exec"](true).
+  next().
+}

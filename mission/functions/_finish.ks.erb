@@ -1,0 +1,13 @@
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if defined(params) {
+    if params:haskey("NextShip") {
+      local template to KUniverse:GETCRAFT(params["NextShip"], "VAB").
+      KUniverse:LAUNCHCRAFT(template).
+    } else if params:haskey("SwitchToShp") {
+      KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
+    }
+  }
+  reboot.
+}
