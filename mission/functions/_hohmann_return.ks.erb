@@ -1,0 +1,10 @@
+function hohmann_return {
+  print "Homann Return".
+  hohmann["return"]().
+  local nn to nextnode.
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 10).
+  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 1).
+  node_exec["exec"](true).
+  next().
+}
