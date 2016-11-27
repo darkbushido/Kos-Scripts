@@ -4,6 +4,9 @@ local p is import("lib/params.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
+local hohmann is import("lib/hohmann_transfer.ks").
+local hc is import("lib/hillclimb.ks").
+local fit is import("lib/fitness_transfer.ks").
 list files.
 local science_flyby is mission(mission_definition@).
 function mission_definition {
@@ -66,11 +69,41 @@ function set_inc_lan {
   node_exec["exec"](true).
   next().
 }
+function hohmann_transfer {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS.
+  local r2 TO p["Body"]:obt:semimajoraxis.
+  set d_time to hohmann["time"](r1,r2, p["Body"]).
+  hohmann["transfer"](r1,r2,d_time).
+  local nn to nextnode.
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  print "Inclination Fitness : " + p["TInc"].
+  set data to hc["seek"](data, fit["inc_fit"](p["Body"], p["TInc"]), 1).
+  set data to hc["seek"](data, fit["inc_fit"](p["Body"], p["TInc"]), 0.1).
+  print "Periapsis fit".
+  set data to hc["seek"](data, fit["per_fit"](p["Body"], p["DAlt"]), 0.1).
+  node_exec["exec"](true).
+  next().
+}
+function hohmann_correction {
+  set ct to time:seconds + (eta:transition * 0.7).
+  local data is list(0).
+  print "Correction Inclination Fitness".
+  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["Body"], p["TInc"]), 1).
+  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["Body"], p["TInc"]), 0.1).
+  print "Correction Periapsis fit".
+  set data to hc["seek"](data, fit["c_per_fit"](ct, p["Body"], p["DAlt"]), 1).
+  set data to hc["seek"](data, fit["c_per_fit"](ct, p["Body"], p["DAlt"]), 0.1).
+  local nn to nextnode.
+  if nn:deltav:mag < 0.3 remove nn.
+  next().
+}
 
       seq:add(pre_launch@).
       seq:add(launch@).
       seq:add(coast_to_atm@).
       seq:add(circularize_ap@).
       seq:add(set_inc_lan@).
+      seq:add(hohmann_transfer@).
+      seq:add(hohmann_correction@).
   }
 export(science_flyby).

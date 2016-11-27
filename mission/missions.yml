@@ -19,3 +19,20 @@ moon_flyby:
   - collect_science
   - return_correction
   - *RETURNTOKERBIN
+moon_orbit:
+  - *ATMOLAUNCH
+  - hohmann_transfer
+  - hohmann_correction
+  - exec_node
+  - wait_for_soi_change_tbody
+  - collect_science
+  - circularize_pe
+  - set_inc_lan_to_eq
+  - collect_science
+  - hohmann_return
+  - return_correction
+  - *RETURNTOKERBIN
+moon_crash:
+  - *ATMOLAUNCH
+  - hohmann_transfer
+  - hohmann_correction

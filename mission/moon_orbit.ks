@@ -116,15 +116,30 @@ function collect_science {
   science["science"]().
   next().
 }
-function free_return_correction {
-  set ct to time:seconds + eta:periapsis.
-  local data is list(0).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 0.1).
+function circularize_pe {
+  local sma to ship:obt:SEMIMAJORAXIS.
+  local ecc to ship:obt:ECCENTRICITY.
+  if hasnode node_exec["exec"](true).
+  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+  else node_exec["circularize"](true).
+}
+function set_inc_lan_to_eq {
+  local orbit_inc to 0.
+  if abs(ship:orbit:inclination-180) < 15 {
+    set orbit_inc to 180.
+  }
+  node_set_inc_lan["create_node"](orbit_inc).
+  node_exec["exec"](true).
+  next().
+}
+function hohmann_return {
+  print "Homann Return".
+  hohmann["return"]().
   local nn to nextnode.
-  if nn:deltav:mag < 0.1 remove nn.
-  else node_exec["exec"](true).
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 10).
+  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 1).
+  node_exec["exec"](true).
   next().
 }
 function return_correction {
@@ -186,8 +201,10 @@ function finish {
       seq:add(exec_node@).
       seq:add(wait_for_soi_change_tbody@).
       seq:add(collect_science@).
-      seq:add(free_return_correction@).
+      seq:add(circularize_pe@).
+      seq:add(set_inc_lan_to_eq@).
       seq:add(collect_science@).
+      seq:add(hohmann_return@).
       seq:add(return_correction@).
       seq:add(wait_for_soi_change_kerbin@).
       seq:add(atmo_reentry@).
