@@ -1,0 +1,46 @@
+local mission is import("lib/mission.ks").
+local ship_utils is import("lib/ship_utils.ks").
+local p is import("lib/params.ks").
+<% if (@steps & ['launch','coast_to_atm']).any? -%>
+local lazcalc is import("lib/lazcalc.ks").
+<% end -%>
+<% if (@steps & [
+  'circularize_ap','hohmann_transfer','exec_node',
+  'free_return_correction','return_correction']).any? -%>
+local node_exec is import("lib/node_exec.ks").
+<% end -%>
+<% if (@steps & ['set_inc_lan']).any? -%>
+local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
+<% end -%>
+<% if (@steps & ['hohmann_transfer']).any? -%>
+local hohmann is import("lib/hohmann_transfer.ks").
+local hc is import("lib/hillclimb.ks").
+local fit is import("lib/fitness_transfer.ks").
+<% end -%>
+<% if (@steps & ['collect_science']).any? -%>
+local science is import("lib/science.ks").
+<% end -%>
+<% if (@steps & ['collect_science']).any? -%>
+local science is import("lib/science.ks").
+<% end -%>
+list files.
+local science_flyby is mission(mission_definition@).
+function mission_definition {
+  parameter seq, ev, next.
+  // parameter params, seq, ev, next, a_on to true.
+  SET prevThrust TO AVAILABLETHRUST.
+  ev:add("Power", ship_utils["power"]).
+  print p["PAlt"].
+  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
+  SET thrott to 0.
+
+<% @steps.uniq.each do |step| -%>
+<%= render "functions/#{step}.ks" -%>
+<% end -%>
+
+  <% @steps.each do |step| -%>
+    seq:add(<%= step -%>@).
+  <% end -%>
+}
+export(science_flyby).

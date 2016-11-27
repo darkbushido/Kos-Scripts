@@ -2,10 +2,12 @@ atmo_launch: &ATMOLAUNCH
   - pre_launch
   - launch
   - coast_to_atm
-  - circularize_at_apoapsis
+  - circularize_ap
+  - set_inc_lan
 return_to_kerbin: &RETURNTOKERBIN
   - wait_for_soi_change_kerbin
   - atmo_reentry
+  - finish
 moon_flyby:
   - *ATMOLAUNCH
   - hohmann_transfer
@@ -15,4 +17,5 @@ moon_flyby:
   - collect_science
   - free_return_correction
   - collect_science
+  - return_correction
   - *RETURNTOKERBIN
