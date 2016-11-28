@@ -12,14 +12,18 @@
     set jp to lex().
   }
   local tbody to body(has_key("Body", "Mun")).
+  local next_ship to has_key("NextShip", false).
   local params to lex(
     "PAlt", has_key("ParkingAltitude", BODY:ATM:HEIGHT + 10000),
     "DAlt", has_key("Altitude", tbody:ATM:HEIGHT + 20000),
-    "Inc", has_key("Inc", 0),
-    "TInc", has_key("TInc", 178),
+    "Inc", has_key("Inc", tbody:obt:inclination),
+    "LAN", has_key("LAN", tbody:obt:lan),
+    "TInc", has_key("TInc", 0),
     "Body", tbody,
     "PitchExp", has_key("PitchExp", 0.35)
   ).
+  if next_ship
+    params:add("NextShip",next_ship).
   print params.
 
   export(params).
