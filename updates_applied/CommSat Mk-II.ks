@@ -4,8 +4,11 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/rt_network.ks", "1:/startup.ks").
+COPYPATH("0:/mission/remote_tech_network.ks", "1:/startup.ks").
 set params to lex(
-  "NextShip", "CommSat Mk-I"
+  "Vessel", vessel("CommSat Mk-I"),
+  "Offset", 120 * 1,
+  "PitchExp", 0.5,
+  "Altitude", 750000
 ).
 writejson(params, "params.json").

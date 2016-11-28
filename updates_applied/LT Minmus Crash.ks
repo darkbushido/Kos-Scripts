@@ -4,10 +4,10 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/science_flyby.ks", "1:/startup.ks").
+COPYPATH("0:/mission/moon_crash.ks", "1:/startup.ks").
 set params to lex(
   "Body", "Minmus",
   "Altitude", -1000,
-  "PitchExp", 0.27
+  "PitchExp", 0.31
 ).
 writejson(params, "params.json").
