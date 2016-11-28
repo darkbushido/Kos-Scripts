@@ -1,9 +1,0 @@
-function set_inc_lan_to_eq {
-  local orbit_inc to 0.
-  if abs(ship:orbit:inclination-180) < 15 {
-    set orbit_inc to 180.
-  }
-  node_set_inc_lan["create_node"](orbit_inc).
-  node_exec["exec"](true).
-  next().
-}

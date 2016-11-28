@@ -2,8 +2,10 @@ function pre_launch {
   ev:remove("Power").
   ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  lock throttle to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
   local dir to lazcalc["LAZ"](p["PAlt"], p["Body"]:obt:inclination).
   lock steering to heading(dir, 88).
+  wait 1.
   next().
 }
