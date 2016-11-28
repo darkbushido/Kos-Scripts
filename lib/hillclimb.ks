@@ -17,10 +17,12 @@
     local best_fitness is -2^64.
     local best is 0.
     for neighbor in neighbors(d, ss) {
-      if fitness_lookup:haskey(neighbor)
-        local fitness is fitness_lookup[neighbor].
-      else
-        local fitness is f_fn(neighbor).
+      if fitness_lookup:haskey(neighbor) {
+        set fitness to fitness_lookup[neighbor].
+      } else {
+        set fitness to f_fn(neighbor).
+        fitness_lookup:add(neighbor, fitness).
+      }
       if fitness > best_fitness {
         set best to neighbor.
         set best_fitness to fitness.
