@@ -24,9 +24,11 @@ function pre_launch {
   ev:remove("Power").
   ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  lock throttle to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
   local dir to lazcalc["LAZ"](p["PAlt"], p["Body"]:obt:inclination).
   lock steering to heading(dir, 88).
+  wait 1.
   next().
 }
 function launch {
@@ -67,11 +69,11 @@ function circularize_ap {
   else node_exec["circularize"]().
 }
 function set_inc_lan {
-  node_set_inc_lan["create_node"](p["Body"]:obt:inclination, p["Body"]:obt:lan).
+  node_set_inc_lan["create_node"](p["Inc"],p["LAN"]).
   node_exec["exec"](true).
   next().
 }
-function hohmann_transfer {
+function hohmann_transfer_body {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
   local r2 TO p["Body"]:obt:semimajoraxis.
   set d_time to hohmann["time"](r1,r2, p["Body"]).
@@ -123,12 +125,8 @@ function circularize_pe {
   else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
   else node_exec["circularize"](true).
 }
-function set_inc_lan_to_eq {
-  local orbit_inc to 0.
-  if abs(ship:orbit:inclination-180) < 15 {
-    set orbit_inc to 180.
-  }
-  node_set_inc_lan["create_node"](orbit_inc).
+function set_tinc {
+  node_set_inc_lan["create_node"](p["TInc"]).
   node_exec["exec"](true).
   next().
 }
@@ -137,8 +135,8 @@ function hohmann_return {
   hohmann["return"]().
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 10).
-  hillclimb["seek"](data, fitness["periapsis_fit"](Kerbin, 30000), 1).
+  hc["seek"](data, fit["per_fit"](Kerbin, 30000), 10).
+  hc["seek"](data, fit["per_fit"](Kerbin, 30000), 1).
   node_exec["exec"](true).
   next().
 }
@@ -180,34 +178,33 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if defined(params) {
-    if params:haskey("NextShip") {
-      local template to KUniverse:GETCRAFT(params["NextShip"], "VAB").
+  if defined(p) {
+    if p:haskey("NextShip") {
+      local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
       KUniverse:LAUNCHCRAFT(template).
-    } else if params:haskey("SwitchToShp") {
+    } else if p:haskey("SwitchToShp") {
       KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
     }
   }
   reboot.
 }
-
-      seq:add(pre_launch@).
-      seq:add(launch@).
-      seq:add(coast_to_atm@).
-      seq:add(circularize_ap@).
-      seq:add(set_inc_lan@).
-      seq:add(hohmann_transfer@).
-      seq:add(hohmann_correction@).
-      seq:add(exec_node@).
-      seq:add(wait_for_soi_change_tbody@).
-      seq:add(collect_science@).
-      seq:add(circularize_pe@).
-      seq:add(set_inc_lan_to_eq@).
-      seq:add(collect_science@).
-      seq:add(hohmann_return@).
-      seq:add(return_correction@).
-      seq:add(wait_for_soi_change_kerbin@).
-      seq:add(atmo_reentry@).
-      seq:add(finish@).
-  }
+  seq:add(pre_launch@).
+  seq:add(launch@).
+  seq:add(coast_to_atm@).
+  seq:add(circularize_ap@).
+  seq:add(set_inc_lan@).
+  seq:add(hohmann_transfer_body@).
+  seq:add(hohmann_correction@).
+  seq:add(exec_node@).
+  seq:add(wait_for_soi_change_tbody@).
+  seq:add(collect_science@).
+  seq:add(circularize_pe@).
+  seq:add(set_tinc@).
+  seq:add(collect_science@).
+  seq:add(hohmann_return@).
+  seq:add(return_correction@).
+  seq:add(wait_for_soi_change_kerbin@).
+  seq:add(atmo_reentry@).
+  seq:add(finish@).
+}
 export(science_flyby).

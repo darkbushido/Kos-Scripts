@@ -39,19 +39,18 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if defined(params) {
-    if params:haskey("NextShip") {
-      local template to KUniverse:GETCRAFT(params["NextShip"], "VAB").
+  if defined(p) {
+    if p:haskey("NextShip") {
+      local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
       KUniverse:LAUNCHCRAFT(template).
-    } else if params:haskey("SwitchToShp") {
+    } else if p:haskey("SwitchToShp") {
       KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
     }
   }
   reboot.
 }
-
-      seq:add(wait_for_soi_change_kerbin@).
-      seq:add(atmo_reentry@).
-      seq:add(finish@).
-  }
+  seq:add(wait_for_soi_change_kerbin@).
+  seq:add(atmo_reentry@).
+  seq:add(finish@).
+}
 export(science_flyby).

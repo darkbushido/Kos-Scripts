@@ -22,9 +22,11 @@ function pre_launch {
   ev:remove("Power").
   ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  lock throttle to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
   local dir to lazcalc["LAZ"](p["PAlt"], p["Body"]:obt:inclination).
   lock steering to heading(dir, 88).
+  wait 1.
   next().
 }
 function launch {
@@ -65,11 +67,11 @@ function circularize_ap {
   else node_exec["circularize"]().
 }
 function set_inc_lan {
-  node_set_inc_lan["create_node"](p["Body"]:obt:inclination, p["Body"]:obt:lan).
+  node_set_inc_lan["create_node"](p["Inc"],p["LAN"]).
   node_exec["exec"](true).
   next().
 }
-function hohmann_transfer {
+function hohmann_transfer_body {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
   local r2 TO p["Body"]:obt:semimajoraxis.
   set d_time to hohmann["time"](r1,r2, p["Body"]).
@@ -97,13 +99,12 @@ function hohmann_correction {
   if nn:deltav:mag < 0.3 remove nn.
   next().
 }
-
-      seq:add(pre_launch@).
-      seq:add(launch@).
-      seq:add(coast_to_atm@).
-      seq:add(circularize_ap@).
-      seq:add(set_inc_lan@).
-      seq:add(hohmann_transfer@).
-      seq:add(hohmann_correction@).
-  }
+  seq:add(pre_launch@).
+  seq:add(launch@).
+  seq:add(coast_to_atm@).
+  seq:add(circularize_ap@).
+  seq:add(set_inc_lan@).
+  seq:add(hohmann_transfer_body@).
+  seq:add(hohmann_correction@).
+}
 export(science_flyby).

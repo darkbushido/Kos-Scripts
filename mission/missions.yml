@@ -8,9 +8,18 @@ return_to_kerbin: &RETURNTOKERBIN
   - wait_for_soi_change_kerbin
   - atmo_reentry
   - finish
-moon_flyby:
+launch_to_orbit:
+  - *ATMOLAUNCH
+  - adjust_ap
+  - adjust_pe
+remote_tech_network:
   - *ATMOLAUNCH
   - hohmann_transfer
+  - circularize_ap
+  - finish
+moon_flyby:
+  - *ATMOLAUNCH
+  - hohmann_transfer_body
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
@@ -21,18 +30,18 @@ moon_flyby:
   - *RETURNTOKERBIN
 moon_orbit:
   - *ATMOLAUNCH
-  - hohmann_transfer
+  - hohmann_transfer_body
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
   - collect_science
   - circularize_pe
-  - set_inc_lan_to_eq
+  - set_tinc
   - collect_science
   - hohmann_return
   - return_correction
   - *RETURNTOKERBIN
 moon_crash:
   - *ATMOLAUNCH
-  - hohmann_transfer
+  - hohmann_transfer_body
   - hohmann_correction
