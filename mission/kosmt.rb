@@ -3,7 +3,7 @@ require 'erb'
 require 'singleton'
 require './template.rb'
 
-class Kosms
+class KOSMT
   class MissionBuilder
     def initialize(name, steps)
       mission_base = 'mission_base.erb'
@@ -18,7 +18,6 @@ class Kosms
   end
   def initialize
     @missions = YAML.load_file('missions.yml').each_pair{|k,v| v.flatten!}
-
   end
   def generate_missions
     @missions.each_pair do |name, steps|
