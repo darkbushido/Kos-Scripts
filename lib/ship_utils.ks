@@ -9,19 +9,19 @@
   function auto_stage {
     if prevThrust = 0 AND AVAILABLETHRUST > 0
       set prevThrust TO AVAILABLETHRUST.
-    if NOT STAGE:READY {}
-    else if AVAILABLETHRUST = 0 {
-      local t TO THROTTLE.
+    if AVAILABLETHRUST > prevThrust {
+      set prevThrust TO AVAILABLETHRUST.
+    } else if AVAILABLETHRUST = 0 {
       LOCK THROTTLE TO 0.
       WAIT 1. STAGE. WAIT 1.
-      LOCK THROTTLE TO t.
+      LOCK THROTTLE TO thrott.
       set prevThrust TO AVAILABLETHRUST.
-    } else if AVAILABLETHRUST < (prevThrust - 10) {
+    } else if AVAILABLETHRUST < (prevThrust - 5) {
       STAGE. WAIT 1.
       set prevThrust TO AVAILABLETHRUST.
   }}
   function power {
-    if SHIP:ELECTRICCHARGE < 50 disable().
+    if SHIP:ELECTRICCHARGE < 100 disable().
     else if SHIP:ELECTRICCHARGE >= 200 enable().
   }
   function enable {
