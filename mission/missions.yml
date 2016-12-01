@@ -3,11 +3,15 @@ atmo_launch: &ATMOLAUNCH
   - launch
   - coast_to_atm
   - circularize_ap
-  - set_inc_lan
+  - set_launch_inc_lan
 return_to_kerbin: &RETURNTOKERBIN
   - wait_for_soi_change_kerbin
   - atmo_reentry
   - finish
+launch_and_return:
+  - *ATMOLAUNCH
+  - adjust_pe
+  - *RETURNTOKERBIN
 launch_to_orbit:
   - *ATMOLAUNCH
   - adjust_ap
@@ -28,7 +32,6 @@ remote_tech_moon_uplink:
 remote_tech_moon_network:
   - hohmann_transfer
   - circularize_ap
-
 moon_flyby:
   - *ATMOLAUNCH
   - hohmann_transfer_body

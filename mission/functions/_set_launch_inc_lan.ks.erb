@@ -1,0 +1,7 @@
+function set_launch_inc_lan {
+  if p["L"]["LAN"]
+    node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
+  else node_set_inc_lan["create_node"](p["L"]["Inc"]).
+  node_exec["exec"](true).
+  next().
+}

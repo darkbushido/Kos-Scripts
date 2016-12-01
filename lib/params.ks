@@ -5,26 +5,40 @@
     else set v to d.
     return v.
   }
-
-  if core:volume:exists("params.json") {
-    set jp to readjson("params.json").
-  } else {
-    set jp to lex().
-  }
-  local tbody to body(has_key("Body", "Mun")).
-  local next_ship to has_key("NextShip", false).
-  local params to lex(
-    "PAlt", has_key("ParkingAltitude", BODY:ATM:HEIGHT + 10000),
-    "DAlt", has_key("Altitude", tbody:ATM:HEIGHT + 20000),
-    "Inc", has_key("Inc", tbody:obt:inclination),
-    "LAN", has_key("LAN", tbody:obt:lan),
-    "TInc", has_key("TInc", 0),
-    "Body", tbody,
-    "AutoStage", has_key("PitchExp", true),
-    "PitchExp", has_key("PitchExp", 0.35)
+  if core:volume:exists("params.json") { set jp to readjson("params.json").}
+  else { set jp to lex(). }
+  local tbody to body(has_key("TransBody", "Mun")).
+  local launch_params to lex(
+    "PitchExp", has_key("LaunchPitchExp", 0.35),
+    "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
+    "Inc", has_key("LaunchInc", 0),
+    "LAN", has_key("LaunchLAN", false),
+    "AStage", has_key("LaunchAutoStage", true)
   ).
-  if next_ship
-    params:add("NextShip",next_ship).
+  local orbit_params to lex(
+    "Alt", has_key("OrbitAlt", launch_params["Alt"]),
+    "AP", has_key("OrbitAP", launch_params["Alt"]),
+    "PE", has_key("OrbitPE", launch_params["Alt"]),
+    "Inc", has_key("OrbitInc", launch_params["Inc"]),
+    "LAN", has_key("OrbitLAN", launch_params["LAN"]),
+    "Vessel", has_key("OrbitVessel", false),
+    "Offset", has_key("OrbitOffset", 0)
+  ).
+  local transfer_params to lex(
+    "Body", tbody,
+    "Inc", has_key("TransInc", 0),
+    "Alt", has_key("TransAlt", tbody:ATM:HEIGHT + 15000)
+  ).
+  local params to lex(
+    "L", launch_params,
+    "O", orbit_params,
+    "T", transfer_params,
+
+    "NextShip", has_key("NextShip", false)
+    // "TInc", has_key("TInc", 0),
+    // "Body", tbody,
+
+  ).
   print params.
 
   export(params).

@@ -2,12 +2,11 @@ local mission is import("lib/mission.ks").
 local ship_utils is import("lib/ship_utils.ks").
 local p is import("lib/params.ks").
 list files.
-local science_flyby is mission(mission_definition@).
+local mission_base is mission(mission_definition@).
 function mission_definition {
   parameter seq, ev, next.
   SET prevThrust TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
-  print p["PAlt"].
   SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
   SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
@@ -53,4 +52,4 @@ function finish {
   seq:add(atmo_reentry@).
   seq:add(finish@).
 }
-export(science_flyby).
+export(mission_base).

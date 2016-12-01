@@ -4,7 +4,7 @@ function pre_launch {
   set ship:control:pilotmainthrottle to 0.
   lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
   lock throttle to thrott.
-  local dir to lazcalc["LAZ"](p["PAlt"], p["Inc"]).
+  local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
   wait 1.
   next().

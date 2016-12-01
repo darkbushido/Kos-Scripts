@@ -71,14 +71,6 @@ function set_launch_inc_lan {
   node_exec["exec"](true).
   next().
 }
-function adjust_ap {
-  local d_time to time:seconds + eta:periapsis.
-  local data to list(d_time, 0, 0, 0).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["AP"]), 1).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["AP"]), 0.1).
-  node_exec["exec"](true).
-  next().
-}
 function adjust_pe {
   local d_time to time:seconds + eta:periapsis.
   local data to list(d_time, 0, 0, 0).
@@ -87,12 +79,51 @@ function adjust_pe {
   node_exec["exec"](true).
   next().
 }
+function wait_for_soi_change_kerbin {
+  wait 5.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if ship:body = Kerbin {
+    wait 30.
+    next().
+}}
+function atmo_reentry {
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+    lock steering to srfretrograde.
+    until stage:number = 1 {
+      if STAGE:READY {STAGE.}
+      else {wait 1.}
+    }
+    ev:remove("Power"). ship_utils["disable"](). wait 5.
+  } else if not ev:haskey("Power") {
+    ev:add("Power", ship_utils["power"]). wait 5.
+  }
+  if (NOT CHUTESSAFE) { unlock steering.CHUTESSAFE ON. }
+  if list("Landed","Splashed"):contains(status) {
+    ev:add("Power", ship_utils["power"]). wait 5.
+    next().
+}}
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if defined(p) {
+    if p:haskey("NextShip") {
+      local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
+      KUniverse:LAUNCHCRAFT(template).
+    } else if p:haskey("SwitchToShp") {
+      KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
+    }
+  }
+  reboot.
+}
   seq:add(pre_launch@).
   seq:add(launch@).
   seq:add(coast_to_atm@).
   seq:add(circularize_ap@).
   seq:add(set_launch_inc_lan@).
-  seq:add(adjust_ap@).
   seq:add(adjust_pe@).
+  seq:add(wait_for_soi_change_kerbin@).
+  seq:add(atmo_reentry@).
+  seq:add(finish@).
 }
 export(mission_base).

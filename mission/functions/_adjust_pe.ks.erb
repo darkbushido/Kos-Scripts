@@ -1,8 +1,8 @@
 function adjust_pe {
   local d_time to time:seconds + eta:periapsis.
   local data to list(d_time, 0, 0, 0).
-  set data to hc["seek"](data, fit["per_fit"](d_time, target_pe_alt), 1).
-  set data to hc["seek"](data, fit["per_fit"](d_time, target_pe_alt), 0.1).
+  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 1).
+  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 0.1).
   node_exec["exec"](true).
   next().
 }

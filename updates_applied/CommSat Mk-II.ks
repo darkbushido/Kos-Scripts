@@ -6,9 +6,9 @@ for file in fileList {
 }
 COPYPATH("0:/mission/remote_tech_network.ks", "1:/startup.ks").
 set params to lex(
-  "Vessel", vessel("CommSat Mk-I"),
-  "Offset", 120 * 1,
-  "PitchExp", 0.5,
-  "Altitude", 750000
+  "LaunchPitchExp", 0.5,
+  "OrbitAlt", 750000,
+  "OrbitVessel", "CommSat Mk-I",
+  "OrbitOffset", 120 * 1
 ).
 writejson(params, "params.json").
