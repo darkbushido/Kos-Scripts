@@ -20,6 +20,7 @@
     "LAN", has_key("LAN", tbody:obt:lan),
     "TInc", has_key("TInc", 0),
     "Body", tbody,
+    "AutoStage", has_key("PitchExp", true),
     "PitchExp", has_key("PitchExp", 0.35)
   ).
   if next_ship

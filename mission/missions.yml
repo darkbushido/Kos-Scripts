@@ -17,6 +17,18 @@ remote_tech_network:
   - hohmann_transfer
   - circularize_ap
   - finish
+remote_tech_moon_uplink:
+  - *ATMOLAUNCH
+  - hohmann_transfer_body
+  - hohmann_correction
+  - exec_node
+  - wait_for_soi_change_tbody
+  - circularize_pe
+  - set_tinc
+remote_tech_moon_network:
+  - hohmann_transfer
+  - circularize_ap
+
 moon_flyby:
   - *ATMOLAUNCH
   - hohmann_transfer_body
@@ -45,3 +57,4 @@ moon_crash:
   - *ATMOLAUNCH
   - hohmann_transfer_body
   - hohmann_correction
+  - exec_node

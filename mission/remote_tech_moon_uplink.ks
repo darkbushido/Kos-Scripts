@@ -104,6 +104,25 @@ function exec_node {
     node_exec["exec"]().
   next().
 }
+function wait_for_soi_change_tbody {
+  wait 5.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if ship:body = p["Body"] {
+    wait 30.
+    next().
+}}
+function circularize_pe {
+  local sma to ship:obt:SEMIMAJORAXIS.
+  local ecc to ship:obt:ECCENTRICITY.
+  if hasnode node_exec["exec"](true).
+  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+  else node_exec["circularize"](true).
+}
+function set_tinc {
+  node_set_inc_lan["create_node"](p["TInc"]).
+  node_exec["exec"](true).
+  next().
+}
   seq:add(pre_launch@).
   seq:add(launch@).
   seq:add(coast_to_atm@).
@@ -112,5 +131,8 @@ function exec_node {
   seq:add(hohmann_transfer_body@).
   seq:add(hohmann_correction@).
   seq:add(exec_node@).
+  seq:add(wait_for_soi_change_tbody@).
+  seq:add(circularize_pe@).
+  seq:add(set_tinc@).
 }
 export(science_flyby).

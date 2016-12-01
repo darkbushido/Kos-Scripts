@@ -9,6 +9,7 @@ set params to lex(
   "Apa", 500000,
   "Pea", 500000,
   "INC", 90,
-  "PitchExp", 0.5
+  "PitchExp", 0.5,
+  "AutoStage", false
 ).
 writejson(params, "params.json").

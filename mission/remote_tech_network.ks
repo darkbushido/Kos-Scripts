@@ -24,25 +24,25 @@ function pre_launch {
   set ship:control:pilotmainthrottle to 0.
   lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
   lock throttle to thrott.
-  local dir to lazcalc["LAZ"](p["PAlt"], p["Body"]:obt:inclination).
+  local dir to lazcalc["LAZ"](p["PAlt"], p["Inc"]).
   lock steering to heading(dir, 88).
   wait 1.
   next().
 }
 function launch {
-  local dir to lazcalc["LAZ"](p["PAlt"], 0).
-  if not p["Body"]:obt:inclination = 0 {
+  local dir to lazcalc["LAZ"](p["PAlt"], p["Inc"]).
+  if not p["Inc"] = 0 {
     print "waiting for launch window.".
     local lan_t to lazcalc["window"](p["Body"]).
     warpto(lan_t).
     wait until time:seconds >= lan_t.
-    set dir to lazcalc["LAZ"](p["PAlt"], p["Body"]:obt:inclination).
+    set dir to lazcalc["LAZ"](p["PAlt"], p["Inc"]).
   }
   stage. wait 10.
   lock pct_alt to (alt:radar / p["PAlt"]).
   lock target_pitch to 90 - (90* pct_alt^p["PitchExp"]).
   lock steering to heading(dir, target_pitch).
-  if not ev:haskey("AutoStage")
+  if not ev:haskey("AutoStage") and p["AutoStage"]
     ev:add("AutoStage", ship_utils["auto_stage"]).
   next().
 }
