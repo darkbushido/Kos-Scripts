@@ -11,23 +11,23 @@
   local launch_params to lex(
     "PitchExp", has_key("LaunchPitchExp", 0.35),
     "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
-    "Inc", has_key("LaunchInc", 0),
-    "LAN", has_key("LaunchLAN", false),
+    "Inc", has_key("LaunchInc", tbody:obt:inclination),
+    "LAN", has_key("LaunchLAN", tbody:obt:LAN),
     "AStage", has_key("LaunchAutoStage", true)
   ).
   local orbit_params to lex(
     "Alt", has_key("OrbitAlt", launch_params["Alt"]),
     "AP", has_key("OrbitAP", launch_params["Alt"]),
     "PE", has_key("OrbitPE", launch_params["Alt"]),
-    "Inc", has_key("OrbitInc", launch_params["Inc"]),
-    "LAN", has_key("OrbitLAN", launch_params["LAN"]),
+    "Inc", has_key("OrbitInc", 0),
+    "LAN", has_key("OrbitLAN", 0),
     "Vessel", has_key("OrbitVessel", false),
     "Offset", has_key("OrbitOffset", 0)
   ).
   local transfer_params to lex(
+    "Alt", has_key("TransAlt", tbody:ATM:HEIGHT + 15000),
     "Body", tbody,
-    "Inc", has_key("TransInc", 0),
-    "Alt", has_key("TransAlt", tbody:ATM:HEIGHT + 15000)
+    "Inc", has_key("TransInc", tbody:obt:inclination)
   ).
   local params to lex(
     "L", launch_params,

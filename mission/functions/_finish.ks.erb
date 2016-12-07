@@ -2,7 +2,7 @@ function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
   if defined(p) {
-    if p:haskey("NextShip") {
+    if p["NextShip"]:typename = "Vessel" {
       local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
       KUniverse:LAUNCHCRAFT(template).
     } else if p:haskey("SwitchToShp") {

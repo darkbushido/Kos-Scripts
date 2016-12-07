@@ -31,8 +31,8 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   if not p["L"]["Inc"] = 0 {
-    print "waiting for L window.".
-    local lan_t to lazcalc["window"](p["Body"]).
+    print "waiting for Launch window.".
+    local lan_t to lazcalc["window"](p["T"]["Body"]).
     warpto(lan_t).
     wait until time:seconds >= lan_t.
   }
@@ -107,7 +107,7 @@ function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
   if defined(p) {
-    if p:haskey("NextShip") {
+    if p["NextShip"]:typename = "Vessel" {
       local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
       KUniverse:LAUNCHCRAFT(template).
     } else if p:haskey("SwitchToShp") {

@@ -31,8 +31,8 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   if not p["L"]["Inc"] = 0 {
-    print "waiting for L window.".
-    local lan_t to lazcalc["window"](p["Body"]).
+    print "waiting for Launch window.".
+    local lan_t to lazcalc["window"](p["T"]["Body"]).
     warpto(lan_t).
     wait until time:seconds >= lan_t.
   }
@@ -107,7 +107,7 @@ function exec_node {
 function wait_for_soi_change_tbody {
   wait 5.
   lock steering to lookdirup(v(0,1,0), sun:position).
-  if ship:body = p["Body"] {
+  if ship:body = p["T"]["Body"] {
     wait 30.
     next().
 }}
@@ -118,8 +118,8 @@ function circularize_pe {
   else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
   else node_exec["circularize"](true).
 }
-function set_tinc {
-  node_set_inc_lan["create_node"](p["TInc"]).
+function set_orbit_inc {
+  node_set_inc_lan["create_node"](p["O"]["Inc"]).
   node_exec["exec"](true).
   next().
 }
@@ -133,6 +133,6 @@ function set_tinc {
   seq:add(exec_node@).
   seq:add(wait_for_soi_change_tbody@).
   seq:add(circularize_pe@).
-  seq:add(set_tinc@).
+  seq:add(set_orbit_inc@).
 }
 export(mission_base).

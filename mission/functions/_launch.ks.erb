@@ -1,8 +1,8 @@
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   if not p["L"]["Inc"] = 0 {
-    print "waiting for L window.".
-    local lan_t to lazcalc["window"](p["Body"]).
+    print "waiting for Launch window.".
+    local lan_t to lazcalc["window"](p["T"]["Body"]).
     warpto(lan_t).
     wait until time:seconds >= lan_t.
   }

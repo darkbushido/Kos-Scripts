@@ -11,13 +11,6 @@ function mission_definition {
   SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
-function wait_for_soi_change_kerbin {
-  wait 5.
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if ship:body = Kerbin {
-    wait 30.
-    next().
-}}
 function atmo_reentry {
   lock steering to lookdirup(v(0,1,0), sun:position).
   if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
@@ -48,7 +41,6 @@ function finish {
   }
   reboot.
 }
-  seq:add(wait_for_soi_change_kerbin@).
   seq:add(atmo_reentry@).
   seq:add(finish@).
 }
