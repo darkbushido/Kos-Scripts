@@ -2,7 +2,7 @@ ship = CommSat Mk-II
 version = 1.2.2
 description = 
 type = VAB
-size = 4.14369678,10.9016113,3.11037421
+size = 4.14369678,11.8529663,3.11037421
 PART
 {
 	part = probeCoreOcto_4291739898
@@ -135,6 +135,27 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleDataTransmitter
+		isEnabled = True
+		xmitIncomplete = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			StartTransmissionAction
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleLogisticsConsumer
 		isEnabled = True
 		stagingEnabled = True
@@ -199,47 +220,6 @@ PART
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleSPU
-		isEnabled = True
-		IsRTPowered = True
-		IsRTSignalProcessor = True
-		IsRTCommandStation = False
-		RTCommandMinCrew = 6
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = False
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 0
-		RTDishRange = -1
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1401,6 +1381,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
+	link = RelayAntenna5_4291669588
+	attN = top,RelayAntenna5_4291669588
 	attN = bottom,batteryBankMini_4278473646
 	EVENTS
 	{
@@ -1671,7 +1653,7 @@ PART
 	sqor = -1
 	sepI = -1
 	attm = 0
-	modCost = 0
+	modCost = 91.8000031
 	modMass = 0
 	modSize = 0,0,0
 	link = solarPanels5_4273794276
@@ -1729,6 +1711,7 @@ PART
 		selectedTankSetupTxt = LiquidFuel+Oxidizer
 		configLoaded = True
 		initialTankSetup = 
+		storedFactorMultiplier = 1
 		storedVolumeMultiplier = 1
 		storedMassMultiplier = 1
 		traceBoiloff = False
@@ -2962,17 +2945,34 @@ PART
 			ExtendPanelsAction
 			{
 				actionGroup = None
-				active = False
 			}
 			ExtendAction
 			{
 				actionGroup = None
-				active = False
 			}
 			RetractAction
 			{
 				actionGroup = None
-				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitter
+		isEnabled = True
+		xmitIncomplete = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			StartTransmissionAction
+			{
+				actionGroup = None
 			}
 		}
 		UPGRADESAPPLIED
@@ -3056,75 +3056,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntenna
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = False
-		IsRTPowered = True
-		IsRTBroken = False
-		IsNonRetractable = False
-		RTDishCosAngle = 1
-		RTOmniRange = 0
-		RTDishRange = -1
-		stagingEnabled = True
-		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-			ActionToggle
-			{
-				actionGroup = None
-			}
-			ActionOpen
-			{
-				actionGroup = None
-			}
-			ActionClose
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleSPUPassive
-		isEnabled = True
-		IsRTPowered = False
-		IsRTSignalProcessor = True
-		IsRTCommandStation = False
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTDataTransmitter
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
 }
 PART
 {
@@ -3147,7 +3078,7 @@ PART
 	sqor = -1
 	sepI = 0
 	attm = 0
-	modCost = 0
+	modCost = 183.600006
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4278444396
@@ -3203,6 +3134,7 @@ PART
 		selectedTankSetupTxt = LiquidFuel+Oxidizer
 		configLoaded = True
 		initialTankSetup = 
+		storedFactorMultiplier = 1
 		storedVolumeMultiplier = 1
 		storedMassMultiplier = 1
 		traceBoiloff = False
@@ -3340,7 +3272,7 @@ PART
 	sqor = -1
 	sepI = 0
 	attm = 0
-	modCost = 0
+	modCost = 183.600006
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4293521568
@@ -3396,6 +3328,7 @@ PART
 		selectedTankSetupTxt = LiquidFuel+Oxidizer
 		configLoaded = True
 		initialTankSetup = 
+		storedFactorMultiplier = 1
 		storedVolumeMultiplier = 1
 		storedMassMultiplier = 1
 		traceBoiloff = False
@@ -3533,7 +3466,7 @@ PART
 	sqor = -1
 	sepI = 0
 	attm = 0
-	modCost = 0
+	modCost = 183.600006
 	modMass = 0
 	modSize = 0,0,0
 	link = liquidEngine2_4278440210
@@ -3595,6 +3528,7 @@ PART
 		selectedTankSetupTxt = LiquidFuel+Oxidizer
 		configLoaded = True
 		initialTankSetup = 
+		storedFactorMultiplier = 1
 		storedVolumeMultiplier = 1
 		storedMassMultiplier = 1
 		traceBoiloff = False
@@ -5205,6 +5139,157 @@ PART
 		}
 		ACTIONS
 		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = RelayAntenna5_4291669588
+	partName = Part
+	pos = 0,15.9870825,0
+	attPos = 0,0,0
+	attPos0 = 0,0.100000381,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	attN = bottom,batteryBankMini_4278473358
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitter
+		isEnabled = True
+		xmitIncomplete = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			StartTransmissionAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleControllableEmissive
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitterIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTripLogger
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		Log
+		{
+			flight = 0
 		}
 		UPGRADESAPPLIED
 		{
