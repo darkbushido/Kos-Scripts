@@ -5,6 +5,8 @@ local node_exec is import("lib/node_exec.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_orbit.ks").
+print "Mission Params".
+print p.
 list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {

@@ -8,6 +8,8 @@ local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
+print "Mission Params".
+print p.
 list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {
@@ -31,7 +33,7 @@ function pre_launch {
 }
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
-  if not p["L"]["Inc"] = 0 {
+  if p["L"]["CareAboutLAN"] {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Body"]).
     warpto(lan_t).
@@ -66,7 +68,7 @@ function circularize_ap {
   else node_exec["circularize"]().
 }
 function set_launch_inc_lan {
-  if p["L"]["LAN"]
+  if p["L"]["CareAboutLan"]
     node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["L"]["Inc"]).
   node_exec["exec"](true).
@@ -150,7 +152,7 @@ function atmo_reentry {
   lock steering to lookdirup(v(0,1,0), sun:position).
   if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
     lock steering to srfretrograde.
-    until stage:number = 1 {
+    until stage:number <= 1 {
       if STAGE:READY {STAGE.}
       else {wait 1.}
     }
@@ -159,10 +161,8 @@ function atmo_reentry {
     ev:add("Power", ship_utils["power"]). wait 5.
   }
   if (NOT CHUTESSAFE) { unlock steering.CHUTESSAFE ON. }
-  if list("Landed","Splashed"):contains(status) {
-    ev:add("Power", ship_utils["power"]). wait 5.
-    next().
-}}
+  if Altitude > 10000 next().
+}
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").

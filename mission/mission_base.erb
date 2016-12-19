@@ -24,6 +24,14 @@ local fit is import("lib/fitness_transfer.ks").
 <% if (@steps & ['collect_science']).any? -%>
 local science is import("lib/science.ks").
 <% end -%>
+<% if (@steps & ['deorbit_node']).any? -%>
+local land is import("lib/land.ks").
+<% end -%>
+<% if (@steps & ['suicide_burn']).any? -%>
+local suicide is import("lib/suicide_burn.ks").
+<% end -%>
+print "Mission Params".
+print p.
 list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {

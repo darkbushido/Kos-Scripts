@@ -34,6 +34,24 @@ remote_tech_moon_uplink:
 remote_tech_moon_network:
   - hohmann_transfer
   - circularize_ap
+kerbin_power_land_on_target:
+  - *ATMOLAUNCH
+  - fly_over_target
+  - deorbit_node
+  - hoverslam
+  - collect_science
+  - finish
+suicide_burn:
+  - suicide_burn
+  - finish
+hoverslam:
+  - hoverslam
+  - finish
+kerbin_land_on_target:
+  - *ATMOLAUNCH
+  - fly_over_target
+  - deorbit_node
+  - *RETURNTOKERBIN
 moon_flyby:
   - *ATMOLAUNCH
   - hohmann_transfer_body
@@ -45,6 +63,11 @@ moon_flyby:
   - collect_science
   - return_correction
   - *RETURNTOKERBIN
+moon_crash:
+  - *ATMOLAUNCH
+  - hohmann_transfer_body
+  - hohmann_correction
+  - exec_node
 moon_orbit:
   - *ATMOLAUNCH
   - hohmann_transfer_body
@@ -58,8 +81,13 @@ moon_orbit:
   - hohmann_return
   - return_correction
   - *RETURNTOKERBIN
-moon_crash:
+moon_crash_at:
   - *ATMOLAUNCH
   - hohmann_transfer_body
   - hohmann_correction
   - exec_node
+  - wait_for_soi_change_tbody
+  - circularize_pe
+  - set_orbit_inc
+  - fly_over_target
+  - deorbit_node

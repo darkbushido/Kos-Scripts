@@ -4,9 +4,7 @@ local p is import("lib/params.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
-local hohmann is import("lib/hohmann_transfer.ks").
-local hc is import("lib/hillclimb.ks").
-local fit is import("lib/fitness_transfer.ks").
+local land is import("lib/land.ks").
 print "Mission Params".
 print p.
 list files.
@@ -73,46 +71,58 @@ function set_launch_inc_lan {
   node_exec["exec"](true).
   next().
 }
-function hohmann_transfer_body {
-  local r1 to SHIP:OBT:SEMIMAJORAXIS.
-  local r2 TO p["T"]["Body"]:obt:semimajoraxis.
-  set d_time to hohmann["time"](r1,r2, p["T"]["Body"]).
-  hohmann["transfer"](r1,r2,d_time).
-  local nn to nextnode.
-  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  print "Inclination Fitness : " + p["T"]["Inc"].
-  set data to hc["seek"](data, fit["inc_fit"](p["T"]["Body"], p["T"]["Inc"]), 1).
-  set data to hc["seek"](data, fit["inc_fit"](p["T"]["Body"], p["T"]["Inc"]), 0.1).
-  print "Periapsis fit".
-  set data to hc["seek"](data, fit["per_fit"](p["T"]["Body"], p["T"]["Alt"]), 0.1).
-  node_exec["exec"](true).
+function fly_over_target {
+  land["FlyOverTarget"]().
   next().
 }
-function hohmann_correction {
-  set ct to time:seconds + (eta:transition * 0.7).
-  local data is list(0).
-  print "Correction Inclination Fitness".
-  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["T"]["Body"], p["T"]["Inc"]), 1).
-  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["T"]["Body"], p["T"]["Inc"]), 0.1).
-  print "Correction Periapsis fit".
-  set data to hc["seek"](data, fit["c_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), 1).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), 0.1).
-  local nn to nextnode.
-  if nn:deltav:mag < 0.3 remove nn.
+function deorbit_node {
+  land["DeorbitNode"]().
   next().
 }
-function exec_node {
-  if hasnode
-    node_exec["exec"]().
-  next().
+function wait_for_soi_change_kerbin {
+  wait 5.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if ship:body = Kerbin {
+    wait 30.
+    next().
+}}
+function atmo_reentry {
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+    lock steering to srfretrograde.
+    until stage:number <= 1 {
+      if STAGE:READY {STAGE.}
+      else {wait 1.}
+    }
+    ev:remove("Power"). ship_utils["disable"](). wait 5.
+  } else if not ev:haskey("Power") {
+    ev:add("Power", ship_utils["power"]). wait 5.
+  }
+  if (NOT CHUTESSAFE) { unlock steering.CHUTESSAFE ON. }
+  if Altitude > 10000 next().
+}
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if defined(p) {
+    if p["NextShip"]:typename = "Vessel" {
+      local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
+      KUniverse:LAUNCHCRAFT(template).
+    } else if p:haskey("SwitchToShp") {
+      KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
+    }
+  }
+  reboot.
 }
   seq:add(pre_launch@).
   seq:add(launch@).
   seq:add(coast_to_atm@).
   seq:add(circularize_ap@).
   seq:add(set_launch_inc_lan@).
-  seq:add(hohmann_transfer_body@).
-  seq:add(hohmann_correction@).
-  seq:add(exec_node@).
+  seq:add(fly_over_target@).
+  seq:add(deorbit_node@).
+  seq:add(wait_for_soi_change_kerbin@).
+  seq:add(atmo_reentry@).
+  seq:add(finish@).
 }
 export(mission_base).
