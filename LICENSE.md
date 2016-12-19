@@ -61,3 +61,9 @@ lib/node_set_inc_lan.ks Curtasy of https://www.reddit.com/user/G_Space
 https://www.reddit.com/r/Kos/comments/3r5pbj/set_inclination_from_orbit_script
 
 lib/hohmann_transfer hohmann_return comes from https://www.reddit.com/r/Kos/comments/3xihu7/automated_mun_science_return_probe
+
+hoverslam comes from here
+https://www.reddit.com/r/Kos/comments/4qukt1/singleline_hoverslam_script/
+
+suicide burn comes from here
+https://www.reddit.com/r/Kos/comments/5bjdix/vtol_landing_script_landing_with_jet_engines/
