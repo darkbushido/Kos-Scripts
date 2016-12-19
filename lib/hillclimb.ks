@@ -18,6 +18,7 @@
     local best is 0.
     for neighbor in neighbors(d, ss) {
       if fitness_lookup:haskey(neighbor) {
+        print "Fit Cache Hit".
         set fitness to fitness_lookup[neighbor].
       } else {
         set fitness to f_fn(neighbor).
