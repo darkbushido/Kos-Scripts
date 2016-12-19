@@ -1,5 +1,5 @@
 {
-  set node_exec to lex(
+  local node_exec to lex(
     "exec", exec@,
     "circularize", circularize@
   ).

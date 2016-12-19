@@ -1,5 +1,4 @@
 {
-
   local laz_calc is lex(
     "LAZ", LAZcalc@,
     "window", launch_window@

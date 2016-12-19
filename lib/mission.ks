@@ -15,6 +15,7 @@
       h:clear().
       h:write("export("+m+").").
       set r to m.
+      print "Runmode: " +r.
     }.
     d(s,e,n).
     return{
