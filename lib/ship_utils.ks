@@ -28,14 +28,21 @@
     if ADDONS:RT:AVAILABLE {
       for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
         if antenna:GETFIELD("status") = "Off" antenna:DOEVENT("activate").
+    }} else {
+      for antenna in SHIP:ModulesNamed("ModuleDeployableAntenna") {
+        if antenna:GETFIELD("status") = "Retracted" antenna:DOEVENT("extend antenna").
   }}}
   function disable {
     if ADDONS:RT:AVAILABLE {
       for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
         if not list("Reflectron DP-10"):contains(antenna:part:title) {
           if not (antenna:getfield("status") = "Off") antenna:DOEVENT("deactivate").
-            wait until antenna:getfield("status") = "Off".
-  }}}}
+          wait until antenna:getfield("status") = "Off".
+    }}} else {
+      for antenna in SHIP:ModulesNamed("ModuleDeployableAntenna") {
+        if antenna:getfield("status") = "Extended" antenna:DOEVENT("retract antenna").
+        wait until antenna:getfield("status") = "Retracted".
+  }}}
   function stage_delta_v {
     local LG to (ship:body:mu / ship:body:radius ^2).
     local fuels is LEX("LiquidFuel", 0.005,"Oxidizer", 0.005,
