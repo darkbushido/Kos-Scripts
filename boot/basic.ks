@@ -20,7 +20,6 @@ function download_updates {
     DELETEPATH("1:/update.ks").
   }
 }
-
 local s is stack().
 local d is lex().
 global import is{
@@ -41,8 +40,12 @@ if addons:rt:available {
       a:DOEVENT("activate").
   }
   if addons:rt:hasconnection(ship) { download_updates(). }
+  else if CONTROLCONNECTION { download_updates(). }
   else { print "No Connection, Running startup.ks". }
 } else {
+  for antenna in SHIP:ModulesNamed("ModuleDeployableAntenna") {
+    if antenna:GETFIELD("status") = "Retracted" antenna:DOEVENT("extend antenna").
+  }
   download_updates().
 }
 if exists("1:/startup.ks") {
