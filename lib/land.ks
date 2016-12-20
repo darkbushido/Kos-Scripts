@@ -6,7 +6,7 @@
   local fit is import("lib/fitness_land.ks").
   local landing to lex(
     "FlyOverTarget", fly_over_target@,
-    "DeorbitNode", deorbit_node@
+    "DeorbitNode", refine_deorbit_node@
   ).
   function fly_over_target {
     print "Adjusting Inclination and Lan to fly over target".
@@ -18,21 +18,24 @@
     remove n.
     node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90+rot_angle).
     node_exec["exec"](true).
+    print "Creating deorbit node".
+    local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
+    local ship_2_node to mod((720 + node_lng+rot_angle - ship_ref),360).
+    local node_eta to ship_2_node*OBT:PERIOD/360.
+    local deorbit_node to NODE(time:seconds + node_eta,0,0,-SHIP:VELOCITY:SURFACE:MAG/20).
+    ADD deorbit_node.
   }
-  function deorbit_node {
+  function refine_deorbit_node {
     addons:tr:settarget(p["LND"]["LatLng"]).
-    local mnv_time to TIME:SECONDS + ship:orbit:period/4.
-    local mnv_dv to -ship:velocity:orbit:mag/10.
-    local n to node(mnv_time,0,0,mnv_dv).
-    add n.
-    wait 1.
-    local data to list(mnv_time).
+    local nd to NEXTNODE.
+    local data to list(time:seconds + nd:eta, nd:radialout, nd:normal, nd:prograde).
+
     print "refining manuver time by 60".
-    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"],mnv_dv), 60).
+    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"]), 50).
     print "refining manuver time by 10".
-    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"],mnv_dv), 10).
+    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"]), 10).
     print "refining manuver time by 1".
-    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"],mnv_dv), 1).
+    set data to hc["seek"](data, fit["deorbit_fit"](p["LND"]["LatLng"]), 1).
     node_exec["exec"](true).
   }
   export(landing).
