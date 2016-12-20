@@ -18,12 +18,13 @@ function hoverslam {
   set throt to 0.
   lock truealt to (altitude - geoposition:terrainheight).
   lock throttle to throt.
-  until (altitude - geoposition:terrainheight) < p["LND"]["RadarOffset"] {
+  until ((altitude - geoposition:terrainheight) < p["LND"]["RadarOffset"]) or (list("Landed","Splashed"):contains(status)) {
     set throt to min(1,max(0,(((p["LND"]["HSMOD"]/(1+constant:e^(5-1.5*truealt)))+(truealt/min(-1,(verticalspeed))))+(abs(verticalspeed)/(availablethrust/mass))))).
     wait 0.
   }
   unlock throttle.
   unlock steering.
+  next().
 }
 function finish {
   ship_utils["enable"]().
