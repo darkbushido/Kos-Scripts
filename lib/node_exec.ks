@@ -7,11 +7,16 @@
     parameter autowarp is 0, n is nextnode,
       v is n:burnvector,
       starttime is (time:seconds + n:eta - mnv_time(v:mag)*0.53).
+    sas off.
     if (starttime-300) >= time:seconds {
       lock steering to lookdirup(v(0,1,0), sun:position).
-      wait until VANG(SHIP:FACING:VECTOR, lookdirup(v(0,1,0), sun:position):vector) < 0.01.
-      if autowarp warpto(starttime - 300).
+      wait until VANG(SHIP:FACING:VECTOR, lookdirup(v(0,1,0), sun:position):vector) < 0.05.
+      if autowarp {
+        sas on.
+        warpto(starttime - 300).
+      }
       wait until time:seconds >= (starttime - 300).
+      sas off.
     }
     lock steering to n:burnvector.
     wait until VANG(SHIP:FACING:VECTOR, n:BURNVECTOR) < 1.
