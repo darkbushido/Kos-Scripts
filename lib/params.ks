@@ -1,10 +1,5 @@
 {
-  function has_key {
-    parameter k, d.
-    if jp:haskey(k) set v to jp[k].
-    else set v to d.
-    return v.
-  }
+  function has_key { parameter k, d. if jp:haskey(k) set v to jp[k]. else set v to d. return v. }
   if core:volume:exists("params.json") { set jp to readjson("params.json").}
   else { set jp to lex(). }
   local tbody to body(has_key("TransBody", "Mun")).
@@ -39,12 +34,8 @@
     "SurfaceSheerCap", has_key("SurfaceSheerCap", 40)
   ).
   local params to lex(
-    "L", launch_params,
-    "O", orbit_params,
-    "T", transfer_params,
-    "LND", landing_params,
-    "NextShip", has_key("NextShip", false)
+    "L", launch_params, "O", orbit_params, "T", transfer_params,
+    "LND", landing_params, "NextShip", has_key("NextShip", false)
   ).
-
   export(params).
 }

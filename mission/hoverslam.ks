@@ -7,7 +7,7 @@ list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {
   parameter seq, ev, next.
-  SET prevThrust TO AVAILABLETHRUST.
+  SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
   SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
   SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
@@ -29,14 +29,9 @@ function hoverslam {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if defined(p) {
-    if p["NextShip"]:typename = "Vessel" {
-      local template to KUniverse:GETCRAFT(p["NextShip"], "VAB").
-      KUniverse:LAUNCHCRAFT(template).
-    } else if p:haskey("SwitchToShp") {
-      KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).
-    }
-  }
+  if p["NextShip"]:typename = "Vessel" {
+    local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
+  } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.
 }
   seq:add(hoverslam@).

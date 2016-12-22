@@ -11,31 +11,25 @@ list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {
   parameter seq, ev, next.
-  SET prevThrust TO AVAILABLETHRUST.
+  SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
   SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
   SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
 function hohmann_transfer {
-  local r1 to SHIP:OBT:SEMIMAJORAXIS.
-  local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
   local d_time to eta:apoapsis.
-  if p["O"]["Vessel"]:typename = "Vessel"
-    set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
-  hohmann["transfer"](r1,r2,d_time).
-  local nn to nextnode.
-  local t to time:seconds + nn:eta.
-  local data is list(nn:prograde).
+  if p["O"]["Vessel"]:typename = "Vessel" set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
+  local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".
   set data to hc["seek"](data, fit["apo_fit"](t, p["O"]["Alt"]), 0.1).
   set data to hc["seek"](data, fit["apo_fit"](t, p["O"]["Alt"]), 0.01).
-  node_exec["exec"](true).
-  next().
+  node_exec["exec"](true). next().
 }
 function circularize_ap {
-  local sma to ship:obt:SEMIMAJORAXIS.
-  local ecc to ship:obt:ECCENTRICITY.
+  local sma to ship:obt:SEMIMAJORAXIS. local ecc to ship:obt:ECCENTRICITY.
   if hasnode node_exec["exec"](true).
   else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
   else node_exec["circularize"]().

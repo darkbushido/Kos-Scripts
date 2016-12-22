@@ -1,16 +1,14 @@
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
+  lock steering to heading(dir, 88).
   if p["L"]["CareAboutLAN"] {
     print "waiting for Launch window.".
-    local lan_t to lazcalc["window"](p["T"]["Body"]).
-    warpto(lan_t).
-    wait until time:seconds >= lan_t.
+    local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage. wait until ship:velocity:surface:mag > 100.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
-  if not ev:haskey("AutoStage") and p["L"]["AStage"]
-    ev:add("AutoStage", ship_utils["auto_stage"]).
+  if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
   next().
 }

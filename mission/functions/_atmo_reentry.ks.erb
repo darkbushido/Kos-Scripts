@@ -10,6 +10,5 @@ function atmo_reentry {
   } else if not ev:haskey("Power") {
     ev:add("Power", ship_utils["power"]). wait 5.
   }
-  if (NOT CHUTESSAFE) { unlock steering.CHUTESSAFE ON. }
-  if Altitude > 10000 next().
+  if (NOT CHUTESSAFE) { unlock steering. CHUTESSAFE ON. next().}
 }

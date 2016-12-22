@@ -1,14 +1,15 @@
 sas off.
+set ship:control:pilotmainthrottle to 0.
 
-set RADAR_GROUND_HEIGHT to 6.4. //Set this too high and you get negative sqrt and crash.
+set RADAR_GROUND_HEIGHT to 2.1. //Set this too high and you get negative sqrt and crash.
                                 //Set this too low and you slam into the ground.
 set DESCENT_SPEED to 2. // fudgey number. higher is faster
-set JET_SPOOL_TIME to 0. // aproximate number of seconds the jet spools.
+set JET_SPOOL_TIME to 3. // aproximate number of seconds the jet spools.
 set SURFACE_SHEAR_CAP to 40. //how many meters per second before we just lock to 45 degrees
                              //higher means less aggressive reactions to sideways movement.
 set pt to TIME:SECONDS. //previous time
 set pv to 0. //previous velocity
-until false {
+until list("Landed","Splashed"):contains(status) {
     wait 0.1.
     CLEARSCREEN.
     set surfaceShear to vxcl(up:forevector, velocity:surface).
@@ -28,6 +29,7 @@ until false {
     print "Adjustment Throttle : " + round(adjustmentThrottle, 2).
 
     lock throttle to adjustmentThrottle + baseThrottle + surfaceShear:mag/SURFACE_SHEAR_CAP.
+
     lock steering to lookdirup(up:forevector*SURFACE_SHEAR_CAP-surfaceShear, facing:topvector).
 
     set pt to TIME:SECONDS.
