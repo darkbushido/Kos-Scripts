@@ -27,17 +27,17 @@
     LOCAL pN IS HEADING(0,lat):VECTOR.
     LOCAL bodyInc IS VANG(pN, eN).
     LOCAL beta IS ARCCOS(MAX(-1,MIN(1,COS(bodyInc) * SIN(lat) / SIN(bodyInc)))).
-    LOCAL intersectdir IS VCRS(pN, eN):NORMALIZED.
-    LOCAL intersectpos IS -VXCL(pN, eN):NORMALIZED.
-    LOCAL launchtimedir IS (intersectdir * SIN(beta) + intersectpos * COS(beta)) * COS(lat) + SIN(lat) * pN.
-    LOCAL launchtime IS VANG(launchtimedir, SHIP:POSITION - BODY:POSITION) / 360 * BODY:ROTATIONPERIOD.
+    LOCAL idir IS VCRS(pN, eN):NORMALIZED.
+    LOCAL ipos IS -VXCL(pN, eN):NORMALIZED.
+    LOCAL ltdir IS (idir * SIN(beta) + ipos * COS(beta)) * COS(lat) + SIN(lat) * pN.
+    LOCAL lt IS VANG(ltdir, SHIP:POSITION - BODY:POSITION) / 360 * BODY:ROTATIONPERIOD.
     LOCAL incl_t is tgt:obt:inclination.
-    if VCRS(launchtimedir, SHIP:POSITION - BODY:POSITION)*pN < 0 {
+    if VCRS(ltdir, SHIP:POSITION - BODY:POSITION)*pN < 0 {
       print "VCRS is less then 0".
       set incl_t to incl_t * -1.
-      SET launchtime TO BODY:ROTATIONPERIOD - launchtime.
+      SET lt TO BODY:ROTATIONPERIOD - lt.
     }
-    RETURN TIME:SECONDS+launchtime.
+    RETURN TIME:SECONDS+lt.
   }
   export(laz_calc).
 }

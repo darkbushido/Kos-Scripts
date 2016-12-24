@@ -9,6 +9,6 @@ set params to lex(
   "LaunchPitchExp", 0.5,
   "OrbitAlt", 750000,
   "OrbitVessel", "CommSat Mk-I",
-  "OrbitOffset", 120 * 1
+  "OrbitOffset", 120 * 2
 ).
 writejson(params, "params.json").
