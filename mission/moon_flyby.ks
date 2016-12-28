@@ -16,15 +16,14 @@ function mission_definition {
   parameter seq, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
-  lock throttle to thrott. wait 1. next().
+  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET PID:SETPOINT TO p["L"]["Alt"].
+  next().
 }
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
@@ -33,7 +32,10 @@ function launch {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
-  stage. wait until ship:velocity:surface:mag > 100.
+  stage.
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
+  wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
@@ -68,23 +70,19 @@ function hohmann_transfer_body {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  print "Inclination Fitness : " + p["T"]["Inc"].
-  set data to hc["seek"](data, fit["inc_fit"](p["T"]["Body"], p["T"]["Inc"]), 1).
-  set data to hc["seek"](data, fit["inc_fit"](p["T"]["Body"], p["T"]["Inc"]), 0.1).
-  print "Periapsis fit".
-  set data to hc["seek"](data, fit["per_fit"](p["T"]["Body"], p["T"]["Alt"]), 0.1).
+  print "Transfer Fitness : " + p["T"]["Inc"].
+  set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
+  set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
   node_exec["exec"](true).
   next().
 }
 function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0).
-  print "Correction Inclination Fitness".
-  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["T"]["Body"], p["T"]["Inc"]), 1).
-  set data to hc["seek"](data, fit["c_inc_fit"](ct, p["T"]["Body"], p["T"]["Inc"]), 0.1).
-  print "Correction Periapsis fit".
-  set data to hc["seek"](data, fit["c_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), 1).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), 0.1).
+  print "Correction Fitness".
+  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 10).
+  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
+  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().
@@ -103,7 +101,7 @@ function wait_for_soi_change_tbody {
 }}
 function collect_science {
   print "Gathering Science".
-  science["science"]().
+  science["collect"]().
   next().
 }
 function free_return_correction {
@@ -120,9 +118,9 @@ function free_return_correction {
 function return_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 0.1).
+  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 10).
+  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 1).
+  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 0.1).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
@@ -152,7 +150,7 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if p:haskey("NextShip") {
+  if p["NextShip"]:typename = "Vessel" {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
   } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.

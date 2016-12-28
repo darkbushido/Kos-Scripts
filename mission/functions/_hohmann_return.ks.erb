@@ -3,8 +3,8 @@ function hohmann_return {
   hohmann["return"]().
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  hc["seek"](data, fit["per_fit"](Kerbin, 30000), 10).
-  hc["seek"](data, fit["per_fit"](Kerbin, 30000), 1).
+  hc["seek"](data, fit["trans_fit"](Kerbin, 0, 30000), 10).
+  hc["seek"](data, fit["trans_fit"](Kerbin, 0, 30000), 1).
   node_exec["exec"](true).
   next().
 }

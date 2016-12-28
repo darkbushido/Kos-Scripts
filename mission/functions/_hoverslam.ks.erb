@@ -1,4 +1,5 @@
 function hoverslam {
+  gear on.
   lock steering to srfretrograde.
   set throt to 0.
   lock truealt to (altitude - geoposition:terrainheight).
@@ -8,6 +9,6 @@ function hoverslam {
     wait 0.
   }
   unlock throttle.
-  unlock steering.
+  lock steering to up.
   next().
 }

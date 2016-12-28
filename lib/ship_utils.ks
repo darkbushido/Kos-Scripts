@@ -13,8 +13,8 @@
     else if availablethrust < (pT - 5) {STAGE. WAIT 1.set pT TO availablethrust.}
   }
   function power {
-    if SHIP:ELECTRICCHARGE < 100 disable().
-    else if SHIP:ELECTRICCHARGE >= 200 enable().
+    if SHIP:ELECTRICCHARGE > 200 enable().
+    else disable().
   }
   function enable {
     if ADDONS:RT:AVAILABLE {

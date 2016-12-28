@@ -8,6 +8,8 @@ local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
+local cn is import("lib/circle_nav.ks").
+local land is import("lib/land.ks").
 print "Mission Params".
 print p.
 list files.
@@ -99,11 +101,6 @@ function wait_for_soi_change_tbody {
     wait 30.
     next().
 }}
-function collect_science {
-  print "Gathering Science".
-  science["collect"]().
-  next().
-}
 function circularize_pe {
   local sma to ship:obt:SEMIMAJORAXIS.
   local ecc to ship:obt:ECCENTRICITY.
@@ -115,6 +112,81 @@ function set_orbit_inc {
   node_set_inc_lan["create_node"](p["O"]["Inc"]).
   node_exec["exec"](true).
   next().
+}
+function fly_over_target {
+  land["FlyOverTarget"]().
+  next().
+}
+function deorbit_node {
+  land["DeorbitNode"]().
+  next().
+}
+function cancel_surface_speed {
+  local tti to land["TTI"]().
+  local ttb to time:seconds + (tti * 0.9).
+  local s to ship:velocity:surface:mag.
+  local n to node(ttb,0,0,-s).
+  add n.
+  node_exec["exec"]().
+  next().
+}
+function hoverslam {
+  gear on.
+  lock steering to srfretrograde.
+  set throt to 0.
+  lock truealt to (altitude - geoposition:terrainheight).
+  lock throttle to throt.
+  until ((altitude - geoposition:terrainheight) < p["LND"]["RadarOffset"]) or (list("Landed","Splashed"):contains(status)) {
+    set throt to min(1,max(0,(((p["LND"]["HSMOD"]/(1+constant:e^(5-1.5*truealt)))+(truealt/min(-1,(verticalspeed))))+(abs(verticalspeed)/(availablethrust/mass))))).
+    wait 0.
+  }
+  unlock throttle.
+  lock steering to up.
+  next().
+}
+function collect_science {
+  print "Gathering Science".
+  science["collect"]().
+  next().
+}
+function sleep {
+  print "Waiting for 15 seconds".
+  wait 15.
+  print "Finished Waiting".
+  next().
+}
+function transfer_science {
+  print "Transfering Science".
+  science["transfer"]().
+  next().
+}
+function pre_launch_moon {
+  ev:remove("Power"). ship_utils["disable"]().
+  set ship:control:pilotmainthrottle to 0.
+  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET PID:SETPOINT TO 15000.
+  next().
+}
+function launch_moon {
+  local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
+  lock steering to heading(dir, 88).
+  stage.
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
+  wait until ship:velocity:surface:mag > 5.
+  lock steering to heading(dir, 25).
+  if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
+  next().
+}
+function coast_to_alt {
+  if apoapsis > 15000 {
+    print apoapsis.
+    set warp to 0. lock throttle to 0.
+    if ev:haskey("AutoStage") ev:remove("AutoStage").
+    panels on.
+    if not ev:haskey("Power") ev:add("Power", ship_utils["power"]).
+    next().
+  }
 }
 function hohmann_return {
   print "Homann Return".
@@ -175,10 +247,19 @@ function finish {
   seq:add(hohmann_correction@).
   seq:add(exec_node@).
   seq:add(wait_for_soi_change_tbody@).
-  seq:add(collect_science@).
   seq:add(circularize_pe@).
   seq:add(set_orbit_inc@).
+  seq:add(fly_over_target@).
+  seq:add(deorbit_node@).
+  seq:add(cancel_surface_speed@).
+  seq:add(hoverslam@).
   seq:add(collect_science@).
+  seq:add(sleep@).
+  seq:add(transfer_science@).
+  seq:add(pre_launch_moon@).
+  seq:add(launch_moon@).
+  seq:add(coast_to_alt@).
+  seq:add(circularize_ap@).
   seq:add(hohmann_return@).
   seq:add(return_correction@).
   seq:add(wait_for_soi_change_kerbin@).

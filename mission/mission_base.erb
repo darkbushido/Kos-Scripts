@@ -25,6 +25,7 @@ local fit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
 <% end -%>
 <% if (@steps & ['deorbit_node']).any? -%>
+local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 <% end -%>
 <% if (@steps & ['suicide_burn']).any? -%>
@@ -38,8 +39,6 @@ function mission_definition {
   parameter seq, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
 <% @steps.uniq.each do |step| -%>

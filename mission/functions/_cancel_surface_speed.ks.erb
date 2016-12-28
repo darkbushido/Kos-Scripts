@@ -1,0 +1,9 @@
+function cancel_surface_speed {
+  local tti to land["TTI"]().
+  local ttb to time:seconds + (tti * 0.9).
+  local s to ship:velocity:surface:mag.
+  local n to node(ttb,0,0,-s).
+  add n.
+  node_exec["exec"]().
+  next().
+}

@@ -1,5 +1,5 @@
 {
-  local science is lex( "science", collect_science@ ).
+  local science is lex( "collect", collect_science@, "transfer", transfer_science@ ).
   function highlight_part {
     parameter SP, SM.
     if not SM:HASDATA and not SM:INOPERABLE { HIGHLIGHT(SP, BLUE). return true. }
@@ -25,6 +25,9 @@
         else SMS:REMOVE(SM:part:name).
       }
     }
+    transfer_science().
+  }
+  function transfer_science {
     for sc in ship:modulesnamed("ModuleScienceContainer") {
       sc:doaction("collect all", true).
     }

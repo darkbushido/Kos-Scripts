@@ -4,6 +4,7 @@ local p is import("lib/params.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
+local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 print "Mission Params".
 print p.
@@ -13,15 +14,14 @@ function mission_definition {
   parameter seq, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
-  lock throttle to thrott. wait 1. next().
+  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET PID:SETPOINT TO p["L"]["Alt"].
+  next().
 }
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
@@ -30,7 +30,10 @@ function launch {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
-  stage. wait until ship:velocity:surface:mag > 100.
+  stage.
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
+  wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
@@ -90,7 +93,7 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if p:haskey("NextShip") {
+  if p["NextShip"]:typename = "Vessel" {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
   } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.

@@ -91,3 +91,25 @@ moon_crash_at:
   - set_orbit_inc
   - fly_over_target
   - deorbit_node
+moon_land_at:
+  - *ATMOLAUNCH
+  - hohmann_transfer_body
+  - hohmann_correction
+  - exec_node
+  - wait_for_soi_change_tbody
+  - circularize_pe
+  - set_orbit_inc
+  - fly_over_target
+  - deorbit_node
+  - cancel_surface_speed
+  - hoverslam
+  - collect_science
+  - sleep
+  - transfer_science
+  - pre_launch_moon
+  - launch_moon
+  - coast_to_alt
+  - circularize_ap
+  - hohmann_return
+  - return_correction
+  - *RETURNTOKERBIN

@@ -1,0 +1,11 @@
+function launch_moon {
+  local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
+  lock steering to heading(dir, 88).
+  stage.
+  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
+  wait until ship:velocity:surface:mag > 5.
+  lock steering to heading(dir, 25).
+  if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
+  next().
+}

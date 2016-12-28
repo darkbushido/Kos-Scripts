@@ -13,8 +13,6 @@ function mission_definition {
   parameter seq, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO BODY:ATM:HEIGHT + 10000.
   SET thrott to 0.
 
 function hohmann_transfer {
