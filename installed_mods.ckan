@@ -3,12 +3,15 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2016.11.24.03.56.42",
+	"version": "2016.12.28.02.28.30",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
 		{
-			"name": "AlternateResourcePanel"
+			"name": "USITools"
+		},
+		{
+			"name": "KerbalAlarmClock"
 		},
 		{
 			"name": "BetterCrewAssignment"
@@ -20,19 +23,19 @@
 			"name": "SixCrewScienceLab"
 		},
 		{
-			"name": "xScience"
+			"name": "USI-FTT"
 		},
 		{
-			"name": "ContractConfigurator"
+			"name": "USI-ART"
 		},
 		{
-			"name": "ModuleManager"
+			"name": "IndicatorLights"
 		},
 		{
-			"name": "FirespitterCore"
+			"name": "UKS"
 		},
 		{
-			"name": "ChopShop"
+			"name": "InterstellarFuelSwitch"
 		},
 		{
 			"name": "ProgressParser"
@@ -41,67 +44,46 @@
 			"name": "ContractParser"
 		},
 		{
-			"name": "Ceteras-Suit-Pack"
+			"name": "ChopShop"
 		},
 		{
-			"name": "NMSG"
+			"name": "xScience"
 		},
 		{
-			"name": "ContractConfigurator-ContractPack-SCANsat"
-		},
-		{
-			"name": "DMagicOrbitalScience"
-		},
-		{
-			"name": "DockingPortAlignmentIndicator"
-		},
-		{
-			"name": "RemoteTech"
-		},
-		{
-			"name": "ContractsWindowPlus"
-		},
-		{
-			"name": "RasterPropMonitor"
-		},
-		{
-			"name": "KIS"
+			"name": "ContractConfigurator-KerbinSpaceStation"
 		},
 		{
 			"name": "KAS"
 		},
 		{
+			"name": "LandingHeight"
+		},
+		{
 			"name": "UniversalStorage"
 		},
 		{
-			"name": "RasterPropMonitor-Core"
+			"name": "USI-EXP"
 		},
 		{
-			"name": "TextureReplacer"
-		},
-		{
-			"name": "kOS"
+			"name": "USI-Core"
 		},
 		{
 			"name": "HyperEdit"
 		},
 		{
-			"name": "ContractConfigurator-RemoteTech"
+			"name": "Impact"
 		},
 		{
-			"name": "KerbalAlarmClock"
+			"name": "AlternateResourcePanel"
 		},
 		{
 			"name": "KSP-AVC"
 		},
 		{
-			"name": "LandingHeight"
+			"name": "USI-LS"
 		},
 		{
 			"name": "ColorCodedCans"
-		},
-		{
-			"name": "RCSBuildAid"
 		},
 		{
 			"name": "LaunchNumbering"
@@ -110,25 +92,16 @@
 			"name": "LithobrakeExplorationTechnologies"
 		},
 		{
-			"name": "MechJeb2"
-		},
-		{
-			"name": "MechJebEmbeddedUniversalFree"
-		},
-		{
 			"name": "SCANsat"
 		},
 		{
 			"name": "PilotAssistant"
 		},
 		{
-			"name": "PreciseManeuver"
+			"name": "InterstellarFuelSwitch-Core"
 		},
 		{
-			"name": "QuickSearch"
-		},
-		{
-			"name": "InterstellarFuelSwitch"
+			"name": "SmokeScreen"
 		},
 		{
 			"name": "PortraitStats"
@@ -137,91 +110,73 @@
 			"name": "EngineLighting"
 		},
 		{
-			"name": "AmbientLightAdjustment"
+			"name": "ReentryParticleEffect"
 		},
 		{
-			"name": "RoutineMissionManager"
+			"name": "CriticalTemperatureGauge"
 		},
 		{
-			"name": "StationScience"
+			"name": "QuickSearch"
 		},
 		{
-			"name": "InterstellarFuelSwitch-Core"
-		},
-		{
-			"name": "CapCom"
+			"name": "AsteroidDay"
 		},
 		{
 			"name": "TransferWindowPlanner"
 		},
 		{
-			"name": "FirespitterResourcesConfig"
+			"name": "MalemuteRover"
 		},
 		{
-			"name": "Karbonite"
+			"name": "Konstruction"
 		},
 		{
 			"name": "KaribouExpeditionRover"
 		},
 		{
-			"name": "MalemuteRover"
+			"name": "FirespitterResourcesConfig"
 		},
 		{
-			"name": "UKS"
+			"name": "FirespitterCore"
 		},
 		{
-			"name": "USI-ART"
+			"name": "ContractConfigurator"
 		},
 		{
-			"name": "USI-Core"
+			"name": "CommunityResourcePack"
 		},
 		{
-			"name": "USI-EXP"
+			"name": "TextureReplacer"
 		},
 		{
-			"name": "USI-FTT"
+			"name": "ManeuverNodeEvolved"
 		},
 		{
-			"name": "USI-LS"
+			"name": "kOS"
 		},
 		{
 			"name": "USI-SRV"
 		},
 		{
-			"name": "USITools"
-		},
-		{
-			"name": "USI-UKS-Shared"
+			"name": "DMagicOrbitalScience"
 		},
 		{
 			"name": "ThrottleControlledAvionics"
 		},
 		{
-			"name": "AT-Utils"
+			"name": "ConfigurableContainers-Core"
 		},
 		{
-			"name": "Toolbar"
-		},
-		{
-			"name": "Chatterer"
-		},
-		{
-			"name": "ContractConfigurator-RoverMissionsRedux"
-		},
-		{
-			"name": "BetterBurnTime"
-		},
-		{
-			"name": "ContractConfigurator-AnomalySurveyor"
+			"name": "SmartStage"
 		},
 		{
 			"name": "ContractConfigurator-CleverSats"
 		},
 		{
-			"name": "PartOrganizer"
+			"name": "ContractsWindowPlus"
 		},
 		{
-			"name": "KerbalEngineerRedux"
+			"name": "CommunityCategoryKit"
 		},
 		{
 			"name": "KerbalJointReinforcement"
@@ -230,13 +185,10 @@
 			"name": "WaypointManager"
 		},
 		{
-			"name": "BDAnimationModules"
+			"name": "ContractConfigurator-KerbalAcademy"
 		},
 		{
-			"name": "Trajectories"
-		},
-		{
-			"name": "CriticalTemperatureGauge"
+			"name": "RoutineMissionManager"
 		},
 		{
 			"name": "ShipManifest"
@@ -248,34 +200,64 @@
 			"name": "ToughLove"
 		},
 		{
-			"name": "FinalFrontier"
+			"name": "BetterBurnTime"
 		},
 		{
-			"name": "ContractConfigurator-KerbinSpaceStation"
+			"name": "ContractConfigurator-FieldResearch"
 		},
 		{
-			"name": "RoverScienceRevisited"
+			"name": "ContractConfigurator-GrandTours"
 		},
 		{
-			"name": "ContractConfigurator-KerbalAcademy"
+			"name": "BDAnimationModules"
 		},
 		{
-			"name": "CommunityResourcePack"
+			"name": "ContractConfigurator-RoverMissionsRedux"
 		},
 		{
 			"name": "ContractConfigurator-UnmannedContracts"
 		},
 		{
-			"name": "CrowdSourcedScience"
-		},
-		{
 			"name": "SpacetuxSA"
 		},
 		{
-			"name": "SurfaceExperimentPack"
+			"name": "IndicatorLightsCommunityExtensions"
 		},
 		{
-			"name": "DMagicScienceAnimate"
+			"name": "FinalFrontier"
+		},
+		{
+			"name": "ModuleManager"
+		},
+		{
+			"name": "Karbonite"
+		},
+		{
+			"name": "AT-Utils"
+		},
+		{
+			"name": "KerbalInventorySystemNoFun"
+		},
+		{
+			"name": "KIS"
+		},
+		{
+			"name": "Mk1CabinHatch"
+		},
+		{
+			"name": "Mk2Expansion"
+		},
+		{
+			"name": "OPTSpacePlaneMain"
+		},
+		{
+			"name": "KEI"
+		},
+		{
+			"name": "MechJebForAll"
+		},
+		{
+			"name": "OctosatContinued"
 		},
 		{
 			"name": "AutomatedScienceSampler"
@@ -284,52 +266,73 @@
 			"name": "KerboKatzUtilities"
 		},
 		{
-			"name": "SAVE"
+			"name": "ContractConfigurator-Tourism"
 		},
 		{
-			"name": "SmokeScreen"
-		},
-		{
-			"name": "PersistentDynamicPodNames"
-		},
-		{
-			"name": "TweakScale"
+			"name": "GravityTurnContinued"
 		},
 		{
 			"name": "BonVoyage"
 		},
 		{
-			"name": "Mk2Expansion"
+			"name": "AntennaSleep"
 		},
 		{
-			"name": "PhoenixIndustriesBoosters"
+			"name": "AtmosphereAutopilot"
 		},
 		{
-			"name": "PhoenixIndustriesCargoResupplySystem"
+			"name": "EVAHandrailsPackContinued"
 		},
 		{
-			"name": "PhoenixIndustriesFlags"
+			"name": "KerbalEngineerRedux"
 		},
 		{
-			"name": "AdditionalProgressionContracts"
+			"name": "MiniAVC"
 		},
 		{
-			"name": "KEI"
+			"name": "PoodsMilkyWaySkybox"
 		},
 		{
-			"name": "IndicatorLights"
+			"name": "SpaceY-Expanded"
+		},
+		{
+			"name": "SpaceY-Lifters"
 		},
 		{
 			"name": "TacFuelBalancer"
 		},
 		{
-			"name": "StageRecovery"
+			"name": "Mk3Expansion"
 		},
 		{
-			"name": "KRASH"
+			"name": "ContractConfigurator-RemoteTech"
 		},
 		{
-			"name": "MagiCore"
+			"name": "RemoteTech"
+		},
+		{
+			"name": "RealPlume-StockConfigs"
+		},
+		{
+			"name": "surfacelights"
+		},
+		{
+			"name": "ModularRocketSystem"
+		},
+		{
+			"name": "RealPlume"
+		},
+		{
+			"name": "LightFixer"
+		},
+		{
+			"name": "MinAmbience"
+		},
+		{
+			"name": "Kopernicus"
+		},
+		{
+			"name": "ModularFlightIntegrator"
 		}
 	]
 }
