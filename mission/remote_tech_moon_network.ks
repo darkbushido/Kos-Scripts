@@ -17,7 +17,7 @@ function mission_definition {
 
 function hohmann_transfer {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
-  local d_time to eta:apoapsis.
+  local d_time to eta:periapsis.
   if p["O"]["Vessel"]:typename = "Vessel" set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).

@@ -3,7 +3,8 @@
   function highlight_part {
     parameter SP, SM.
     if not SM:HASDATA and not SM:INOPERABLE { HIGHLIGHT(SP, BLUE). return true. }
-    else { HIGHLIGHT(SP, MAGENTA). return false. }
+    else if SM:HASDATA { HIGHLIGHT(SP, GREEN). }
+    else { HIGHLIGHT(SP, YELLOW). return false. }
   }
   function collect_science {
     local SL to lex(). local SMS to lex().
@@ -18,15 +19,21 @@
         }
     }}
     for SM_name in SMS:KEYS {
-      SET SM to SMS[SM_name][0].
-      if not SM:HASDATA and not SM:INOPERABLE {
-        HIGHLIGHT(SM:PART, RED). SM:DEPLOY.
-        if SMS[SM:PART:NAME]:LENGTH > 1 SMS[SM:PART:NAME]:REMOVE(0).
-        else SMS:REMOVE(SM:part:name).
-      }
+      print "Collecting Science From: "+SM_name.
+      if  SM_name = "dmUSPresTemp" {for SM in SMS[SM_name] { do_science(SM). }}
+      else { SET SM to SMS[SM_name][0]. do_science(SM).}
     }
     transfer_science().
   }
+  function do_science {
+    parameter SM.
+    if not SM:HASDATA and not SM:INOPERABLE {
+      local t to time:seconds.
+      HIGHLIGHT(SM:PART, RED). SM:DEPLOY.
+      until (SM:HASDATA or (time:seconds > t+10)) {
+        print ".". wait 1.
+      }
+  }}
   function transfer_science {
     for sc in ship:modulesnamed("ModuleScienceContainer") {
       sc:doaction("collect all", true).

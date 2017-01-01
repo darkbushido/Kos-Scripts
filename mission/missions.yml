@@ -103,8 +103,8 @@ moon_land_at:
   - deorbit_node
   - cancel_surface_speed
   - hoverslam
-  - collect_science
   - sleep
+  - collect_science
   - transfer_science
   - pre_launch_moon
   - launch_moon

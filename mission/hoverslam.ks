@@ -28,7 +28,7 @@ function hoverslam {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if p["NextShip"]:typename = "Vessel" {
+  if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
   } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.

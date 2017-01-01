@@ -1,4 +1,4 @@
-ship = Mun Lander
+ship = T2 Lander Minmus
 version = 1.2.2
 description = 
 type = VAB
@@ -29,6 +29,7 @@ PART
 	modSize = 0,0,0
 	link = sasModule_4291013586
 	link = ScienceBox_4291310458
+	link = SurfAntenna_4285434422
 	attN = bottom,sasModule_4291013586
 	attN = top,ScienceBox_4291310458
 	EVENTS
@@ -273,7 +274,7 @@ PART
 		VSLCONFIG
 		{
 			VesselID = 00000000-0000-0000-0000-000000000000
-			Name = Mun Lander
+			Name = Minmus Lander
 			Enabled = False
 			GUIVisible = False
 			ActionGroup = None
@@ -3653,6 +3654,7 @@ PART
 	modMass = 0
 	modSize = 0,0,0
 	link = fuelTank_4291211492
+	link = RTShortDish2_4285438104
 	attN = top,US.1C10.Wedge.Quadcore_4291248378
 	attN = bottom,fuelTank_4291211492
 	EVENTS
@@ -3853,6 +3855,7 @@ PART
 	link = miniLandingLeg_4285445506
 	link = miniLandingLeg_4285445322
 	link = miniLandingLeg_4285445138
+	link = SurfAntenna_4285435280
 	attN = top,fuelTankSmall_4285687878
 	attN = bottom,liquidEngine3_4291198848
 	EVENTS
@@ -7496,7 +7499,7 @@ PART
 	pos = 0.899602413,5.34392262,0.309646487
 	attPos = 0,0,0
 	attPos0 = 0.535685837,-0.211260825,-0.309278488
-	rot = 5.67396121E-08,0.258818895,1.57541407E-07,0.965925872
+	rot = 5.6739605E-08,0.258818895,1.57541407E-07,0.965925872
 	attRot = 0,0,0,1
 	attRot0 = -1.84648115E-07,-0.965925872,4.94763412E-08,0.258819073
 	mir = 1,1,1
@@ -8276,7 +8279,7 @@ PART
 	pos = 2.85502934,5.03797054,0.000368722511
 	attPos = 0,0,0
 	attPos0 = -0.796317875,-0.0857810453,-3.38972228E-09
-	rot = -1.7362245E-08,-0.70710665,1.73622663E-08,-0.707107008
+	rot = -1.73622485E-08,-0.70710665,1.73622663E-08,-0.707107008
 	attRot = 0,0,0,1
 	attRot0 = 1.75877447E-14,-0.707106829,1.52748602E-14,0.707106829
 	mir = 1,1,1
@@ -8672,7 +8675,7 @@ PART
 {
 	part = launchClamp1_4287512196
 	partName = Part
-	pos = 4.27409983,2.01883507,0.000369563466
+	pos = 4.27409887,2.01883507,0.000369563466
 	attPos = 0,0,0
 	attPos0 = -1.19213496E-07,-3.01913524,1.41906703
 	rot = 8.82919906E-08,-0.707107067,8.82920546E-08,0.70710659
@@ -8707,10 +8710,10 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.06174314
+		scaleFactor = 1.06174278
 		height = 2.67898655
 		stagingEnabled = True
-		towerRot = -8.82919906E-08,0.707107067,-8.82920475E-08,0.70710659
+		towerRot = -8.82919977E-08,0.707107067,-8.82920688E-08,0.70710659
 		EVENTS
 		{
 		}
@@ -8845,10 +8848,10 @@ PART
 {
 	part = strutConnector_4287506620
 	partName = CompoundPart
-	pos = 2.69846392,8.44277382,0.584679723
+	pos = 2.69846392,8.44277382,0.584679484
 	attPos = 0,0,0
 	attPos0 = -0.584309936,3.40480328,-0.156565189
-	rot = -1.81667126E-08,0.608760238,-6.26353653E-08,0.793354332
+	rot = -1.8166709E-08,0.608760238,-6.26353653E-08,0.793354332
 	attRot = 0,0,0,1
 	attRot0 = -7.1001951E-09,0.130527511,5.3930723E-08,-0.991444707
 	mir = 1,1,1
@@ -10716,7 +10719,7 @@ PART
 {
 	part = launchClamp1_4288692934
 	partName = Part
-	pos = -4.22621202,2.01883507,0.000366687047
+	pos = -4.22621107,2.01883507,0.000366687047
 	attPos = 0,0,0
 	attPos0 = -1.27060702E-07,-3.01913524,1.41906703
 	rot = 8.82921327E-08,0.70710665,-8.8292019E-08,0.707107008
@@ -10751,7 +10754,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.06174314
+		scaleFactor = 1.06174278
 		height = 2.67898655
 		stagingEnabled = True
 		towerRot = -8.82921327E-08,-0.70710665,8.82920332E-08,0.707107008
@@ -10889,7 +10892,7 @@ PART
 {
 	part = strutConnector_4287505954
 	partName = CompoundPart
-	pos = -2.65057635,8.44277382,-0.583943725
+	pos = -2.65057635,8.44277382,-0.583943486
 	attPos = 0,0,0
 	attPos0 = -0.584310055,3.40480328,-0.156565189
 	rot = -6.26353511E-08,0.793354213,1.81667144E-08,-0.608760297
@@ -11469,6 +11472,518 @@ PART
 		name = KOSNameTag
 		isEnabled = True
 		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = RTShortDish2_4285438104
+	partName = Part
+	pos = 0.0239437465,13.1250763,-0.641463459
+	attPos = 0,0,0
+	attPos0 = -5.40167093E-08,0.100275993,-0.641831398
+	rot = 1.05367164E-08,0.70710665,-0.707107008,1.05367119E-08
+	attRot = 0,0,0,1
+	attRot0 = 1.05367164E-08,0.70710665,-0.707107008,1.05367119E-08
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = 2
+	resPri = 0
+	dstg = 6
+	sidx = -1
+	sqor = -1
+	sepI = 2
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	srfN = srfAttach,fuelTankSmall_4285687878
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntenna
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = False
+		IsRTPowered = True
+		IsRTBroken = False
+		IsNonRetractable = False
+		RTDishCosAngle = 0.97629600711993336
+		RTOmniRange = 0
+		RTDishRange = 0
+		stagingEnabled = True
+		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ActionToggle
+			{
+				actionGroup = None
+			}
+			ActionOpen
+			{
+				actionGroup = None
+			}
+			ActionClose
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSPUPassive
+		isEnabled = True
+		IsRTPowered = False
+		IsRTSignalProcessor = True
+		IsRTCommandStation = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTDataTransmitter
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = SurfAntenna_4285435280
+	partName = Part
+	pos = 0.0239437502,12.3357534,-0.663464487
+	attPos = 0,0,0
+	attPos0 = -5.0291419E-08,0.831892967,-0.663832426
+	rot = 0.500000179,0.499999911,-0.500000119,-0.499999881
+	attRot = 0,0.707106769,0,0.707106769
+	attRot0 = 0.500000179,0.499999911,-0.500000119,-0.499999881
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = 2
+	resPri = 0
+	dstg = 6
+	sidx = -1
+	sqor = -1
+	sepI = 2
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	srfN = srfAttach,fuelTank_4291211492
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleControllableEmissive
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitterIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntenna
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		IsNonRetractable = False
+		RTDishCosAngle = 1
+		RTOmniRange = 1500000
+		RTDishRange = -1
+		stagingEnabled = True
+		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ActionToggle
+			{
+				actionGroup = None
+			}
+			ActionOpen
+			{
+				actionGroup = None
+			}
+			ActionClose
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSPUPassive
+		isEnabled = True
+		IsRTPowered = False
+		IsRTSignalProcessor = True
+		IsRTCommandStation = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTDataTransmitter
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = SurfAntenna_4285434422
+	partName = Part
+	pos = 0.417483836,17.3099747,0.000367967412
+	attPos = 0,0,0
+	attPos0 = 0.393540025,0.0733852386,2.79396772E-08
+	rot = 0.707106709,0.707106888,6.32202699E-08,4.21468478E-08
+	attRot = 0,0.707106769,0,0.707106769
+	attRot0 = 0.707106709,0.707106888,6.32202699E-08,4.21468478E-08
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	srfN = srfAttach,probeCoreOcto_4291377956
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleControllableEmissive
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitterIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntenna
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		IsNonRetractable = False
+		RTDishCosAngle = 1
+		RTOmniRange = 1500000
+		RTDishRange = -1
+		stagingEnabled = True
+		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ActionToggle
+			{
+				actionGroup = None
+			}
+			ActionOpen
+			{
+				actionGroup = None
+			}
+			ActionClose
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSPUPassive
+		isEnabled = True
+		IsRTPowered = False
+		IsRTSignalProcessor = True
+		IsRTCommandStation = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTDataTransmitter
+		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{

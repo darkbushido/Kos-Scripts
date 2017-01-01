@@ -10,6 +10,7 @@ local fit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
+local tti is import("lib/time_to_impact.ks").
 print "Mission Params".
 print p.
 list files.
@@ -68,11 +69,11 @@ function set_launch_inc_lan {
 function hohmann_transfer_body {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
   local r2 TO p["T"]["Body"]:obt:semimajoraxis.
+  lock steering to lookdirup(v(0,1,0), sun:position).
   set d_time to hohmann["time"](r1,r2, p["T"]["Body"]).
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  print "Transfer Fitness : " + p["T"]["Inc"].
   set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
   set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
   node_exec["exec"](true).
@@ -122,8 +123,8 @@ function deorbit_node {
   next().
 }
 function cancel_surface_speed {
-  local tti to land["TTI"]().
-  local ttb to time:seconds + (tti * 0.9).
+  local ttis to tti["TTI"]().
+  local ttb to time:seconds + (ttis * 0.9).
   local s to ship:velocity:surface:mag.
   local n to node(ttb,0,0,-s).
   add n.
@@ -233,7 +234,7 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if p["NextShip"]:typename = "Vessel" {
+  if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
   } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.

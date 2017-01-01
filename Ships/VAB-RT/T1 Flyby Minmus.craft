@@ -1,8 +1,8 @@
-ship = LT Minmus Crash
+ship = T1 Flyby Minmus
 version = 1.2.2
 description = 
 type = VAB
-size = 3.27104616,12.1626797,4.24170208
+size = 3.27104759,13.2942181,4.24170542
 PART
 {
 	part = probeCoreOcto_4293313014
@@ -29,7 +29,6 @@ PART
 	modSize = 0,0,0
 	link = batteryBankMini_4293236416
 	link = solarPanels5_4293181076
-	link = sensorThermometer_4291022554
 	link = kOSMachine1m_4291021336
 	attN = bottom,kOSMachine1m_4291021336
 	attN = top,batteryBankMini_4293236416
@@ -275,7 +274,7 @@ PART
 		VSLCONFIG
 		{
 			VesselID = 00000000-0000-0000-0000-000000000000
-			Name = LT Minimus Crash
+			Name = T1 Flyby Minmus
 			Enabled = False
 			GUIVisible = False
 			ActionGroup = None
@@ -380,14 +379,14 @@ PART
 							Limit = 1
 							role = MAIN
 						}
-						4231258803
+						2877949106
 						{
 							Name = BACC "Thumper" Solid Fuel Booster
 							On = False
 							Limit = 1
 							role = MAIN
 						}
-						110039613
+						1107111966
 						{
 							Name = BACC "Thumper" Solid Fuel Booster
 							On = False
@@ -969,8 +968,9 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = batteryBankMini_4284765758
-	attN = top,batteryBankMini_4284765758
+	link = parachuteRadial_4290571338
+	link = ScienceBox_4290368452
+	attN = top,ScienceBox_4290368452
 	attN = bottom,probeCoreOcto_4293313014
 	EVENTS
 	{
@@ -1090,7 +1090,7 @@ PART
 {
 	part = solarPanels5_4293181076
 	partName = Part
-	pos = -0.540633678,13.6553202,0.1782621
+	pos = -0.540633798,13.6553202,0.1782621
 	attPos = 0,0,0
 	attPos0 = 2.60991797E-08,0.0876560211,-0.343935788
 	rot = 8.94069174E-08,-0.707106829,8.94069601E-08,0.707106829
@@ -1205,29 +1205,29 @@ PART
 }
 PART
 {
-	part = sensorThermometer_4291022554
+	part = parachuteRadial_4290571338
 	partName = Part
-	pos = -0.439787984,13.5829401,0.421353787
+	pos = 0.111359119,13.9397497,0.1782621
 	attPos = 0,0,0
-	attPos0 = -0.243090495,0.0152721396,-0.243090495
-	rot = -9.873024E-08,0.923879385,2.38355412E-07,0.382684112
+	attPos0 = -6.92076396E-09,0.0850076675,0.308055609
+	rot = -2.1426581E-07,0.707106769,-2.1426581E-07,-0.707106888
 	attRot = 0,0,0,1
-	attRot0 = -2.38355497E-07,0.3826828,9.87298989E-08,0.923879683
+	attRot0 = -4.26325608E-14,1,-3.030176E-07,-8.94069672E-08
 	mir = 1,1,1
 	symMethod = Radial
 	autostrutMode = Off
 	rigidAttachment = False
-	istg = -1
+	istg = 0
 	resPri = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 0
+	sqor = 0
 	sepI = -1
 	attm = 1
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	srfN = srfAttach,probeCoreOcto_4293313014
+	srfN = srfAttach,batteryBankMini_4293236416
 	EVENTS
 	{
 	}
@@ -1239,31 +1239,14 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEnviroSensor
+		name = ModuleParachute
 		isEnabled = True
-		sensorActive = False
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceExperiment
-		isEnabled = True
-		Deployed = False
-		Inoperable = False
-		cooldownToGo = 0
+		persistentState = STOWED
+		animTime = 0
+		minAirPressureToOpen = 0.75
+		deployAltitude = 1000
+		spreadAngle = 7
+		automateSafeDeploy = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1274,7 +1257,7 @@ PART
 			{
 				actionGroup = None
 			}
-			ResetAction
+			CutAction
 			{
 				actionGroup = None
 			}
@@ -1285,55 +1268,68 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleTestSubject
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCrewRequirement
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
 		name = PartTemperatureState
 		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleControllableEmissive
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceDataIndicator
-		isEnabled = True
-		isUiEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleScienceAvailabilityIndicator
-		isEnabled = True
-		isUiEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
@@ -1379,11 +1375,11 @@ PART
 }
 PART
 {
-	part = batteryBankMini_4284765758
+	part = ScienceBox_4290368452
 	partName = Part
-	pos = -0.196697205,14.05474,0.1782621
+	pos = -0.196697205,14.3547401,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,0.200000793,0
+	attPos0 = 0,0.5,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,-0.707106829,0,0.707106829
@@ -1401,6 +1397,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
+	link = dmmagBoom_4293886220
+	attN = top,dmmagBoom_4293886220
 	attN = bottom,batteryBankMini_4293236416
 	EVENTS
 	{
@@ -1410,6 +1408,40 @@ PART
 	}
 	PARTDATA
 	{
+	}
+	MODULE
+	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceContainer
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			CollectAllAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 	MODULE
 	{
@@ -1443,23 +1475,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleResourceLevelIndicator
-		isEnabled = True
-		isUiEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleResourceEnabledIndicator
+		name = ModuleScienceContainerIndicator
 		isEnabled = True
 		isUiEnabled = True
 		stagingEnabled = True
@@ -1504,25 +1520,14 @@ PART
 		{
 		}
 	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 200
-		maxAmount = 200
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
 }
 PART
 {
 	part = kOSMachine1m_4291021336
 	partName = Part
-	pos = -0.196697205,13.2075901,0.1782621
+	pos = -0.196697205,13.2075882,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-0.360081702,0
+	attPos0 = 0,-0.360081673,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,-0.707106829,0,0.707106829
@@ -1540,8 +1545,8 @@ PART
 	modCost = 732
 	modMass = 0.146486998
 	modSize = 0,0,0
-	link = HeatShield1_4291021280
-	attN = bottom,HeatShield1_4291021280
+	link = US.1C10.Wedge.Quadcore_4274323702
+	attN = bottom,US.1C10.Wedge.Quadcore_4274323702
 	attN = top,probeCoreOcto_4293313014
 	EVENTS
 	{
@@ -1651,11 +1656,11 @@ PART
 }
 PART
 {
-	part = HeatShield1_4291021280
+	part = US.1C10.Wedge.Quadcore_4274323702
 	partName = Part
-	pos = -0.196697205,13.0125904,0.1782621
+	pos = -0.196697205,12.8417377,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-0.195000604,0
+	attPos0 = 0,-0.365850449,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -1673,8 +1678,16 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = stackDecoupler_4291021220
-	attN = bottom,stackDecoupler_4291021220
+	link = dmUSMat_4274307568
+	link = dmUSMat_4274309606
+	link = dmUSScope_4293904970
+	link = dmUSPresTemp_4293903504
+	link = fuelTank_4291010520
+	attN = back,dmUSScope_4293904970
+	attN = bottom,fuelTank_4291010520
+	attN = front,dmUSPresTemp_4293903504
+	attN = left,dmUSMat_4274307568
+	attN = right,dmUSMat_4274309606
 	attN = top,kOSMachine1m_4291021336
 	EVENTS
 	{
@@ -1687,108 +1700,18 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleJettison
+		name = ModuleKISPartMount
 		isEnabled = True
-		isJettisoned = False
-		shroudHideOverride = False
-		stagingEnabled = False
+		stagingEnabled = True
 		EVENTS
 		{
 		}
 		ACTIONS
 		{
-			JettisonAction
+			ActionGroupRelease
 			{
 				actionGroup = None
 			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleAblator
-		isEnabled = True
-		nominalAmountRecip = -1
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleColorChanger
-		isEnabled = True
-		animState = False
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-				active = False
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDecouple
-		isEnabled = True
-		ejectionForcePercent = 100
-		isDecoupled = False
-		stagingEnabled = False
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-			DecoupleAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleLiftingSurface
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 		UPGRADESAPPLIED
 		{
@@ -1812,21 +1735,6 @@ PART
 	MODULE
 	{
 		name = USI_ModuleRecycleablePart
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = tjs_DecouplerLight
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
@@ -1855,45 +1763,32 @@ PART
 		{
 		}
 	}
-	RESOURCE
-	{
-		name = Ablator
-		amount = 200
-		maxAmount = 200
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
 }
 PART
 {
-	part = stackDecoupler_4291021220
+	part = dmUSMat_4274307568
 	partName = Part
-	pos = -0.196697205,12.7775402,0.1782621
+	pos = 0.165303618,12.8417377,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-0.235052094,0
-	rot = 0,0,0,1.00000012
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
+	attPos0 = 0.361999989,0,0
+	rot = 0,1.00000012,0,0
+	attRot = 0,0.999999881,0,0
+	attRot0 = 0,1,0,0
 	mir = 1,1,1
 	symMethod = Radial
 	autostrutMode = Off
 	rigidAttachment = False
-	istg = 0
+	istg = -1
 	resPri = 0
-	dstg = 1
-	sidx = 0
-	sqor = 0
-	sepI = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
 	attm = 0
 	modCost = 0
 	modMass = 0
 	modSize = 0,0,0
-	link = fuelTank_4291010520
-	attN = bottom,fuelTank_4291010520
-	attN = top,HeatShield1_4291021280
+	attN = back,US.1C10.Wedge.Quadcore_4274323702
 	EVENTS
 	{
 	}
@@ -1905,63 +1800,43 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleDecouple
+		name = DMModuleScienceAnimate
 		isEnabled = True
-		ejectionForcePercent = 100
-		isDecoupled = False
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
 		}
 		ACTIONS
 		{
-			DecoupleAction
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
 			{
 				actionGroup = None
 			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleToggleCrossfeed
-		isEnabled = True
-		crossfeedStatus = False
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-			ToggleAction
+			DeployAction
 			{
 				actionGroup = None
 			}
-			EnableAction
+			ResetAction
 			{
 				actionGroup = None
 			}
-			DisableAction
-			{
-				actionGroup = None
-			}
-		}
-		UPGRADESAPPLIED
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 		UPGRADESAPPLIED
 		{
@@ -1999,8 +1874,536 @@ PART
 	}
 	MODULE
 	{
-		name = tjs_DecouplerLight
+		name = ModuleKISItemEvaTweaker
 		isEnabled = True
+		staticAttached = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = dmUSMat_4274309606
+	partName = Part
+	pos = -0.540597677,12.8417377,0.1782621
+	attPos = 0,0,0
+	attPos0 = -0.343900144,0,0
+	rot = 0,0,0,1.00000012
+	attRot = 0,0,0,0.999999881
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	attN = back,US.1C10.Wedge.Quadcore_4274323702
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleKISItemEvaTweaker
+		isEnabled = True
+		staticAttached = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = dmUSScope_4293904970
+	partName = Part
+	pos = -0.196697235,12.8417377,0.522162557
+	attPos = 0,0,0
+	attPos0 = -2.98023366E-08,0,0.343900114
+	rot = 0,0.707106888,0,0.707106888
+	attRot = 0,0.707106769,0,0.707106769
+	attRot0 = 0,0.707106829,0,0.707106829
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	attN = back,US.1C10.Wedge.Quadcore_4274323702
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleKerbNetAccess
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			OpenKerbNetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleKISItemEvaTweaker
+		isEnabled = True
+		staticAttached = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = dmUSPresTemp_4293903504
+	partName = Part
+	pos = -0.196697235,12.8417377,-0.165638342
+	attPos = 0,0,0
+	attPos0 = -2.98023295E-08,0,-0.343900114
+	rot = 0,0.707106888,0,-0.707106888
+	attRot = 0,0.707106709,0,-0.707106709
+	attRot0 = 0,0.707106829,0,-0.707106829
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	attN = back,US.1C10.Wedge.Quadcore_4274323702
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = DMEnviroSensor
+		isEnabled = True
+		sensorActive = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMEnviroSensor
+		isEnabled = True
+		sensorActive = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+				active = False
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleKISItemEvaTweaker
+		isEnabled = True
+		staticAttached = False
 		stagingEnabled = True
 		EVENTS
 		{
@@ -2033,9 +2436,9 @@ PART
 {
 	part = fuelTank_4291010520
 	partName = Part
-	pos = -0.196697205,11.6788597,0.1782621
+	pos = -0.196697205,11.6822481,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-1.09868395,0
+	attPos0 = 0,-1.15948963,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -2043,18 +2446,21 @@ PART
 	symMethod = Radial
 	autostrutMode = Off
 	rigidAttachment = False
-	istg = 0
+	istg = -1
 	resPri = 0
-	dstg = 2
+	dstg = 0
 	sidx = -1
 	sqor = -1
-	sepI = 0
+	sepI = -1
 	attm = 0
 	modCost = 183.600006
 	modMass = 0
 	modSize = 0,0,0
 	link = liquidEngine3_4291020884
-	attN = top,stackDecoupler_4291021220
+	link = rpwsAnt_4290380544
+	link = GooExperiment_4293891854
+	link = GooExperiment_4293891162
+	attN = top,US.1C10.Wedge.Quadcore_4274323702
 	attN = bottom,liquidEngine3_4291020884
 	EVENTS
 	{
@@ -2227,7 +2633,7 @@ PART
 {
 	part = liquidEngine3_4291020884
 	partName = Part
-	pos = -0.196697205,10.4957304,0.1782621
+	pos = -0.196697205,10.4991188,0.1782621
 	attPos = 0,0,0
 	attPos0 = 0,-1.18312299,0
 	rot = 0,0,0,1.00000012
@@ -2239,10 +2645,10 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 2
+	dstg = 0
 	sidx = 0
 	sqor = 1
-	sepI = 0
+	sepI = -1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2307,7 +2713,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEngines
+		name = ModuleEnginesFX
 		isEnabled = True
 		staged = False
 		flameout = False
@@ -2489,7 +2895,7 @@ PART
 {
 	part = stackDecoupler_4291020784
 	partName = Part
-	pos = -0.196697205,9.95786095,0.1782621
+	pos = -0.196697205,9.96125126,0.1782621
 	attPos = 0,0,0
 	attPos0 = 0,-0.537865579,0
 	rot = 0,0,0,1.00000012
@@ -2501,7 +2907,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 3
+	dstg = 1
 	sidx = 1
 	sqor = 1
 	sepI = 1
@@ -2651,9 +3057,9 @@ PART
 {
 	part = fuelTank_4291020592
 	partName = Part
-	pos = -0.196697205,8.8591814,0.1782621
+	pos = -0.196697205,8.86256695,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-1.09868395,0
+	attPos0 = 0,-1.09868431,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -2663,7 +3069,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -2845,9 +3251,9 @@ PART
 {
 	part = fuelTank_4291020448
 	partName = Part
-	pos = -0.196697205,6.98097801,0.1782621
+	pos = -0.196697205,6.98437691,0.1782621
 	attPos = 0,0,0
-	attPos0 = 0,-1.87819099,0
+	attPos0 = 0,-1.87819004,0
 	rot = 0,0,0,1.00000012
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -2857,7 +3263,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -3041,7 +3447,7 @@ PART
 {
 	part = fuelTank_4291020304
 	partName = Part
-	pos = -0.196697205,5.10278797,0.1782621
+	pos = -0.196697205,5.10618687,0.1782621
 	attPos = 0,0,0
 	attPos0 = 0,-1.87819004,0
 	rot = 0,0,0,1.00000012
@@ -3053,7 +3459,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -3239,7 +3645,7 @@ PART
 {
 	part = liquidEngine2_4291020160
 	partName = Part
-	pos = -0.196697205,3.28845882,0.1782621
+	pos = -0.196697205,3.29185772,0.1782621
 	attPos = 0,0,0
 	attPos0 = 0,-1.81432605,0
 	rot = 0,0,0,1.00000012
@@ -3251,7 +3657,7 @@ PART
 	rigidAttachment = False
 	istg = 3
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = 1
 	sqor = 3
 	sepI = 1
@@ -3317,7 +3723,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEngines
+		name = ModuleEnginesFX
 		isEnabled = True
 		staged = False
 		flameout = False
@@ -3525,7 +3931,7 @@ PART
 {
 	part = winglet3_4291019922
 	partName = Part
-	pos = 0.895177245,4.1044836,0.178262219
+	pos = 0.895178199,4.10788155,0.178262219
 	attPos = 0,0,0
 	attPos0 = 1.09186697,-0.998306274,1.93715096E-07
 	rot = 2.0937172E-08,1.00000012,2.66453526E-15,2.08616257E-07
@@ -3537,7 +3943,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -3644,7 +4050,7 @@ PART
 {
 	part = winglet3_4285013494
 	partName = Part
-	pos = -0.742635846,4.1044836,-0.767332196
+	pos = -0.742635608,4.10788155,-0.767332613
 	attPos = 0,0,0
 	attPos0 = -0.545933306,-0.998306274,-0.945584416
 	rot = 1.04685904E-08,0.500000179,-1.81321198E-08,-0.866025507
@@ -3656,7 +4062,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -3763,7 +4169,7 @@ PART
 {
 	part = winglet3_4285013446
 	partName = Part
-	pos = -0.742635489,4.1044836,1.12384939
+	pos = -0.742635965,4.10788155,1.12385058
 	attPos = 0,0,0
 	attPos0 = -0.545933485,-0.998306274,0.945584416
 	rot = -1.04685718E-08,-0.5,-1.81321145E-08,-0.866025686
@@ -3775,7 +4181,7 @@ PART
 	rigidAttachment = False
 	istg = 1
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = -1
 	sqor = -1
 	sepI = 1
@@ -3882,7 +4288,7 @@ PART
 {
 	part = launchClamp1_4285013964
 	partName = Part
-	pos = -1.6205914,3.43553925,0.178261861
+	pos = -1.62059271,3.43893814,0.178261861
 	attPos = 0,0,0
 	attPos0 = -1.42389202,-1.66724896,-1.19209304E-07
 	rot = 1.48048214E-08,0.707106829,-1.48048214E-08,0.707106948
@@ -3894,7 +4300,7 @@ PART
 	rigidAttachment = False
 	istg = 3
 	resPri = 0
-	dstg = 4
+	dstg = 2
 	sidx = 2
 	sqor = 3
 	sepI = 3
@@ -3916,8 +4322,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.62321472
-		height = 4.09568977
+		scaleFactor = 1.62456179
+		height = 4.09908867
 		stagingEnabled = True
 		towerRot = -1.48048196E-08,-0.707106769,1.48048196E-08,0.707106888
 		EVENTS
@@ -4054,7 +4460,7 @@ PART
 {
 	part = radialDecoupler_4291019646
 	partName = Part
-	pos = -0.196697086,6.24645185,-0.445583105
+	pos = -0.196697086,6.24985123,-0.445583582
 	attPos = 0,0,0
 	attPos0 = 5.9604659E-08,-0.734526575,-0.623840511
 	rot = 1.68945434E-07,0.707106888,-1.68945434E-07,-0.707106888
@@ -4066,7 +4472,7 @@ PART
 	rigidAttachment = False
 	istg = 2
 	resPri = 0
-	dstg = 5
+	dstg = 3
 	sidx = 0
 	sqor = 2
 	sepI = 2
@@ -4121,14 +4527,17 @@ PART
 			ToggleAction
 			{
 				actionGroup = None
+				active = False
 			}
 			EnableAction
 			{
 				actionGroup = None
+				active = False
 			}
 			DisableAction
 			{
 				actionGroup = None
+				active = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -4216,7 +4625,7 @@ PART
 {
 	part = solidBooster1-1_4290649544
 	partName = Part
-	pos = -0.196697086,5.91632986,-1.24193954
+	pos = -0.196697086,5.91972923,-1.24194133
 	attPos = 0,0,0
 	attPos0 = -0.796357512,-0.330121607,9.49331707E-08
 	rot = 0,1.00000024,-2.23517475E-07,0
@@ -4228,7 +4637,7 @@ PART
 	rigidAttachment = False
 	istg = 3
 	resPri = 0
-	dstg = 6
+	dstg = 4
 	sidx = 0
 	sqor = 3
 	sepI = 2
@@ -4249,7 +4658,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEngines
+		name = ModuleEnginesFX
 		isEnabled = True
 		staged = False
 		flameout = False
@@ -4421,7 +4830,7 @@ PART
 {
 	part = radialDecoupler_4290647556
 	partName = Part
-	pos = -0.196697205,6.24645185,0.802106798
+	pos = -0.196697205,6.24985123,0.802107275
 	attPos = 0,0,0
 	attPos0 = 0,-0.734526575,0.623840511
 	rot = -1.68945434E-07,-0.707106948,-1.68945434E-07,-0.707106829
@@ -4433,7 +4842,7 @@ PART
 	rigidAttachment = False
 	istg = 2
 	resPri = 0
-	dstg = 5
+	dstg = 3
 	sidx = 0
 	sqor = 2
 	sepI = 2
@@ -4488,14 +4897,17 @@ PART
 			ToggleAction
 			{
 				actionGroup = None
+				active = False
 			}
 			EnableAction
 			{
 				actionGroup = None
+				active = False
 			}
 			DisableAction
 			{
 				actionGroup = None
+				active = False
 			}
 		}
 		UPGRADESAPPLIED
@@ -4583,7 +4995,7 @@ PART
 {
 	part = solidBooster1-1_4290647496
 	partName = Part
-	pos = -0.196696848,5.91632986,1.59846354
+	pos = -0.196696848,5.91972923,1.59846532
 	attPos = 0,0,0
 	attPos0 = -0.796357512,-0.330121607,9.49331707E-08
 	rot = -2.23517446E-07,-1.1920929E-07,2.13162821E-14,-1.00000024
@@ -4595,7 +5007,7 @@ PART
 	rigidAttachment = False
 	istg = 3
 	resPri = 0
-	dstg = 6
+	dstg = 4
 	sidx = 0
 	sqor = 3
 	sepI = 2
@@ -4616,7 +5028,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEngines
+		name = ModuleEnginesFX
 		isEnabled = True
 		staged = False
 		flameout = False
@@ -4782,5 +5194,770 @@ PART
 		hideFlow = False
 		isVisible = True
 		flowMode = Both
+	}
+}
+PART
+{
+	part = rpwsAnt_4290380544
+	partName = Part
+	pos = -0.88689971,12.3875952,0.1782621
+	attPos = 0,0,0
+	attPos0 = -0.690201819,0.705347061,0
+	rot = 1.48048134E-08,0.707106829,-1.48048116E-08,0.707106948
+	attRot = 0,0,0,1
+	attRot0 = 1.48048116E-08,0.707106769,-1.48048098E-08,0.707106888
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	srfN = srfAttach,fuelTank_4291010520
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleKISItem
+		isEnabled = True
+		staticAttached = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = GooExperiment_4293891854
+	partName = Part
+	pos = -0.196697265,12.2327394,-0.344935238
+	attPos = 0,0,0
+	attPos0 = -5.9604659E-08,0.550491333,-0.523196638
+	rot = 2.38924827E-07,0,0,-1.00000012
+	attRot = 0,0,0,1
+	attRot0 = 2.38924798E-07,0,0,-1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	sym = GooExperiment_4293891162
+	srfN = srfAttach,fuelTank_4291010520
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleAnimateGeneric
+		isEnabled = True
+		aniState = LOCKED
+		animSwitch = True
+		animTime = 0
+		animSpeed = 1
+		deployPercent = 100
+		animationIsDisabled = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceExperiment
+		isEnabled = True
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCrewRequirement
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleControllableEmissive
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceDataIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceAvailabilityIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = GooExperiment_4293891162
+	partName = Part
+	pos = -0.196697086,12.2327394,0.701459467
+	attPos = 0,0,0
+	attPos0 = 1.19209318E-07,0.550491333,0.523196638
+	rot = -1.42108547E-14,-1.00000012,-2.38924827E-07,1.1920929E-07
+	attRot = 0,0,0,1
+	attRot0 = -1.4210853E-14,-1,-2.38924798E-07,1.19209275E-07
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	sym = GooExperiment_4293891854
+	srfN = srfAttach,fuelTank_4291010520
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleAnimateGeneric
+		isEnabled = True
+		aniState = LOCKED
+		animSwitch = True
+		animTime = 0
+		animSpeed = 1
+		deployPercent = 100
+		animationIsDisabled = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceExperiment
+		isEnabled = True
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleCrewRequirement
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleControllableEmissive
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceDataIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleScienceAvailabilityIndicator
+		isEnabled = True
+		isUiEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+}
+PART
+{
+	part = dmmagBoom_4293886220
+	partName = Part
+	pos = -0.196697205,14.9497395,0.1782621
+	attPos = 0,0,0
+	attPos0 = 0,0.594999313,0
+	rot = 0,0,0,1.00000012
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	autostrutMode = Off
+	rigidAttachment = False
+	istg = -1
+	resPri = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = -1
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = 0,0,0
+	attN = bottom,ScienceBox_4290368452
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleResourceScanner
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMModuleScienceAnimate
+		isEnabled = True
+		IsDeployed = False
+		isLocked = False
+		experimentNumber = 0
+		experimentsReturned = 0
+		Deployed = False
+		Inoperable = False
+		cooldownToGo = 0
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			deployAction
+			{
+				actionGroup = None
+				active = False
+			}
+			retractAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleAction
+			{
+				actionGroup = None
+			}
+			DeployAction
+			{
+				actionGroup = None
+			}
+			ResetAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = DMMagBoomModule
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = PartTemperatureState
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = USI_ModuleRecycleablePart
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleKISItem
+		isEnabled = True
+		staticAttached = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSCANresourceScanner
+		isEnabled = True
+		scanning = False
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			startResourceScanAction
+			{
+				actionGroup = None
+			}
+			stopResourceScanAction
+			{
+				actionGroup = None
+			}
+			toggleResourceScanAction
+			{
+				actionGroup = None
+			}
+			startScanAction
+			{
+				actionGroup = None
+				active = False
+			}
+			stopScanAction
+			{
+				actionGroup = None
+				active = False
+			}
+			toggleScanAction
+			{
+				actionGroup = None
+				active = False
+			}
+			analyzeData
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = SCANresourceDisplay
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = KOSNameTag
+		isEnabled = True
+		nameTag = 
+		stagingEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 }

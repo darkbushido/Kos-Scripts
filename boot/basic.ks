@@ -3,7 +3,8 @@ clearscreen. wait until ship:unpacked. wait 0.
 set ship:control:pilotmainthrottle to 0.
 local ALL_PROCESSORS to list().
 LIST PROCESSORS IN ALL_PROCESSORS.
-if ALL_PROCESSORS:Length = 1 or core:tag="Main" { if not list("Landed","Splashed"):contains(status) lock steering to lookdirup(v(0,1,0), sun:position). }
+if ALL_PROCESSORS:Length = 1 or core:tag="Main" { if not list("Landed","Splashed"):contains(status)
+  lock steering to lookdirup(v(0,1,0), sun:position). }
 function download_updates {
   if core:tag = "" local us to ship:name + ".ks".
   else local us to ship:name + "-" + core:tag + ".ks".
@@ -14,6 +15,10 @@ function download_updates {
     MOVEPATH("0:/updates_pending/" + us, "0:/updates_applied/" + us).
     RUNPATH("1:/update.ks"). DELETEPATH("1:/update.ks").
   }
+}
+function notfalse {
+  parameter test to false.
+  return not (test:typename = "Boolean" and test=false).
 }
 local s is stack(). local d is lex().
 global import is{

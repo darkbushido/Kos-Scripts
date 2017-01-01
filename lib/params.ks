@@ -1,7 +1,7 @@
 {
-  function has_key { parameter k, d. if jp:haskey(k) set v to jp[k]. else set v to d. return v. }
   if core:volume:exists("params.json") { set jp to readjson("params.json").}
   else { set jp to lex(). }
+  function has_key { parameter k, d. if jp:haskey(k) set v to jp[k]. else set v to d. return v. }
   local tbody to body(has_key("TransBody", "Mun")).
   local launch_params to lex(
     "PitchExp", has_key("LaunchPitchExp", 0.35),
@@ -20,6 +20,8 @@
     "Vessel", has_key("OrbitVessel", false),
     "Offset", has_key("OrbitOffset", 0)
   ).
+  if notfalse(orbit_params["Vessel"])
+    set orbit_params["Vessel"] to vessel(orbit_params["Vessel"]).
   local transfer_params to lex(
     "Alt", has_key("TransAlt", tbody:ATM:HEIGHT + 15000),
     "Body", tbody,
@@ -35,7 +37,10 @@
   ).
   local params to lex(
     "L", launch_params, "O", orbit_params, "T", transfer_params,
-    "LND", landing_params, "NextShip", has_key("NextShip", false)
+    "LND", landing_params, "NextShip", has_key("NextShip", false),
+    "SwitchToShp", has_key("SwitchToShp", false)
   ).
+  if notfalse(params["SwitchToShp"])
+    set params["SwitchToShp"] to vessel(params["SwitchToShp"]).
   export(params).
 }

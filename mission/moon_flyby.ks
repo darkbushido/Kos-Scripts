@@ -66,11 +66,11 @@ function set_launch_inc_lan {
 function hohmann_transfer_body {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
   local r2 TO p["T"]["Body"]:obt:semimajoraxis.
+  lock steering to lookdirup(v(0,1,0), sun:position).
   set d_time to hohmann["time"](r1,r2, p["T"]["Body"]).
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  print "Transfer Fitness : " + p["T"]["Inc"].
   set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
   set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
   node_exec["exec"](true).
@@ -107,9 +107,9 @@ function collect_science {
 function free_return_correction {
   set ct to time:seconds + eta:periapsis.
   local data is list(0).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["c_per_fit"](ct, kerbin, 30000), 0.1).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
@@ -150,7 +150,7 @@ function atmo_reentry {
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
-  if p["NextShip"]:typename = "Vessel" {
+  if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
   } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
   reboot.
