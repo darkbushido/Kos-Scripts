@@ -16,6 +16,7 @@
       IF ALTITUDE > (BODY:RADIUS / 2) SET timeOffset TO timeToAltitude(BODY:RADIUS / 2).
       UNTIL oA < tH
       {
+        SET tH TO SHIP:BODY:GEOPOSITIONOF(POSITIONAT(SHIP,TIME:SECONDS + timeOffset)):terrainheight.
         SET oA TO SHIP:BODY:ALTITUDEOF(POSITIONAT(SHIP,TIME:SECONDS + timeOffset)).
         SET timeOffset TO timeOffset + 2.
       }.
@@ -24,6 +25,7 @@
     ELSE SET timeOffset TO (impactTimeList[0] - 5*(TIME:SECONDS - impactTimeList[1])).
     UNTIL oA < tH
     {
+      SET tH TO SHIP:BODY:GEOPOSITIONOF(POSITIONAT(SHIP,TIME:SECONDS + timeOffset)):terrainheight.
       SET oA TO SHIP:BODY:ALTITUDEOF(POSITIONAT(SHIP,TIME:SECONDS + timeOffset)).
       SET timeOffset TO timeOffset + tol.
     }.
