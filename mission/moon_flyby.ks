@@ -21,8 +21,10 @@ function mission_definition {
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO p["L"]["Alt"].
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+  SET QPID:SETPOINT TO 20.
   next().
 }
 function launch {
@@ -33,7 +35,14 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  if ship:body:atm:exists {
+    lock thrott to min(
+      TPID:UPDATE(TIME:SECONDS, APOAPSIS),
+      QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
+    ).
+  } else {
+    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
+  }
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
@@ -78,11 +87,11 @@ function hohmann_transfer_body {
 }
 function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
-  local data is list(0).
+  local data is list(0,0,0).
   print "Correction Fitness".
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 10).
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
+  for step in list(100,10,1) {set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  print "Correction Periapsis Fitness".
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().
@@ -106,7 +115,8 @@ function collect_science {
 }
 function free_return_correction {
   set ct to time:seconds + eta:periapsis.
-  local data is list(0).
+  local data is list(0,0,0).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 100).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
@@ -152,7 +162,7 @@ function finish {
   deletepath("startup.ks").
   if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
-  } else if p:haskey("SwitchToShp") { KUniverse:ACTIVEVESSEL(vessel(params["SwitchToShp"])).}
+  } else if p:haskey("SwitchToShp") { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
   reboot.
 }
   seq:add(pre_launch@).

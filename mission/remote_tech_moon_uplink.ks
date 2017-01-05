@@ -20,8 +20,10 @@ function mission_definition {
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO p["L"]["Alt"].
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+  SET QPID:SETPOINT TO 20.
   next().
 }
 function launch {
@@ -32,7 +34,14 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  if ship:body:atm:exists {
+    lock thrott to min(
+      TPID:UPDATE(TIME:SECONDS, APOAPSIS),
+      QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
+    ).
+  } else {
+    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
+  }
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
@@ -45,7 +54,7 @@ function coast_to_atm {
   if alt:radar > body:atm:height {
     set warp to 0. lock throttle to 0.
     if ev:haskey("AutoStage") ev:remove("AutoStage").
-    wait 2. stage. wait 1. panels on.
+    wait 2. stage. wait 1.
     if not ev:haskey("Power") ev:add("Power", ship_utils["power"]).
     next().
   }
@@ -77,11 +86,11 @@ function hohmann_transfer_body {
 }
 function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
-  local data is list(0).
+  local data is list(0,0,0).
   print "Correction Fitness".
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 10).
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
-  set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
+  for step in list(100,10,1) {set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  print "Correction Periapsis Fitness".
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().
@@ -105,10 +114,19 @@ function circularize_pe {
   else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
   else node_exec["circularize"](true).
 }
-function set_orbit_inc {
-  node_set_inc_lan["create_node"](p["O"]["Inc"]).
+function set_orbit_inc_lan {
+  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   node_exec["exec"](true).
   next().
+}
+function wait_until_only_core {
+  LIST PROCESSORS IN ALL_PROCESSORS.
+  if ALL_PROCESSORS:length = 1 { next().}
+  else {
+    ev:remove("Power").
+    print "Waiting until only Core". wait 30.
+  }
 }
   seq:add(pre_launch@).
   seq:add(launch@).
@@ -120,6 +138,7 @@ function set_orbit_inc {
   seq:add(exec_node@).
   seq:add(wait_for_soi_change_tbody@).
   seq:add(circularize_pe@).
-  seq:add(set_orbit_inc@).
+  seq:add(set_orbit_inc_lan@).
+  seq:add(wait_until_only_core@).
 }
 export(mission_base).

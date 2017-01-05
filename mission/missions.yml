@@ -30,10 +30,15 @@ remote_tech_moon_uplink:
   - exec_node
   - wait_for_soi_change_tbody
   - circularize_pe
-  - set_orbit_inc
+  - set_orbit_inc_lan
+  - wait_until_only_core
 remote_tech_moon_network:
+  - wait_until_only_core
+  - set_orbit_inc_lan
+  - set_orbit_inc_lan
   - hohmann_transfer
   - circularize_ap
+  - finish
 kerbin_power_land_on_target:
   - *ATMOLAUNCH
   - fly_over_target
@@ -76,7 +81,7 @@ moon_orbit:
   - wait_for_soi_change_tbody
   - collect_science
   - circularize_pe
-  - set_orbit_inc
+  - set_orbit_inc_lan
   - collect_science
   - hohmann_return
   - return_correction
@@ -88,7 +93,7 @@ moon_crash_at:
   - exec_node
   - wait_for_soi_change_tbody
   - circularize_pe
-  - set_orbit_inc
+  - set_orbit_inc_lan
   - fly_over_target
   - deorbit_node
 moon_land_at:
@@ -98,7 +103,7 @@ moon_land_at:
   - exec_node
   - wait_for_soi_change_tbody
   - circularize_pe
-  - set_orbit_inc
+  - set_orbit_inc_lan
   - fly_over_target
   - deorbit_node
   - cancel_surface_speed

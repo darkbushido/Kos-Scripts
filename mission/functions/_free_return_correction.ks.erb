@@ -1,6 +1,6 @@
 function free_return_correction {
   set ct to time:seconds + eta:periapsis.
-  local data is list(0).
+  local data is list(0,0,0).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 100).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
   set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).

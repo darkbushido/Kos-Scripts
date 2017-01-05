@@ -17,8 +17,10 @@ function mission_definition {
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO p["L"]["Alt"].
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+  SET QPID:SETPOINT TO 20.
   next().
 }
 function launch {
@@ -29,7 +31,14 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  if ship:body:atm:exists {
+    lock thrott to min(
+      TPID:UPDATE(TIME:SECONDS, APOAPSIS),
+      QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
+    ).
+  } else {
+    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
+  }
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).

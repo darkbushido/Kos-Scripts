@@ -3,7 +3,7 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2016.12.28.02.28.30",
+	"version": "2017.01.04.07.00.18",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
@@ -29,13 +29,13 @@
 			"name": "USI-ART"
 		},
 		{
-			"name": "IndicatorLights"
+			"name": "ConfigurableContainers-Core"
 		},
 		{
 			"name": "UKS"
 		},
 		{
-			"name": "InterstellarFuelSwitch"
+			"name": "InterstellarFuelSwitch-Core"
 		},
 		{
 			"name": "ProgressParser"
@@ -50,7 +50,7 @@
 			"name": "xScience"
 		},
 		{
-			"name": "ContractConfigurator-KerbinSpaceStation"
+			"name": "ContractConfigurator-KerbalAcademy"
 		},
 		{
 			"name": "KAS"
@@ -71,9 +71,6 @@
 			"name": "HyperEdit"
 		},
 		{
-			"name": "Impact"
-		},
-		{
 			"name": "AlternateResourcePanel"
 		},
 		{
@@ -83,7 +80,7 @@
 			"name": "USI-LS"
 		},
 		{
-			"name": "ColorCodedCans"
+			"name": "AviationLights"
 		},
 		{
 			"name": "LaunchNumbering"
@@ -98,7 +95,7 @@
 			"name": "PilotAssistant"
 		},
 		{
-			"name": "InterstellarFuelSwitch-Core"
+			"name": "InterstellarFuelSwitch"
 		},
 		{
 			"name": "SmokeScreen"
@@ -110,7 +107,7 @@
 			"name": "EngineLighting"
 		},
 		{
-			"name": "ReentryParticleEffect"
+			"name": "ExtraPlanetaryLaunchpads"
 		},
 		{
 			"name": "CriticalTemperatureGauge"
@@ -149,7 +146,7 @@
 			"name": "TextureReplacer"
 		},
 		{
-			"name": "ManeuverNodeEvolved"
+			"name": "SafeChute"
 		},
 		{
 			"name": "kOS"
@@ -161,10 +158,10 @@
 			"name": "DMagicOrbitalScience"
 		},
 		{
-			"name": "ThrottleControlledAvionics"
+			"name": "AT-Utils"
 		},
 		{
-			"name": "ConfigurableContainers-Core"
+			"name": "IndicatorLights"
 		},
 		{
 			"name": "SmartStage"
@@ -185,7 +182,7 @@
 			"name": "WaypointManager"
 		},
 		{
-			"name": "ContractConfigurator-KerbalAcademy"
+			"name": "ContractConfigurator-KerbinSpaceStation"
 		},
 		{
 			"name": "RoutineMissionManager"
@@ -197,7 +194,7 @@
 			"name": "SpaceXLegs"
 		},
 		{
-			"name": "ToughLove"
+			"name": "LightFixer"
 		},
 		{
 			"name": "BetterBurnTime"
@@ -224,7 +221,7 @@
 			"name": "IndicatorLightsCommunityExtensions"
 		},
 		{
-			"name": "FinalFrontier"
+			"name": "SpaceY-Lifters"
 		},
 		{
 			"name": "ModuleManager"
@@ -233,7 +230,7 @@
 			"name": "Karbonite"
 		},
 		{
-			"name": "AT-Utils"
+			"name": "ThrottleControlledAvionics"
 		},
 		{
 			"name": "KerbalInventorySystemNoFun"
@@ -269,16 +266,10 @@
 			"name": "ContractConfigurator-Tourism"
 		},
 		{
-			"name": "GravityTurnContinued"
-		},
-		{
 			"name": "BonVoyage"
 		},
 		{
-			"name": "AntennaSleep"
-		},
-		{
-			"name": "AtmosphereAutopilot"
+			"name": "Kopernicus"
 		},
 		{
 			"name": "EVAHandrailsPackContinued"
@@ -296,10 +287,10 @@
 			"name": "SpaceY-Expanded"
 		},
 		{
-			"name": "SpaceY-Lifters"
+			"name": "FinalFrontier"
 		},
 		{
-			"name": "TacFuelBalancer"
+			"name": "RCSBuildAid"
 		},
 		{
 			"name": "Mk3Expansion"
@@ -311,28 +302,58 @@
 			"name": "RemoteTech"
 		},
 		{
-			"name": "RealPlume-StockConfigs"
+			"name": "Toolbar"
 		},
 		{
 			"name": "surfacelights"
 		},
 		{
-			"name": "ModularRocketSystem"
+			"name": "KerbalHacksDroptankWrapper"
 		},
 		{
-			"name": "RealPlume"
+			"name": "KHWearableKISProps"
 		},
 		{
-			"name": "LightFixer"
+			"name": "PreciseManeuver"
 		},
 		{
-			"name": "MinAmbience"
-		},
-		{
-			"name": "Kopernicus"
+			"name": "ScienceRelay"
 		},
 		{
 			"name": "ModularFlightIntegrator"
+		},
+		{
+			"name": "SelectableDataTransmitter"
+		},
+		{
+			"name": "PersistentDynamicPodNames"
+		},
+		{
+			"name": "B9"
+		},
+		{
+			"name": "B9AerospaceHX"
+		},
+		{
+			"name": "B9AnimationModules"
+		},
+		{
+			"name": "CoherentContracts"
+		},
+		{
+			"name": "B9-props"
+		},
+		{
+			"name": "RasterPropMonitor-Core"
+		},
+		{
+			"name": "B9PartSwitch"
+		},
+		{
+			"name": "TacFuelBalancer"
+		},
+		{
+			"name": "ModularRocketSystem"
 		}
 	]
 }

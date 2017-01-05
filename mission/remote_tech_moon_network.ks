@@ -2,6 +2,7 @@ local mission is import("lib/mission.ks").
 local ship_utils is import("lib/ship_utils.ks").
 local p is import("lib/params.ks").
 local node_exec is import("lib/node_exec.ks").
+local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_orbit.ks").
@@ -15,10 +16,24 @@ function mission_definition {
   ev:add("Power", ship_utils["power"]).
   SET thrott to 0.
 
+function wait_until_only_core {
+  LIST PROCESSORS IN ALL_PROCESSORS.
+  if ALL_PROCESSORS:length = 1 { next().}
+  else {
+    ev:remove("Power").
+    print "Waiting until only Core". wait 30.
+  }
+}
+function set_orbit_inc_lan {
+  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  else node_set_inc_lan["create_node"](p["O"]["Inc"]).
+  node_exec["exec"](true).
+  next().
+}
 function hohmann_transfer {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
   local d_time to eta:periapsis.
-  if p["O"]["Vessel"]:typename = "Vessel" set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
+  if notfalse(p["O"]["Vessel"]) set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".
@@ -32,7 +47,19 @@ function circularize_ap {
   else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
   else node_exec["circularize"]().
 }
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if notfalse(p["NextShip"]) {
+    local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
+  } else if p:haskey("SwitchToShp") { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
+  reboot.
+}
+  seq:add(wait_until_only_core@).
+  seq:add(set_orbit_inc_lan@).
+  seq:add(set_orbit_inc_lan@).
   seq:add(hohmann_transfer@).
   seq:add(circularize_ap@).
+  seq:add(finish@).
 }
 export(mission_base).

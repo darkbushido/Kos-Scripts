@@ -1,0 +1,6 @@
+function set_orbit_inc_lan {
+  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  else node_set_inc_lan["create_node"](p["O"]["Inc"]).
+  node_exec["exec"](true).
+  next().
+}

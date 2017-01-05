@@ -1,0 +1,8 @@
+function wait_until_only_core {
+  LIST PROCESSORS IN ALL_PROCESSORS.
+  if ALL_PROCESSORS:length = 1 { next().}
+  else {
+    ev:remove("Power").
+    print "Waiting until only Core". wait 30.
+  }
+}

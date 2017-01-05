@@ -3,8 +3,14 @@ clearscreen. wait until ship:unpacked. wait 0.
 set ship:control:pilotmainthrottle to 0.
 local ALL_PROCESSORS to list().
 LIST PROCESSORS IN ALL_PROCESSORS.
-if ALL_PROCESSORS:Length = 1 or core:tag="Main" { if not list("Landed","Splashed"):contains(status)
-  lock steering to lookdirup(v(0,1,0), sun:position). }
+if ALL_PROCESSORS:Length = 1 or core:tag="Main" {
+  if not list("Landed","Splashed"):contains(status) lock steering to lookdirup(v(0,1,0), sun:position).
+  if addons:rt:available {
+    for a in SHIP:ModulesNamed("ModuleRTAntenna") { if a:GETFIELD("status") = "Off" and a:allevents:CONTAINS("(callable) activate, is KSPEvent") a:DOEVENT("activate"). }
+  } else {
+    for antenna in SHIP:ModulesNamed("ModuleDeployableAntenna") { if antenna:GETFIELD("status") = "Retracted" antenna:DOEVENT("extend antenna"). }
+  }
+}
 function download_updates {
   if core:tag = "" local us to ship:name + ".ks".
   else local us to ship:name + "-" + core:tag + ".ks".
@@ -30,14 +36,7 @@ global import is{
 global export is{
   parameter v. set d[s:pop()] to v.
 }.
-if addons:rt:available {
-  for a in SHIP:ModulesNamed("ModuleRTAntenna") { if a:GETFIELD("status") = "Off" and a:allevents:CONTAINS("(callable) activate, is KSPEvent") a:DOEVENT("activate"). }
-  if addons:rt:hasconnection(ship) { download_updates(). }
-  else { print "No Connection, Running startup.ks". }
-} else {
-  for antenna in SHIP:ModulesNamed("ModuleDeployableAntenna") { if antenna:GETFIELD("status") = "Retracted" antenna:DOEVENT("extend antenna"). }
-  if CONTROLCONNECTION:ISCONNECTED { download_updates(). }
-  else { print "No Connection, Running startup.ks". }
-}
+if CONTROLCONNECTION:ISCONNECTED { download_updates(). }
+else { print "No Connection, Running startup.ks". }
 if exists("1:/startup.ks") { wait 5. import("startup.ks")().}
 else {print "No startup.ks, rebooting in 10s".wait 10.print "Rebooting now".reboot.}

@@ -20,8 +20,10 @@ function mission_definition {
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO p["L"]["Alt"].
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+  SET QPID:SETPOINT TO 20.
   next().
 }
 function launch {
@@ -32,7 +34,14 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  if ship:body:atm:exists {
+    lock thrott to min(
+      TPID:UPDATE(TIME:SECONDS, APOAPSIS),
+      QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
+    ).
+  } else {
+    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
+  }
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 50.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
@@ -63,16 +72,18 @@ function set_launch_inc_lan {
   next().
 }
 function adjust_ap {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["AP"] + SHIP:OBT:BODY:RADIUS.
   local d_time to time:seconds + eta:periapsis.
-  local data to list(d_time, 0, 0, 0).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["AP"]), 1).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["AP"]), 0.1).
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
+  set data to hc["seek"](data, fit["apo_fit"](d_time, p["O"]["AP"]), 1).
+  set data to hc["seek"](data, fit["apo_fit"](d_time, p["O"]["AP"]), 0.1).
   node_exec["exec"](true).
   next().
 }
 function adjust_pe {
-  local d_time to time:seconds + eta:periapsis.
-  local data to list(d_time, 0, 0, 0).
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["PE"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to time:seconds + eta:apoapsis.
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
   set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 1).
   set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 0.1).
   node_exec["exec"](true).

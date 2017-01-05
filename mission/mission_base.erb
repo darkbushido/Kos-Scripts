@@ -8,7 +8,7 @@ local lazcalc is import("lib/lazcalc.ks").
   'exec_node','free_return_correction','return_correction']).any? -%>
 local node_exec is import("lib/node_exec.ks").
 <% end -%>
-<% if (@steps & ['set_inc_lan', 'set_launch_inc', 'set_launch_inc_lan']).any? -%>
+<% if (@steps & ['set_launch_inc_lan', 'set_orbit_inc_lan']).any? -%>
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 <% end -%>
 <% if (@steps & ['hohmann_transfer', 'adjust_ap', 'adjust_pe']).any? -%>
