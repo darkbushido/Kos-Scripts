@@ -9,6 +9,7 @@ set params to lex(
   "TransBody", "Minmus",
   "TransInc", 90,
   "OrbitInc", 90,
+  "LaunchMaxQ", 20,
   "LaunchPitchExp", 0.20
 ).
 writejson(params, "params.json").
