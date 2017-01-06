@@ -1,9 +1,5 @@
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET TPID:SETPOINT TO p["L"]["Alt"].
-  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
-  SET QPID:SETPOINT TO 20.
   next().
 }

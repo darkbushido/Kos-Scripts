@@ -23,6 +23,7 @@
       if  SM_name = "dmUSPresTemp" {for SM in SMS[SM_name] { do_science(SM). }}
       else { SET SM to SMS[SM_name][0]. do_science(SM).}
     }
+    wait 5.
     transfer_science().
   }
   function do_science {
@@ -36,6 +37,7 @@
   }}
   function transfer_science {
     for sc in ship:modulesnamed("ModuleScienceContainer") {
+      print "Transfering Science".
       sc:doaction("collect all", true).
     }
   }

@@ -6,7 +6,12 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  if ship:body:atm:exists {
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  if ship:body:atm:exists and notfalse(p["L"]["MAXQ"]) {
+    print "MaxQ: " + p["L"]["MAXQ"].
+    SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+    SET QPID:SETPOINT TO p["L"]["MAXQ"].
     lock thrott to min(
       TPID:UPDATE(TIME:SECONDS, APOAPSIS),
       QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)

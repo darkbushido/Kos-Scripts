@@ -9,7 +9,8 @@
     "Inc", has_key("LaunchInc", tbody:obt:inclination),
     "LAN", has_key("LaunchLAN", tbody:obt:LAN),
     "CareAboutLan", has_key("CareAboutLan", not (tbody = Mun)),
-    "AStage", has_key("LaunchAutoStage", true)
+    "AStage", has_key("LaunchAutoStage", true),
+    "MAXQ", has_key("LaunchMaxQ", false)
   ).
   local oalt to has_key("OrbitAlt", lp["Alt"]).
   local op to lex(
