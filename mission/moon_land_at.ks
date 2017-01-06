@@ -24,10 +24,6 @@ function mission_definition {
 function pre_launch {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET TPID:SETPOINT TO p["L"]["Alt"].
-  SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
-  SET QPID:SETPOINT TO 20.
   next().
 }
 function launch {
@@ -38,7 +34,12 @@ function launch {
     local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
   }
   stage.
-  if ship:body:atm:exists {
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO p["L"]["Alt"].
+  if ship:body:atm:exists and notfalse(p["L"]["MAXQ"]) {
+    print "MaxQ: " + p["L"]["MAXQ"].
+    SET QPID TO PIDLOOP(0.1, 0.01, 0.01, 0, 1).
+    SET QPID:SETPOINT TO p["L"]["MAXQ"].
     lock thrott to min(
       TPID:UPDATE(TIME:SECONDS, APOAPSIS),
       QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
@@ -83,8 +84,7 @@ function hohmann_transfer_body {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 1).
-  set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), 0.1).
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   node_exec["exec"](true).
   next().
 }
@@ -92,9 +92,7 @@ function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
   print "Correction Fitness".
-  for step in list(100,10,1) {set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
-  print "Correction Periapsis Fitness".
-  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().
@@ -174,8 +172,8 @@ function transfer_science {
 function pre_launch_moon {
   ev:remove("Power"). ship_utils["disable"]().
   set ship:control:pilotmainthrottle to 0.
-  SET PID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
-  SET PID:SETPOINT TO 15000.
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO 15000.
   next().
 }
 function launch_moon {
@@ -211,10 +209,10 @@ function hohmann_return {
 }
 function return_correction {
   set ct to time:seconds + (eta:transition * 0.7).
-  local data is list(0).
-  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 10).
-  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 1).
-  set data to hc["seek"](data, fit["cor_fit"](ct, kerbin, 0, 30000), 0.1).
+  local data is list(0,0,0).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
+  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
