@@ -3,12 +3,12 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2017.01.04.07.00.18",
+	"version": "2017.01.06.05.25.28",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
 		{
-			"name": "USITools"
+			"name": "AsteroidDay"
 		},
 		{
 			"name": "KerbalAlarmClock"
@@ -23,16 +23,7 @@
 			"name": "SixCrewScienceLab"
 		},
 		{
-			"name": "USI-FTT"
-		},
-		{
-			"name": "USI-ART"
-		},
-		{
-			"name": "ConfigurableContainers-Core"
-		},
-		{
-			"name": "UKS"
+			"name": "USI-EXP"
 		},
 		{
 			"name": "InterstellarFuelSwitch-Core"
@@ -59,13 +50,13 @@
 			"name": "LandingHeight"
 		},
 		{
-			"name": "UniversalStorage"
+			"name": "UKS"
 		},
 		{
-			"name": "USI-EXP"
+			"name": "FirespitterCore"
 		},
 		{
-			"name": "USI-Core"
+			"name": "FirespitterResourcesConfig"
 		},
 		{
 			"name": "HyperEdit"
@@ -77,7 +68,7 @@
 			"name": "KSP-AVC"
 		},
 		{
-			"name": "USI-LS"
+			"name": "ConfigurableContainers-Core"
 		},
 		{
 			"name": "AviationLights"
@@ -92,10 +83,7 @@
 			"name": "SCANsat"
 		},
 		{
-			"name": "PilotAssistant"
-		},
-		{
-			"name": "InterstellarFuelSwitch"
+			"name": "MalemuteRover"
 		},
 		{
 			"name": "SmokeScreen"
@@ -104,43 +92,31 @@
 			"name": "PortraitStats"
 		},
 		{
-			"name": "EngineLighting"
-		},
-		{
-			"name": "ExtraPlanetaryLaunchpads"
-		},
-		{
-			"name": "CriticalTemperatureGauge"
+			"name": "AT-Utils"
 		},
 		{
 			"name": "QuickSearch"
 		},
 		{
-			"name": "AsteroidDay"
+			"name": "CommunityResourcePack"
 		},
 		{
 			"name": "TransferWindowPlanner"
 		},
 		{
-			"name": "MalemuteRover"
+			"name": "ThrottleControlledAvionics"
 		},
 		{
-			"name": "Konstruction"
+			"name": "USITools"
 		},
 		{
-			"name": "KaribouExpeditionRover"
-		},
-		{
-			"name": "FirespitterResourcesConfig"
-		},
-		{
-			"name": "FirespitterCore"
+			"name": "USI-LS"
 		},
 		{
 			"name": "ContractConfigurator"
 		},
 		{
-			"name": "CommunityResourcePack"
+			"name": "USI-Core"
 		},
 		{
 			"name": "TextureReplacer"
@@ -152,19 +128,13 @@
 			"name": "kOS"
 		},
 		{
-			"name": "USI-SRV"
-		},
-		{
 			"name": "DMagicOrbitalScience"
 		},
 		{
-			"name": "AT-Utils"
+			"name": "CriticalTemperatureGauge"
 		},
 		{
 			"name": "IndicatorLights"
-		},
-		{
-			"name": "SmartStage"
 		},
 		{
 			"name": "ContractConfigurator-CleverSats"
@@ -174,12 +144,6 @@
 		},
 		{
 			"name": "CommunityCategoryKit"
-		},
-		{
-			"name": "KerbalJointReinforcement"
-		},
-		{
-			"name": "WaypointManager"
 		},
 		{
 			"name": "ContractConfigurator-KerbinSpaceStation"
@@ -227,22 +191,13 @@
 			"name": "ModuleManager"
 		},
 		{
-			"name": "Karbonite"
-		},
-		{
-			"name": "ThrottleControlledAvionics"
-		},
-		{
 			"name": "KerbalInventorySystemNoFun"
 		},
 		{
 			"name": "KIS"
 		},
 		{
-			"name": "Mk1CabinHatch"
-		},
-		{
-			"name": "Mk2Expansion"
+			"name": "Konstruction"
 		},
 		{
 			"name": "OPTSpacePlaneMain"
@@ -257,25 +212,10 @@
 			"name": "OctosatContinued"
 		},
 		{
-			"name": "AutomatedScienceSampler"
-		},
-		{
-			"name": "KerboKatzUtilities"
-		},
-		{
 			"name": "ContractConfigurator-Tourism"
 		},
 		{
-			"name": "BonVoyage"
-		},
-		{
 			"name": "Kopernicus"
-		},
-		{
-			"name": "EVAHandrailsPackContinued"
-		},
-		{
-			"name": "KerbalEngineerRedux"
 		},
 		{
 			"name": "MiniAVC"
@@ -293,7 +233,7 @@
 			"name": "RCSBuildAid"
 		},
 		{
-			"name": "Mk3Expansion"
+			"name": "USI-ART"
 		},
 		{
 			"name": "ContractConfigurator-RemoteTech"
@@ -302,16 +242,10 @@
 			"name": "RemoteTech"
 		},
 		{
-			"name": "Toolbar"
-		},
-		{
 			"name": "surfacelights"
 		},
 		{
-			"name": "KerbalHacksDroptankWrapper"
-		},
-		{
-			"name": "KHWearableKISProps"
+			"name": "Karbonite"
 		},
 		{
 			"name": "PreciseManeuver"
@@ -329,31 +263,25 @@
 			"name": "PersistentDynamicPodNames"
 		},
 		{
-			"name": "B9"
-		},
-		{
-			"name": "B9AerospaceHX"
-		},
-		{
-			"name": "B9AnimationModules"
-		},
-		{
 			"name": "CoherentContracts"
-		},
-		{
-			"name": "B9-props"
 		},
 		{
 			"name": "RasterPropMonitor-Core"
 		},
 		{
-			"name": "B9PartSwitch"
-		},
-		{
 			"name": "TacFuelBalancer"
 		},
 		{
-			"name": "ModularRocketSystem"
+			"name": "MechJeb2"
+		},
+		{
+			"name": "Toolbar"
+		},
+		{
+			"name": "ExtraPlanetaryLaunchpads"
+		},
+		{
+			"name": "UniversalStorage"
 		}
 	]
 }
