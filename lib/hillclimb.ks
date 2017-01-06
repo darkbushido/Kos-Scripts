@@ -33,8 +33,11 @@
   function print_log {
     parameter n, fitness, ch is false.
     if n:length = 4 {
-      local d to list(rtsp(n[0],1,8),rtsp(n[1],1,5),rtsp(n[2],1,5),rtsp(n[3],1,6)).
+      local d to list(rtsp(n[0],1,8),rtsp(n[1],1,5),rtsp(n[2],1,5),rtsp(n[3],1,5)).
       print "T: " + d[0] + " R: " + d[1] + " N: " + d[2] + " P: " + d[3] + " Fit: " + round(fitness,14):tostring:padright(16) + " CH: " + ch.
+    } else if n:length = 3 {
+      local d to list(rtsp(n[0],1,5),rtsp(n[1],1,5),rtsp(n[2],1,5)).
+      print "R: " + d[0] + " N: " + d[1] + " P: " + d[2] + " Fit: " + round(fitness,14):tostring:padright(16) + " CH: " + ch.
     } else {
       local str to "".
       for n in n { set str to str + (round(n, 8)):tostring:padright(10). }
