@@ -7,7 +7,7 @@
     parameter tb, ti, tp.
     function fitness_fn {
       parameter data.
-      local n is make_node(d).
+      local n is make_node(data).
       if not t_to(n, tb) return -2^64.
       return m["gaussian2"](
         n:orbit:nextpatch:inclination, ti, 180,

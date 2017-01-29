@@ -34,6 +34,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 lib/lazcalc.ks is based on https://github.com/KSP-KOS/KSLib/blob/master/library/lib_lazcalc.ks
 and is distributed under the terms of the MIT license, (c) the KSLib team
+launch_window under lib/lazcalc.ks is from https://www.reddit.com/r/Kos/comments/3ux8j7/waiting_to_launch_forever/
 
 The MIT License (MIT)
 
@@ -67,3 +68,6 @@ https://www.reddit.com/r/Kos/comments/4qukt1/singleline_hoverslam_script/
 
 suicide burn comes from here
 https://www.reddit.com/r/Kos/comments/5bjdix/vtol_landing_script_landing_with_jet_engines/
+
+Deorbit node is based on the following script by TheGreatFez
+https://github.com/TheGreatFez/kOS-Scripts/blob/master/horizontal_landing
