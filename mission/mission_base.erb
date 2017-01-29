@@ -28,9 +28,6 @@ local science is import("lib/science.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 <% end -%>
-<% if (@steps & ['cancel_surface_speed']).any? -%>
-local tti is import("lib/time_to_impact.ks").
-<% end -%>
 <% if (@steps & ['suicide_burn']).any? -%>
 local suicide is import("lib/suicide_burn.ks").
 <% end -%>

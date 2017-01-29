@@ -131,8 +131,7 @@ function deorbit_node {
   next().
 }
 function cancel_surface_speed {
-  local ttis to tti["TTI"]().
-  local ttb to time:seconds + (ttis * 0.9).
+  local ttb = time:seconds + eta:periapsis.
   local s to ship:velocity:surface:mag.
   local n to node(ttb,0,0,-s).
   add n.
@@ -180,7 +179,7 @@ function launch_moon {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 5.
   lock steering to heading(dir, 25).
@@ -210,9 +209,7 @@ function hohmann_return {
 function return_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).

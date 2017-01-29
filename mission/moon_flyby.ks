@@ -126,9 +126,7 @@ function free_return_correction {
 function return_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
+  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).

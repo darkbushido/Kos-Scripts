@@ -2,7 +2,7 @@ function launch_moon {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
   stage.
-  lock thrott to PID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
   lock throttle to thrott.
   wait until ship:velocity:surface:mag > 5.
   lock steering to heading(dir, 25).
