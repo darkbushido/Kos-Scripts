@@ -15,6 +15,7 @@
   local oalt to has_key("OrbitAlt", lp["Alt"]).
   local op to lex(
     "Alt", oalt,
+    "Power", has_key("OrbitPower", true),
     "AP", has_key("OrbitAP", oalt),
     "PE", has_key("OrbitPE", oalt),
     "Inc", has_key("OrbitInc", lp["Inc"]),

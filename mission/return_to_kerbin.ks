@@ -37,7 +37,7 @@ function finish {
   deletepath("startup.ks").
   if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
-  } else if p:haskey("SwitchToShp") { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
+  } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
   reboot.
 }
   seq:add(wait_for_soi_change_kerbin@).

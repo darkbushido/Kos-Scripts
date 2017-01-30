@@ -1,0 +1,18 @@
+function wait_until_latlng_is_sunward {
+  set vec_to_latlng to latlng(0,p["LND"]["LatLng"]:lng):position - ship:body:position.
+
+  set vec_to_latlng to (latlng(0,0):ALTITUDEPOSITION(750000)).
+  set vec_to_sun to (sun:position:normalized).
+  print vec_to_latlng.
+  print vec_to_sun.
+
+  print VANG(vec_to_latlng, vec_to_sun).
+  set angle to VDOT(vec_to_latlng, vec_to_sun).
+  print angle.
+  print angle * constant():RadToDeg.
+
+
+  next().
+}
+
+print VDOT(vec_to_latlng:normalized, vec_to_sun:normalized).

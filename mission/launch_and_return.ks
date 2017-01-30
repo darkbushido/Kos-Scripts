@@ -56,7 +56,8 @@ function coast_to_atm {
     set warp to 0. lock throttle to 0.
     if ev:haskey("AutoStage") ev:remove("AutoStage").
     wait 2. stage. wait 1. panels on.
-    if not ev:haskey("Power") ev:add("Power", ship_utils["power"]).
+    if not ev:haskey("Power") and p["O"]["Power"]    
+      ev:add("Power", ship_utils["power"]).
     next().
   }
 }
@@ -107,7 +108,7 @@ function finish {
   deletepath("startup.ks").
   if notfalse(p["NextShip"]) {
     local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
-  } else if p:haskey("SwitchToShp") { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
+  } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
   reboot.
 }
   seq:add(pre_launch@).
