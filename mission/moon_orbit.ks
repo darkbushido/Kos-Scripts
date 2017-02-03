@@ -7,6 +7,7 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_transfer.ks").
+local hohmann_return is import("lib/hohmann_transfer_return.ks").
 local science is import("lib/science.ks").
 print "Mission Params".
 print p.
@@ -57,7 +58,7 @@ function coast_to_atm {
     set warp to 0. lock throttle to 0.
     if ev:haskey("AutoStage") ev:remove("AutoStage").
     wait 2. stage. wait 1. panels on.
-    if not ev:haskey("Power") and p["O"]["Power"]    
+    if not ev:haskey("Power") and p["O"]["Power"]
       ev:add("Power", ship_utils["power"]).
     next().
   }
@@ -127,7 +128,7 @@ function set_orbit_inc_lan {
 }
 function hohmann_return {
   print "Homann Return".
-  hohmann["return"]().
+  hohmann_return["return"]().
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
   hc["seek"](data, fit["trans_fit"](Kerbin, 0, 30000), 10).

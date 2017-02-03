@@ -1,6 +1,6 @@
 function hohmann_return {
   print "Homann Return".
-  hohmann["return"]().
+  hohmann_return["return"]().
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
   hc["seek"](data, fit["trans_fit"](Kerbin, 0, 30000), 10).

@@ -56,7 +56,7 @@ function coast_to_atm {
     set warp to 0. lock throttle to 0.
     if ev:haskey("AutoStage") ev:remove("AutoStage").
     wait 2. stage. wait 1. panels on.
-    if not ev:haskey("Power") and p["O"]["Power"]    
+    if not ev:haskey("Power") and p["O"]["Power"]
       ev:add("Power", ship_utils["power"]).
     next().
   }

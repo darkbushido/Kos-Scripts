@@ -21,6 +21,9 @@ local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local fit is import("lib/fitness_transfer.ks").
 <% end -%>
+<% if (@steps & ['hohmann_return']).any? -%>
+local hohmann_return is import("lib/hohmann_transfer_return.ks").
+<% end -%>
 <% if (@steps & ['collect_science']).any? -%>
 local science is import("lib/science.ks").
 <% end -%>
