@@ -1,5 +1,5 @@
 {
-  local hohmann_transfer_return to lex(
+  local hohmann_return to lex(
     "return", transfer_return@
   ).
   function transfer_return {
@@ -24,5 +24,5 @@
     local n to NODE(time:seconds + node_eta, 0, 0, dv).
     ADD n. wait 0.1.
   }
-  export(hohmann_transfer_return).
+  export(hohmann_return).
 }
