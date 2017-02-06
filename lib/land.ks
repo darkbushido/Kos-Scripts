@@ -31,11 +31,12 @@
   }
   function deorbit {
     addons:tr:settarget(p["LND"]["LatLng"]).
-    set landing_pos to p["LND"]["LatLng"].
+    set landing_pos to latlng(p["LND"]["LatLng"]:lat,p["LND"]["LatLng"]:lng).
     set g0 to ship:body:mu/(ship:body:radius)^2.
     set TWR to availablethrust/(mass*g0).
     set Fuel_Factor to 1.25.
     set landing_per_buffer to (50290*(TWR*Fuel_Factor)^(-2.232) + 222.1)*(0.955)^(landing_pos:terrainheight/2500).
+    print landing_per_buffer.
     lock R_ship to ship:body:position.
     lock angle_diff_h to VANG(-R_ship, landing_pos:position - R_ship).
     lock dist_diff_h to (angle_diff_h/360)*2*(constant:pi)*R_ship:mag.
@@ -48,6 +49,7 @@
     set ecc_landing to (R_ship:mag - R_per_landing)/(R_ship:mag + R_per_landing).
     set V_apo to sqrt(((1-ecc_landing)*ship:body:MU)/((1+ecc_landing)*SMA_landing)).
     set TimePeriod_landing to 2*(constant:pi)*sqrt((SMA_landing^3)/(ship:body:mu)).
+    wait 0.
     set prev_dist_h to dist_diff_h.
     wait 0.1.
     set curr_dist_h to dist_diff_h.
@@ -61,6 +63,9 @@
       set eta_node to (TimePeriod_landing/2*position_speed_h)/speed_diff_h + ((constant:pi)*R_ship:mag+dist_diff_h)/speed_diff_h.
     }
     set deltaV_landing to V_apo - velocityat(ship,time:seconds + eta_node):orbit:mag.
+
+    set landing_node to NODE(TIME:seconds + eta_node, 0, 0, deltaV_landing).
+    ADD landing_node.
 
     // if not HASNODE { add node(time:seconds + OBT:PERIOD,0,0,-SHIP:VELOCITY:SURFACE:MAG/2). }
     // local nd to NEXTNODE.
