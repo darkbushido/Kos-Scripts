@@ -6,7 +6,7 @@ for file in fileList {
 }
 COPYPATH("0:/mission/remote_tech_network.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.45,
+  "LaunchPitchExp", 0.46,
   "OrbitAlt", 750000,
   "OrbitVessel", "CommSat Mk-I",
   "OrbitOffset", 120 * 1,

@@ -4,10 +4,11 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/kerbin_power_land_on_target.ks", "1:/startup.ks").
+COPYPATH("0:/mission/moon_crash_at.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.3,
-  "RadarOffset", 4.14,
-  "LandLatLng", latlng(-15,50)
+  "TransBody", "Mun",
+  "TransInc", 0,
+  "LaunchPitchExp", 0.43,
+  "LandLatLng", waypoint("Site X-7S"):GEOPOSITION
 ).
 writejson(params, "params.json").
