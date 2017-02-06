@@ -18,8 +18,8 @@ launch_to_orbit:
   - *ATMOLAUNCH
   - adjust_ap
   - adjust_pe
+  - finish
 remote_tech_network:
-  - *ATMOLAUNCH
   - hohmann_transfer
   - circularize_ap
   - finish
@@ -34,6 +34,7 @@ remote_tech_moon_uplink:
   - wait_until_only_core
 remote_tech_moon_network:
   - wait_until_only_core
+  - wait_until_active_vessel
   - set_orbit_inc_lan
   - set_orbit_inc_lan
   - hohmann_transfer
@@ -83,7 +84,7 @@ moon_orbit:
   - circularize_pe
   - set_orbit_inc_lan
   - collect_science
-  - hohmann_return
+  - hohmann_transfer_return
   - return_correction
   - *RETURNTOKERBIN
 moon_crash_at:
@@ -115,6 +116,6 @@ moon_land_at:
   - launch_moon
   - coast_to_alt
   - circularize_ap
-  - hohmann_return
+  - hohmann_transfer_return
   - return_correction
   - *RETURNTOKERBIN

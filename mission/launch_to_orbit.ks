@@ -6,7 +6,7 @@ local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
-local fit is import("lib/fitness_orbit.ks").
+local orbitfit is import("lib/fitness_orbit.ks").
 print "Mission Params".
 print p.
 list files.
@@ -77,8 +77,8 @@ function adjust_ap {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["AP"] + SHIP:OBT:BODY:RADIUS.
   local d_time to time:seconds + eta:periapsis.
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
-  set data to hc["seek"](data, fit["apo_fit"](d_time, p["O"]["AP"]), 1).
-  set data to hc["seek"](data, fit["apo_fit"](d_time, p["O"]["AP"]), 0.1).
+  set data to hc["seek"](data, orbitfit["apo_fit"](d_time, p["O"]["AP"]), 1).
+  set data to hc["seek"](data, orbitfit["apo_fit"](d_time, p["O"]["AP"]), 0.1).
   node_exec["exec"](true).
   next().
 }
@@ -86,10 +86,18 @@ function adjust_pe {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["PE"] + SHIP:OBT:BODY:RADIUS.
   local d_time to time:seconds + eta:apoapsis.
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 1).
-  set data to hc["seek"](data, fit["per_fit"](d_time, p["O"]["PE"]), 0.1).
+  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 1).
+  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 0.1).
   node_exec["exec"](true).
   next().
+}
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if notfalse(p["NextShip"]) {
+    local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
+  } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
+  reboot.
 }
   seq:add(pre_launch@).
   seq:add(launch@).
@@ -98,5 +106,6 @@ function adjust_pe {
   seq:add(set_launch_inc_lan@).
   seq:add(adjust_ap@).
   seq:add(adjust_pe@).
+  seq:add(finish@).
 }
 export(mission_base).

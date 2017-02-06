@@ -6,7 +6,8 @@ local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
-local fit is import("lib/fitness_transfer.ks").
+local orbitfit is import("lib/fitness_orbit.ks").
+local transfit is import("lib/fitness_orbit.ks").
 local science is import("lib/science.ks").
 print "Mission Params".
 print p.
@@ -82,7 +83,7 @@ function hohmann_transfer_body {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   node_exec["exec"](true).
   next().
 }
@@ -90,7 +91,7 @@ function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
   print "Correction Fitness".
-  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().
@@ -115,10 +116,10 @@ function collect_science {
 function free_return_correction {
   set ct to time:seconds + eta:periapsis.
   local data is list(0,0,0).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 100).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 10).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 1).
-  set data to hc["seek"](data, fit["cor_per_fit"](ct, kerbin, 30000), 0.1).
+  set data to hc["seek"](data, transfit["cor_per_fit"](ct, kerbin, 30000), 100).
+  set data to hc["seek"](data, transfit["cor_per_fit"](ct, kerbin, 30000), 10).
+  set data to hc["seek"](data, transfit["cor_per_fit"](ct, kerbin, 30000), 1).
+  set data to hc["seek"](data, transfit["cor_per_fit"](ct, kerbin, 30000), 0.1).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
@@ -127,7 +128,7 @@ function free_return_correction {
 function return_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
-  for step in list(10,1,0.1) {set data to hc["seek"](data, fit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
