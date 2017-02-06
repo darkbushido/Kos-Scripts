@@ -1,0 +1,11 @@
+function wait_until_active_vessel {
+  if ship:name = KUniverse:ACTIVEVESSEL {
+    if notfalse(p["RenameShip"]) {
+      set ship:name to p["RenameShip"].
+    }
+    next().
+  } else {
+    ev:remove("Power").
+    print "Waiting until Active Vessel". wait 30.
+  }
+}

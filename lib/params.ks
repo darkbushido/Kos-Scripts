@@ -41,7 +41,8 @@
   local params to lex(
     "L", lp, "O", op, "T", transfer_params,
     "LND", lndp, "NextShip", has_key("NextShip", false),
-    "SwitchToShp", has_key("SwitchToShp", false)
+    "SwitchToShp", has_key("SwitchToShp", false),
+    "RenameShip", has_key("RenameShip", false)
   ).
   if notfalse(params["SwitchToShp"])
     set params["SwitchToShp"] to vessel(params["SwitchToShp"]).
