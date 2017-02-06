@@ -25,6 +25,7 @@
     }
     wait 5.
     transfer_science().
+    wait 5.
   }
   function do_science {
     parameter SM.
@@ -39,6 +40,7 @@
     for sc in ship:modulesnamed("ModuleScienceContainer") {
       print "Transfering Science".
       sc:doaction("collect all", true).
+      wait 0.
     }
   }
   export(science).
