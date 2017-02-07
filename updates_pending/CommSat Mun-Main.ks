@@ -6,11 +6,12 @@ for file in fileList {
 }
 COPYPATH("0:/mission/remote_tech_moon_uplink.ks", "1:/startup.ks").
 set params to lex(
+  "LaunchPitchExp", 0.4,
+  "LaunchMaxQ", 25,
   "TransBody", "Mun",
   "TransInc", 90,
   "OrbitInc", 90,
-  "LaunchMaxQ", 25,
-  "LaunchPitchExp", 0.4,
+  "OrbitCareAboutLan", false,
   "OrbitAlt", 50000,
   "TransAlt", 50000
 ).
