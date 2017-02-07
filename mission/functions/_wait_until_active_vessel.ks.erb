@@ -1,5 +1,5 @@
 function wait_until_active_vessel {
-  if ship:name = KUniverse:ACTIVEVESSEL {
+  if ship:name = KUniverse:ACTIVEVESSEL:name {
     if notfalse(p["RenameShip"]) {
       set ship:name to p["RenameShip"].
     }

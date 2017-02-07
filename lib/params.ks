@@ -8,7 +8,7 @@
     "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
     "Inc", has_key("LaunchInc", tbody:obt:inclination),
     "LAN", has_key("LaunchLAN", tbody:obt:LAN),
-    "CareAboutLan", has_key("CareAboutLan", not (tbody = Mun)),
+    "CareAboutLan", has_key("LaunchCareAboutLan", not (tbody = Mun)),
     "AStage", has_key("LaunchAutoStage", true),
     "MAXQ", has_key("LaunchMaxQ", false)
   ).
@@ -19,6 +19,7 @@
     "AP", has_key("OrbitAP", oalt),
     "PE", has_key("OrbitPE", oalt),
     "Inc", has_key("OrbitInc", lp["Inc"]),
+    "CareAboutLan", has_key("OrbitCareAboutLan", lp["CareAboutLan"]),
     "LAN", has_key("OrbitLAN", lp["LAN"]),
     "Vessel", has_key("OrbitVessel", false),
     "Offset", has_key("OrbitOffset", 0)

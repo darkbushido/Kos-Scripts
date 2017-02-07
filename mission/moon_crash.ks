@@ -7,6 +7,7 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
+local transfit is import("lib/fitness_transfer.ks").
 print "Mission Params".
 print p.
 list files.

@@ -7,7 +7,7 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
-local transfit is import("lib/fitness_orbit.ks").
+local transfit is import("lib/fitness_transfer.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 print "Mission Params".
@@ -117,7 +117,7 @@ function circularize_pe {
   else node_exec["circularize"](true).
 }
 function set_orbit_inc_lan {
-  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  if p["O"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.

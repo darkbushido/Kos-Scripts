@@ -37,6 +37,7 @@ remote_tech_moon_network:
   - wait_until_active_vessel
   - set_orbit_inc_lan
   - set_orbit_inc_lan
+  - circularize_ap
   - hohmann_transfer
   - circularize_ap
   - finish

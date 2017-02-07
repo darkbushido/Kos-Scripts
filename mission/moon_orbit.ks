@@ -8,7 +8,7 @@ local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
 local hohmann_return is import("lib/hohmann_return.ks").
-local transfit is import("lib/fitness_orbit.ks").
+local transfit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
 print "Mission Params".
 print p.
@@ -122,7 +122,7 @@ function circularize_pe {
   else node_exec["circularize"](true).
 }
 function set_orbit_inc_lan {
-  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  if p["O"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.

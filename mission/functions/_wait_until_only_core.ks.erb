@@ -1,7 +1,11 @@
 function wait_until_only_core {
   LIST PROCESSORS IN ALL_PROCESSORS.
-  if ALL_PROCESSORS:length = 1 { next().}
-  else {
+  if ALL_PROCESSORS:length = 1 {
+    if notfalse(p["RenameShip"]) {
+      set ship:name to p["RenameShip"].
+    }
+    next().
+  } else {
     ev:remove("Power").
     print "Waiting until only Core". wait 30.
   }

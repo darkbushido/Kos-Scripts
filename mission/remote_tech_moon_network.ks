@@ -6,7 +6,6 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
-local transfit is import("lib/fitness_orbit.ks").
 print "Mission Params".
 print p.
 list files.
@@ -19,14 +18,18 @@ function mission_definition {
 
 function wait_until_only_core {
   LIST PROCESSORS IN ALL_PROCESSORS.
-  if ALL_PROCESSORS:length = 1 { next().}
-  else {
+  if ALL_PROCESSORS:length = 1 {
+    if notfalse(p["RenameShip"]) {
+      set ship:name to p["RenameShip"].
+    }
+    next().
+  } else {
     ev:remove("Power").
     print "Waiting until only Core". wait 30.
   }
 }
 function wait_until_active_vessel {
-  if ship:name = KUniverse:ACTIVEVESSEL {
+  if ship:name = KUniverse:ACTIVEVESSEL:name {
     if notfalse(p["RenameShip"]) {
       set ship:name to p["RenameShip"].
     }
@@ -37,12 +40,18 @@ function wait_until_active_vessel {
   }
 }
 function set_orbit_inc_lan {
-  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  if p["O"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
   else node_exec["exec"](true).
   next().
+}
+function circularize_ap {
+  local sma to ship:obt:SEMIMAJORAXIS. local ecc to ship:obt:ECCENTRICITY.
+  if hasnode node_exec["exec"](true).
+  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+  else node_exec["circularize"]().
 }
 function hohmann_transfer {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
@@ -55,12 +64,6 @@ function hohmann_transfer {
   set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
   node_exec["exec"](true). next().
 }
-function circularize_ap {
-  local sma to ship:obt:SEMIMAJORAXIS. local ecc to ship:obt:ECCENTRICITY.
-  if hasnode node_exec["exec"](true).
-  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
-  else node_exec["circularize"]().
-}
 function finish {
   ship_utils["enable"]().
   deletepath("startup.ks").
@@ -72,7 +75,7 @@ function finish {
   seq:add(wait_until_only_core@).
   seq:add(wait_until_active_vessel@).
   seq:add(set_orbit_inc_lan@).
-  seq:add(set_orbit_inc_lan@).
+  seq:add(circularize_ap@).
   seq:add(hohmann_transfer@).
   seq:add(circularize_ap@).
   seq:add(finish@).

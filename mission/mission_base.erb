@@ -20,8 +20,10 @@ local orbitfit is import("lib/fitness_orbit.ks").
 <% if (@steps & ['hohmann_transfer_return']).any? -%>
 local hohmann_return is import("lib/hohmann_return.ks").
 <% end -%>
-<% if (@steps & ['return_correction', 'set_orbit_inc_lan']).any? -%>
-local transfit is import("lib/fitness_orbit.ks").
+<% if (@steps & ['free_return_correction','hohmann_correction',
+  'hohmann_transfer_body','hohmann_transfer_return',
+  'return_correction','transfer_return']).any? -%>
+local transfit is import("lib/fitness_transfer.ks").
 <% end -%>
 <% if (@steps & ['collect_science']).any? -%>
 local science is import("lib/science.ks").
