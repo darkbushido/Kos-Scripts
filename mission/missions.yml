@@ -20,6 +20,7 @@ launch_to_orbit:
   - adjust_pe
   - finish
 remote_tech_network:
+  - *ATMOLAUNCH
   - hohmann_transfer
   - circularize_ap
   - finish

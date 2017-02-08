@@ -75,6 +75,7 @@ function finish {
   seq:add(wait_until_only_core@).
   seq:add(wait_until_active_vessel@).
   seq:add(set_orbit_inc_lan@).
+  seq:add(set_orbit_inc_lan@).
   seq:add(circularize_ap@).
   seq:add(hohmann_transfer@).
   seq:add(circularize_ap@).
