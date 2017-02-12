@@ -1,6 +1,7 @@
 {
   local cn is import("lib/circle_nav.ks").
   local m is import("lib/math_gaussian.ks").
+  local node_exec is import("lib/node_exec.ks").
   local fitness is lex(
     "deorbit_fit", deorbit_fit@
   ).
@@ -9,7 +10,7 @@
     function fitness_fn {
       parameter data.
       local n is make_node(list(data[0],data[1],data[2],data[3])).
-      remove_any_nodes().
+      node_exec["clean"]().
       add n. wait 0.1.
       if not addons:tr:hasimpact { return -2^64. }
       local deltav to -SHIP:VELOCITY:SURFACE:MAG/2.
@@ -21,6 +22,5 @@
     return fitness_fn@.
   }
   function make_node { parameter d. return node(d[0], d[1], d[2], d[3]). }
-  function remove_any_nodes {until not hasnode {remove nextnode. wait 0.01.}}
   export(fitness).
 }

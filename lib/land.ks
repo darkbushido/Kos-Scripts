@@ -8,7 +8,7 @@
     "FlyOverTarget", fly_over_target@,
     "DeorbitNode", deorbit@
   ).
-  local g0 to ship:body:mu/(ship:body:radius)^2.
+  local g0() to ship:body:mu/(ship:body:radius)^2.
   function fly_over_target {
     print "Adjusting Inclination and Lan to fly over target".
     local node_lng to mod(360+Body:ROTATIONANGLE+p["LND"]["LatLng"]:LNG,360).
@@ -27,22 +27,28 @@
     local dv to -SHIP:VELOCITY:SURFACE:MAG/2.
     if BODY:ATM:EXISTS { set dv to dv/10. }
     if node_eta < OBT:PERIOD/8 { set node_eta to node_eta + OBT:PERIOD.}
-    local nd to NODE(time:seconds + node_eta,0,0,dv).
-    ADD nd.
+    ADD NODE(time:seconds + node_eta,0,0,dv).
   }
+  function landing_pos { return latlng(p["LND"]["LatLng"]:lat,p["LND"]["LatLng"]:lng). }
+  function R_ship { return ship:body:position. }
+  function angle_diff_h { return VANG(-R_ship(), landing_pos():position - R_ship()). }
+  function dist_diff_h { return (angle_diff_h()/360) * 2 * constant:pi()*R_ship():mag. }
+  function velocity_h_norm { return VCRS(VCRS(R_ship(),ship:velocity:orbit),R_ship()):normalized. }
+  function speed_h { return VDOT(velocity_h_norm(),ship:velocity:orbit). }
+  function position_speed_h { return landing_pos():altitudevelocity(altitude):orbit:mag. }
+  function speed_diff_h { return speed_h() - position_speed_h(). }
   function deorbit {
-    addons:tr:settarget(p["LND"]["LatLng"]).
-
-    set TWR to availablethrust/(mass*g0).
+    addons:tr:settarget(landing_pos()).
+    set TWR to availablethrust/(mass*g0()).
     set Fuel_Factor to 1.25.
-    set landing_per_buffer to (50290*(TWR*Fuel_Factor)^(-2.232) + 222.1)*(0.955)^(landing_pos():terrainheight/2500).
+    // set landing_per_buffer to (50290*(TWR*Fuel_Factor)^(-2.232) + 222.1)*(0.99)^(landing_pos():terrainheight/2000).
+    set landing_per_buffer to 2000.
     print landing_per_buffer.
     set R_per_landing to ship:body:radius + max(4500,landing_pos():terrainheight + landing_per_buffer).
     set SMA_landing to (R_ship():mag + R_per_landing)/2.
     set ecc_landing to (R_ship():mag - R_per_landing)/(R_ship():mag + R_per_landing).
     set V_apo to sqrt(((1-ecc_landing)*ship:body:MU)/((1+ecc_landing)*SMA_landing)).
     set TimePeriod_landing to 2*(constant:pi)*sqrt((SMA_landing^3)/(ship:body:mu)).
-    wait 0.
     set prev_dist_h to dist_diff_h().
     wait 0.1.
     set curr_dist_h to dist_diff_h().
@@ -74,7 +80,7 @@
 	     print "Direction Angle Error = " + round(VANG(ship:facing:vector,align_vector),1).
        wait 0.1.
      }
-     set landing_eta_buffer to velocityat(ship,time:seconds + eta:periapsis):orbit:mag/(TWR*g0).
+     set landing_eta_buffer to velocityat(ship,time:seconds + eta:periapsis):orbit:mag/(TWR*g0()).
      print "Warping to " + round(landing_eta_buffer,0) + "sec before Periapsis".
      warpto(time:seconds + eta:periapsis - 1.075*landing_eta_buffer).
      lock steering to srfretrograde.
@@ -90,7 +96,7 @@
      }
 
   }
-
+  function g0() { return ship:body:mu/(ship:body:radius)^2. }
   function landing_pos { return latlng(p["LND"]["LatLng"]:lat,p["LND"]["LatLng"]:lng). }
   function R_ship { return ship:body:position. }
   function angle_diff_h { return VANG(-R_ship(), landing_pos():position - R_ship()). }
@@ -102,7 +108,7 @@
   function Velocity_diff_direction { return (-1*(ship:velocity:orbit - landing_pos:altitudevelocity(altitude):orbit + long_diff_h*long_diff_dir)):direction. }
   function MaxThrustAccHor { return -1*VDOT(Velocity_h_norm,availablethrust/mass*srfretrograde:vector). }
   function truealt { return altitude - landing_pos:terrainheight. }
-  function touchdown_time { return (-verticalspeed - sqrt(verticalspeed^2 - 4*(-0.5*g0)*truealt))/(-1*g0). }
+  function touchdown_time { return (-verticalspeed - sqrt(verticalspeed^2 - 4*(-0.5*g0())*truealt))/(-1*g0()). }
   function cutoffdist_h { return speed_diff_h*touchdown_time. }
   function Vmax_h { return sqrt(MAX(0,2*(dist_diff_h() - buffer_dist())*MaxThrustAccHor)). }
   function error_h { return Vmax_h() - speed_diff_h().}

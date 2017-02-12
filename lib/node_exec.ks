@@ -1,7 +1,8 @@
 {
-  local node_exec to lex( "exec", exec@, "circularize", circularize@ ).
+  local node_exec to lex( "exec", exec@, "circularize", circularize@, "clean", clean@ ).
   function exec {
-    parameter autowarp is 0, n is nextnode, v is n:burnvector, starttime is (time:seconds + n:eta - mnv_time(v:mag)*0.53).
+    parameter autowarp is 0, tmod is 0.5, n is nextnode, v is n:burnvector,
+              starttime is (time:seconds + n:eta - mnv_time(v:mag)*tmod).
     if (starttime-300) >= time:seconds {
       lock steering to lookdirup(v(0,1,0), sun:position).
       wait until VANG(SHIP:FACING:VECTOR, lookdirup(v(0,1,0), sun:position):vector) < 0.05.
@@ -37,5 +38,6 @@
       set isp to isp / engine_count. set thrust to thrust * 1000. return g * m * isp * (1 - e^(-dV/(g*isp))) / thrust.
     } else { return 0.}
   }
+  function clean {until not hasnode {remove nextnode. wait 0.01.}}
   export(node_exec).
 }
