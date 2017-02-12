@@ -118,6 +118,7 @@ moon_land_at:
   - launch_moon
   - coast_to_alt
   - circularize_ap
+  - set_orbit_inc_lan
   - hohmann_transfer_return
   - return_correction
   - *RETURNTOKERBIN

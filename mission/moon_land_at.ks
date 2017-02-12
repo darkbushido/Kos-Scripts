@@ -136,10 +136,10 @@ function deorbit_node {
 }
 function cancel_surface_speed {
   local ttb to time:seconds + eta:periapsis.
-  local s to ship:velocity:surface:mag.
-  local n to node(ttb,0,0,-s).
+  local dv to VELOCITYAT(ship, ttb):surface:mag.
+  local n to node(ttb,0,0,-dv).
   add n.
-  node_exec["exec"]().
+  node_exec["exec"](true,1).
   next().
 }
 function hoverslam {
@@ -268,6 +268,7 @@ function finish {
   seq:add(launch_moon@).
   seq:add(coast_to_alt@).
   seq:add(circularize_ap@).
+  seq:add(set_orbit_inc_lan@).
   seq:add(hohmann_transfer_return@).
   seq:add(return_correction@).
   seq:add(wait_for_soi_change_kerbin@).
