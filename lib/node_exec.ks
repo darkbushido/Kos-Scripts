@@ -1,7 +1,7 @@
 {
   local node_exec to lex( "exec", exec@, "circularize", circularize@, "clean", clean@ ).
   function exec {
-    parameter autowarp is 0, tmod is 0.5, n is nextnode, v is n:burnvector,
+    parameter autowarp is 0, tmod is 0.52, n is nextnode, v is n:burnvector,
               starttime is (time:seconds + n:eta - mnv_time(v:mag)*tmod).
     if (starttime-300) >= time:seconds {
       lock steering to lookdirup(v(0,1,0), sun:position).

@@ -6,9 +6,9 @@ for file in fileList {
 }
 COPYPATH("0:/mission/launch_to_orbit.ks", "1:/startup.ks").
 set params to lex(
-  "OrbitAlt", 500000,
+  "OrbitAlt", 450000,
   "LaunchInc", 90,
-  "LaunchPitchExp", 0.4,
-  "LaunchAutoStage", false
+  "LaunchPitchExp", 0.32,
+  "LaunchCareAboutLan", false
 ).
 writejson(params, "params.json").

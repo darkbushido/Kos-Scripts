@@ -7,7 +7,9 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
+local hohmann_return is import("lib/hohmann_return.ks").
 local transfit is import("lib/fitness_transfer.ks").
+local science is import("lib/science.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 print "Mission Params".
@@ -150,6 +152,96 @@ function hoverslam {
   lock steering to up.
   next().
 }
+function sleep {
+  print "Waiting for 15 seconds".
+  wait 15.
+  print "Finished Waiting".
+  next().
+}
+function collect_science {
+  print "Gathering Science".
+  science["collect"]().
+  next().
+}
+function transfer_science {
+  print "Transfering Science".
+  science["transfer"]().
+  next().
+}
+function pre_launch_moon {
+  ev:remove("Power"). ship_utils["disable"]().
+  set ship:control:pilotmainthrottle to 0.
+  SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
+  SET TPID:SETPOINT TO 15000.
+  next().
+}
+function launch_moon {
+  local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
+  lock steering to heading(dir, 88).
+  stage.
+  lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
+  lock throttle to thrott.
+  wait until ship:velocity:surface:mag > 5.
+  lock steering to heading(dir, 25).
+  if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
+  next().
+}
+function coast_to_alt {
+  if apoapsis > 15000 {
+    set warp to 0. lock throttle to 0.
+    if ev:haskey("AutoStage") ev:remove("AutoStage").
+    panels on.
+    if not ev:haskey("Power") ev:add("Power", ship_utils["power"]).
+    next().
+  }
+}
+function hohmann_transfer_return {
+  hohmann_return["return"]().
+  local nn to nextnode.
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 30000), 10).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 30000), 1).
+  node_exec["exec"](true).
+  next().
+}
+function return_correction {
+  set ct to time:seconds + (eta:transition * 0.7).
+  local data is list(0,0,0).
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_per_fit"](ct, p["T"]["Body"], p["T"]["Alt"]), step).}
+  local nn to nextnode.
+  if nn:deltav:mag < 0.1 remove nn.
+  else node_exec["exec"](true).
+  next().
+}
+function wait_for_soi_change_kerbin {
+  wait 5.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if ship:body = Kerbin {
+    wait 30.
+    next().
+}}
+function atmo_reentry {
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
+    lock steering to srfretrograde.
+    until stage:number <= 1 {
+      if STAGE:READY {STAGE.}
+      else {wait 1.}
+    }
+    ev:remove("Power"). ship_utils["disable"](). wait 5.
+  } else if not ev:haskey("Power") {
+    ev:add("Power", ship_utils["power"]). wait 5.
+  }
+  if (NOT CHUTESSAFE) { unlock steering. CHUTESSAFE ON. next().}
+}
+function finish {
+  ship_utils["enable"]().
+  deletepath("startup.ks").
+  if notfalse(p["NextShip"]) {
+    local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
+  } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
+  reboot.
+}
   seq:add(pre_launch@).
   seq:add(launch@).
   seq:add(coast_to_atm@).
@@ -165,5 +257,18 @@ function hoverslam {
   seq:add(deorbit_node@).
   seq:add(land_on_target@).
   seq:add(hoverslam@).
+  seq:add(sleep@).
+  seq:add(collect_science@).
+  seq:add(transfer_science@).
+  seq:add(pre_launch_moon@).
+  seq:add(launch_moon@).
+  seq:add(coast_to_alt@).
+  seq:add(circularize_ap@).
+  seq:add(set_orbit_inc_lan@).
+  seq:add(hohmann_transfer_return@).
+  seq:add(return_correction@).
+  seq:add(wait_for_soi_change_kerbin@).
+  seq:add(atmo_reentry@).
+  seq:add(finish@).
 }
 export(mission_base).

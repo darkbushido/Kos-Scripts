@@ -99,7 +99,7 @@ moon_crash_at:
   - set_orbit_inc_lan
   - fly_over_target
   - deorbit_node
-moon_land_at:
+moon_land_at: &MOONLANDAT
   - *ATMOLAUNCH
   - hohmann_transfer_body
   - hohmann_correction
@@ -109,8 +109,10 @@ moon_land_at:
   - set_orbit_inc_lan
   - fly_over_target
   - deorbit_node
-  - cancel_surface_speed
+  - land_on_target
   - hoverslam
+moon_land_at_return:
+  - *MOONLANDAT
   - sleep
   - collect_science
   - transfer_science

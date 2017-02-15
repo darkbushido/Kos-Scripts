@@ -28,7 +28,7 @@ local transfit is import("lib/fitness_transfer.ks").
 <% if (@steps & ['collect_science']).any? -%>
 local science is import("lib/science.ks").
 <% end -%>
-<% if (@steps & ['deorbit_node']).any? -%>
+<% if (@steps & ['deorbit_node', 'land_on_target']).any? -%>
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
 <% end -%>
