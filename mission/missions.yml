@@ -109,7 +109,7 @@ moon_land_at: &MOONLANDAT
   - set_orbit_inc_lan
   - fly_over_target
   - deorbit_node
-  - land_on_target
+  - cancel_surface_speed
   - hoverslam
 moon_land_at_return:
   - *MOONLANDAT

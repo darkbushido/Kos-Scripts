@@ -31,7 +31,7 @@
     "Body", tbody,
     "Inc", has_key("TransInc", tbody:obt:inclination)
   ).
-  local lndp to lex(
+  local lnd to lex(
     "LatLng", has_key("LandLatLng", latlng(-0.097,-74.557)),
     "HSMOD", has_key("LandHSMOD", 1),
     "RadarOffset", has_key("RadarOffset", 2.2),
@@ -41,7 +41,7 @@
   ).
   local params to lex(
     "L", lp, "O", op, "T", transfer_params,
-    "LND", lndp, "NextShip", has_key("NextShip", false),
+    "LND", lnd, "NextShip", has_key("NextShip", false),
     "SwitchToShp", has_key("SwitchToShp", false),
     "RenameShip", has_key("RenameShip", false)
   ).

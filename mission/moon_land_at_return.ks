@@ -134,8 +134,12 @@ function deorbit_node {
   land["DeorbitNode"]().
   next().
 }
-function land_on_target {
-  land["OnTarget"]().
+function cancel_surface_speed {
+  local ttb to time:seconds + eta:periapsis.
+  local dv to VELOCITYAT(ship, ttb):surface:mag.
+  local n to node(ttb,0,0,-dv).
+  add n.
+  node_exec["exec"](true,1).
   next().
 }
 function hoverslam {
@@ -199,8 +203,8 @@ function hohmann_transfer_return {
   hohmann_return["return"]().
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 30000), 10).
-  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 30000), 1).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 10).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 1).
   node_exec["exec"](true).
   next().
 }
@@ -255,7 +259,7 @@ function finish {
   seq:add(set_orbit_inc_lan@).
   seq:add(fly_over_target@).
   seq:add(deorbit_node@).
-  seq:add(land_on_target@).
+  seq:add(cancel_surface_speed@).
   seq:add(hoverslam@).
   seq:add(sleep@).
   seq:add(collect_science@).

@@ -132,8 +132,12 @@ function deorbit_node {
   land["DeorbitNode"]().
   next().
 }
-function land_on_target {
-  land["OnTarget"]().
+function cancel_surface_speed {
+  local ttb to time:seconds + eta:periapsis.
+  local dv to VELOCITYAT(ship, ttb):surface:mag.
+  local n to node(ttb,0,0,-dv).
+  add n.
+  node_exec["exec"](true,1).
   next().
 }
 function hoverslam {
@@ -163,7 +167,7 @@ function hoverslam {
   seq:add(set_orbit_inc_lan@).
   seq:add(fly_over_target@).
   seq:add(deorbit_node@).
-  seq:add(land_on_target@).
+  seq:add(cancel_surface_speed@).
   seq:add(hoverslam@).
 }
 export(mission_base).

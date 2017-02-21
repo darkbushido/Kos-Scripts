@@ -3,7 +3,7 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2017.01.06.05.25.28",
+	"version": "2017.02.15.04.34.21",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
@@ -11,13 +11,13 @@
 			"name": "AsteroidDay"
 		},
 		{
-			"name": "KerbalAlarmClock"
+			"name": "SelectableDataTransmitter"
 		},
 		{
 			"name": "BetterCrewAssignment"
 		},
 		{
-			"name": "QuizTechAeroPackContinued"
+			"name": "QuickSearch"
 		},
 		{
 			"name": "SixCrewScienceLab"
@@ -26,7 +26,7 @@
 			"name": "USI-EXP"
 		},
 		{
-			"name": "InterstellarFuelSwitch-Core"
+			"name": "ConfigurableContainers-Core"
 		},
 		{
 			"name": "ProgressParser"
@@ -35,7 +35,7 @@
 			"name": "ContractParser"
 		},
 		{
-			"name": "ChopShop"
+			"name": "CommunityCategoryKit"
 		},
 		{
 			"name": "xScience"
@@ -47,10 +47,10 @@
 			"name": "KAS"
 		},
 		{
-			"name": "LandingHeight"
+			"name": "ChopShop"
 		},
 		{
-			"name": "UKS"
+			"name": "RemoteTech"
 		},
 		{
 			"name": "FirespitterCore"
@@ -59,16 +59,10 @@
 			"name": "FirespitterResourcesConfig"
 		},
 		{
-			"name": "HyperEdit"
-		},
-		{
 			"name": "AlternateResourcePanel"
 		},
 		{
 			"name": "KSP-AVC"
-		},
-		{
-			"name": "ConfigurableContainers-Core"
 		},
 		{
 			"name": "AviationLights"
@@ -83,40 +77,40 @@
 			"name": "SCANsat"
 		},
 		{
-			"name": "MalemuteRover"
+			"name": "ThrottleControlledAvionics"
 		},
 		{
-			"name": "SmokeScreen"
+			"name": "OctosatContinued"
 		},
 		{
-			"name": "PortraitStats"
-		},
-		{
-			"name": "AT-Utils"
-		},
-		{
-			"name": "QuickSearch"
-		},
-		{
-			"name": "CommunityResourcePack"
+			"name": "ContractConfigurator-KerbinSpaceStation"
 		},
 		{
 			"name": "TransferWindowPlanner"
 		},
 		{
-			"name": "ThrottleControlledAvionics"
+			"name": "QuizTechAeroPackContinued"
 		},
 		{
-			"name": "USITools"
+			"name": "AT-Utils"
 		},
 		{
-			"name": "USI-LS"
+			"name": "Kopernicus"
+		},
+		{
+			"name": "ConfigurableContainers"
+		},
+		{
+			"name": "LandingHeight"
+		},
+		{
+			"name": "PortraitStats"
 		},
 		{
 			"name": "ContractConfigurator"
 		},
 		{
-			"name": "USI-Core"
+			"name": "KIS"
 		},
 		{
 			"name": "TextureReplacer"
@@ -143,10 +137,10 @@
 			"name": "ContractsWindowPlus"
 		},
 		{
-			"name": "CommunityCategoryKit"
+			"name": "GroundConstruction"
 		},
 		{
-			"name": "ContractConfigurator-KerbinSpaceStation"
+			"name": "CommunityResourcePack"
 		},
 		{
 			"name": "RoutineMissionManager"
@@ -156,9 +150,6 @@
 		},
 		{
 			"name": "SpaceXLegs"
-		},
-		{
-			"name": "LightFixer"
 		},
 		{
 			"name": "BetterBurnTime"
@@ -185,7 +176,7 @@
 			"name": "IndicatorLightsCommunityExtensions"
 		},
 		{
-			"name": "SpaceY-Lifters"
+			"name": "StationScienceContinued"
 		},
 		{
 			"name": "ModuleManager"
@@ -194,13 +185,10 @@
 			"name": "KerbalInventorySystemNoFun"
 		},
 		{
-			"name": "KIS"
-		},
-		{
 			"name": "Konstruction"
 		},
 		{
-			"name": "OPTSpacePlaneMain"
+			"name": "MalemuteRover"
 		},
 		{
 			"name": "KEI"
@@ -209,13 +197,13 @@
 			"name": "MechJebForAll"
 		},
 		{
-			"name": "OctosatContinued"
+			"name": "SmokeScreen"
 		},
 		{
 			"name": "ContractConfigurator-Tourism"
 		},
 		{
-			"name": "Kopernicus"
+			"name": "USITools"
 		},
 		{
 			"name": "MiniAVC"
@@ -233,13 +221,13 @@
 			"name": "RCSBuildAid"
 		},
 		{
-			"name": "USI-ART"
+			"name": "USI-Core"
 		},
 		{
 			"name": "ContractConfigurator-RemoteTech"
 		},
 		{
-			"name": "RemoteTech"
+			"name": "USI-ART"
 		},
 		{
 			"name": "surfacelights"
@@ -248,7 +236,7 @@
 			"name": "Karbonite"
 		},
 		{
-			"name": "PreciseManeuver"
+			"name": "StageRecovery"
 		},
 		{
 			"name": "ScienceRelay"
@@ -257,7 +245,7 @@
 			"name": "ModularFlightIntegrator"
 		},
 		{
-			"name": "SelectableDataTransmitter"
+			"name": "KerbalAlarmClock"
 		},
 		{
 			"name": "PersistentDynamicPodNames"
@@ -278,10 +266,85 @@
 			"name": "Toolbar"
 		},
 		{
-			"name": "ExtraPlanetaryLaunchpads"
+			"name": "UniversalStorage"
 		},
 		{
-			"name": "UniversalStorage"
+			"name": "Trajectories"
+		},
+		{
+			"name": "LaserDist"
+		},
+		{
+			"name": "AutomatedScienceSampler"
+		},
+		{
+			"name": "KerboKatzUtilities"
+		},
+		{
+			"name": "BonVoyage"
+		},
+		{
+			"name": "Mk2Expansion"
+		},
+		{
+			"name": "ModularRocketSystem"
+		},
+		{
+			"name": "RealPlume"
+		},
+		{
+			"name": "JanitorsCloset"
+		},
+		{
+			"name": "PreciseManeuver"
+		},
+		{
+			"name": "SpaceY-Lifters"
+		},
+		{
+			"name": "WaypointManager"
+		},
+		{
+			"name": "EngineLighting"
+		},
+		{
+			"name": "KramaxAutopilotContinued"
+		},
+		{
+			"name": "ColorCodedCans"
+		},
+		{
+			"name": "USI-LS"
+		},
+		{
+			"name": "InterstellarFuelSwitch-Core"
+		},
+		{
+			"name": "MinAmbience"
+		},
+		{
+			"name": "UKS"
+		},
+		{
+			"name": "KHWearableKISProps"
+		},
+		{
+			"name": "KRASH"
+		},
+		{
+			"name": "RealPlume-StockConfigs"
+		},
+		{
+			"name": "PlanetShine"
+		},
+		{
+			"name": "PlanetShine-Config-Default"
+		},
+		{
+			"name": "EnvironmentalVisualEnhancements"
+		},
+		{
+			"name": "EnvironmentalVisualEnhancements-HR"
 		}
 	]
 }
