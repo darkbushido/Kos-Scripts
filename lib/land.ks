@@ -51,9 +51,9 @@
     } else {
       set eta_node to (TimePeriod_landing/2*position_speed_h())/speed_diff_h() + ((constant:pi)*R_ship():mag+dist_diff_h())/speed_diff_h().
     }
-
     set deltaV_landing to V_apo - velocityat(ship,time:seconds + eta_node):orbit:mag.
     set deorbit_node to NODE(TIME:seconds + eta_node,  0, 0, deltaV_landing).
+    node_exec["clean"](). wait 0.
     ADD deorbit_node.
     node_exec["exec"](true).
   }
