@@ -8,8 +8,8 @@ COPYPATH("0:/mission/remote_tech_network.ks", "1:/startup.ks").
 set params to lex(
   "LaunchPitchExp", 0.46,
   "OrbitAlt", 750000,
-  "OrbitVessel", "CommSat Mk-I",
-  "OrbitOffset", 120 * 1,
+  "TransTarget", vessel("CommSat Mk-I"),
+  "OrbitOffset", 120 * 2,
   "NextShip", "CommSat Mk-II"
 ).
 writejson(params, "params.json").

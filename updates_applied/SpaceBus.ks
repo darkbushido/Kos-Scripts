@@ -4,10 +4,9 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/remote_tech_network.ks", "1:/startup.ks").
+COPYPATH("0:/mission/kerbal_rescue_low.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.3,
-  "LaunchAlt", 73000,
-  "OrbitVessel", "Neilski's Hulk"
+  "LaunchPitchExp", 0.26,
+  "TransTarget", vessel("Katcella's Pod")
 ).
 writejson(params, "params.json").

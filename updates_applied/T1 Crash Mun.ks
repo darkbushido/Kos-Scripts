@@ -6,7 +6,7 @@ for file in fileList {
 }
 COPYPATH("0:/mission/moon_crash.ks", "1:/startup.ks").
 set params to lex(
-  "TransBody", "Mun",
+  "TransTarget", Mun,
   "TransInc", 0,
   "LaunchPitchExp", 0.30,
   "TransAlt", -(Mun:radius/2),

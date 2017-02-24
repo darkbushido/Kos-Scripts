@@ -7,7 +7,7 @@ for file in fileList {
 COPYPATH("0:/mission/moon_land_at.ks", "1:/startup.ks").
 set params to lex(
   "LaunchPitchExp", 0.36,
-  "TransBody", "Mun",
+  "TransTarget", Mun,
   "TransInc", 0,
   "TransAlt", 100000,
   "LandLatLng",  waypoint("Impact Target"):GEOPOSITION

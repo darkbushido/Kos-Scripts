@@ -8,7 +8,6 @@ COPYPATH("0:/mission/launch_to_orbit.ks", "1:/startup.ks").
 set params to lex(
   "OrbitAlt", 450000,
   "LaunchInc", 90,
-  "LaunchPitchExp", 0.32,
-  "LaunchCareAboutLan", false
+  "LaunchPitchExp", 0.32
 ).
 writejson(params, "params.json").
