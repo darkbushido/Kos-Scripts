@@ -19,6 +19,16 @@ launch_to_orbit:
   - adjust_ap
   - adjust_pe
   - finish
+kerbal_rescue_low:
+  - *ATMOLAUNCH
+  - hohmann_transfer
+  - circularize_pe
+  - finish
+kerbal_rescue_high:
+  - *ATMOLAUNCH
+  - hohmann_transfer
+  - circularize_ap
+  - finish
 remote_tech_network:
   - *ATMOLAUNCH
   - hohmann_transfer

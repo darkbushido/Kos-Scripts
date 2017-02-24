@@ -26,9 +26,11 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if p["L"]["CareAboutLAN"] {
+  if p["L"]["Inc"] <> 0 {
     print "waiting for Launch window.".
-    local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
+    local lan_t to lazcalc["window"](p["T"]["Target"]).
+    warpto(lan_t).
+    wait until time:seconds >= lan_t.
   }
   stage.
   SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
@@ -69,7 +71,7 @@ function circularize_ap {
   else node_exec["circularize"]().
 }
 function set_launch_inc_lan {
-  if p["L"]["CareAboutLan"] node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
+  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["L"]["Inc"]).
   node_exec["exec"](true).
   next().
@@ -82,7 +84,7 @@ function hohmann_transfer_body {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   node_exec["exec"](true).
   next().
 }
@@ -115,7 +117,7 @@ function circularize_pe {
   else node_exec["circularize"](true).
 }
 function set_orbit_inc_lan {
-  if p["O"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.

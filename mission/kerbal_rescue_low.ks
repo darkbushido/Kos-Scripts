@@ -4,8 +4,9 @@ local p is import("lib/params.ks").
 local lazcalc is import("lib/lazcalc.ks").
 local node_exec is import("lib/node_exec.ks").
 local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
-local cn is import("lib/circle_nav.ks").
-local land is import("lib/land.ks").
+local hohmann is import("lib/hohmann_transfer.ks").
+local hc is import("lib/hillclimb.ks").
+local orbitfit is import("lib/fitness_orbit.ks").
 print "Mission Params".
 print p.
 list files.
@@ -74,34 +75,26 @@ function set_launch_inc_lan {
   node_exec["exec"](true).
   next().
 }
-function fly_over_target {
-  land["FlyOverTarget"]().
-  next().
-}
-function deorbit_node {
-  land["DeorbitNode"]().
-  next().
-}
-function wait_for_soi_change_kerbin {
-  wait 5.
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if ship:body = Kerbin {
-    wait 30.
-    next().
-}}
-function atmo_reentry {
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
-    lock steering to srfretrograde.
-    until stage:number <= 1 {
-      if STAGE:READY {STAGE.}
-      else {wait 1.}
-    }
-    ev:remove("Power"). ship_utils["disable"](). wait 5.
-  } else if not ev:haskey("Power") {
-    ev:add("Power", ship_utils["power"]). wait 5.
+function hohmann_transfer {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to eta:periapsis.
+  if notfalse(p["O"]["Vessel"]) {
+    print "Hohmann Transfer to Vessel: " + p["O"]["Vessel"] + " Offset: " + p["O"]["Vessel"].
+    set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
   }
-  if (NOT CHUTESSAFE) { unlock steering. CHUTESSAFE ON. next().}
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
+  local t to time:seconds + nn:eta. local data is list(nn:prograde).
+  print "Hillclimbing".
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
+  node_exec["exec"](true). next().
+}
+function circularize_pe {
+  local sma to ship:obt:SEMIMAJORAXIS.
+  local ecc to ship:obt:ECCENTRICITY.
+  if hasnode node_exec["exec"](true).
+  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+  else node_exec["circularize"](true).
 }
 function finish {
   ship_utils["enable"]().
@@ -116,10 +109,8 @@ function finish {
   seq:add(coast_to_atm@).
   seq:add(circularize_ap@).
   seq:add(set_launch_inc_lan@).
-  seq:add(fly_over_target@).
-  seq:add(deorbit_node@).
-  seq:add(wait_for_soi_change_kerbin@).
-  seq:add(atmo_reentry@).
+  seq:add(hohmann_transfer@).
+  seq:add(circularize_pe@).
   seq:add(finish@).
 }
 export(mission_base).

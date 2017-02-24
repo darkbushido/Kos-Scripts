@@ -40,7 +40,7 @@ function wait_until_active_vessel {
   }
 }
 function set_orbit_inc_lan {
-  if p["O"]["CareAboutLan"] node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
+  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
   else node_set_inc_lan["create_node"](p["O"]["Inc"]).
   local nn to nextnode.
   if nn:deltav:mag < 0.1 remove nn.
