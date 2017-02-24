@@ -1,9 +1,11 @@
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if p["L"]["CareAboutLAN"] {
+  if p["L"]["Inc"] <> 0 {
     print "waiting for Launch window.".
-    local lan_t to lazcalc["window"](p["T"]["Body"]). warpto(lan_t). wait until time:seconds >= lan_t.
+    local lan_t to lazcalc["window"](p["T"]["Target"]).
+    warpto(lan_t).
+    wait until time:seconds >= lan_t.
   }
   stage.
   SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
