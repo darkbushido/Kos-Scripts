@@ -4,11 +4,11 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/kerbal_rescue_low.ks", "1:/startup.ks").
+COPYPATH("0:/mission/launch_to_orbit.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.28,
-  "OrbitAlt", 120000,
-  "TransTarget", vessel("Elbald's Heap")
-
+  "LaunchMaxQ", 25,
+  "LaunchInc", 90,
+  "LaunchPitchExp", 0.3,
+  "OrbitPower", false
 ).
 writejson(params, "params.json").

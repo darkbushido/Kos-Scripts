@@ -8,8 +8,8 @@ COPYPATH("0:/mission/remote_tech_moon_network.ks", "1:/startup.ks").
 set params to lex(
   "LaunchAlt", 1000000,
   "SwitchToShp", "CommSat Mun",
-  "Vessel", "CommSat Mun-Sat-I",
-  "RenameShip", "CommSat Mun-Sat-II",
-  "Offset", 120 * 1
+  "TransTarget", vessel("CommSat Mun-Sat-I"),
+  "RenameShip", "CommSat Mun-Sat-III",
+  "OrbitOffset", 120 * 2
 ).
 writejson(params, "params.json").

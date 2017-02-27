@@ -4,10 +4,9 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/remote_tech_moon_network.ks", "1:/startup.ks").
+COPYPATH("0:/mission/launch_to_orbit.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchAlt", 1000000,
-  "SwitchToShp", "CommSat Mun",
-  "RenameShip", "CommSat Mun-Sat-I",
+  "LaunchPitchExp", 0.3,
+  "LaunchMaxQ", 25
 ).
 writejson(params, "params.json").
