@@ -31,13 +31,12 @@
     "AP", has_key("OrbitAP", oalt),
     "PE", has_key("OrbitPE", oalt),
     "Inc", has_key("OrbitInc", 0),
-    "LAN", has_key("OrbitLAN", false),
-    "Vessel", trans_target,
-    "Offset", has_key("OrbitOffset", 0)
+    "LAN", has_key("OrbitLAN", false)
   ).
   local transfer_params to lex(
     "Alt", has_key("TransAlt", 15000),
     "Target", trans_target,
+    "Offset", has_key("OrbitOffset", 0)
     "Inc", has_key("TransInc", op["Inc"])
   ).
   if trans_target:istype("Body")
