@@ -25,7 +25,7 @@
   function disable {
     if ADDONS:RT:AVAILABLE {
       for antenna in SHIP:ModulesNamed("ModuleRTAntenna") {
-        if not list("Reflectron DP-10"):contains(antenna:part:title) {
+        if not list("Reflectron DP-10","Communotron 16-S"):contains(antenna:part:title) {
           if not (antenna:getfield("status") = "Off") antenna:DOEVENT("deactivate").
           wait until antenna:getfield("status") = "Off".
     }}} else {

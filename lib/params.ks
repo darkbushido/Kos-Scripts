@@ -2,23 +2,36 @@
   if core:volume:exists("params.json") { set jp to readjson("params.json").}
   else { set jp to lex(). }
   function has_key { parameter k, d. if jp:haskey(k) set v to jp[k]. else set v to d. return v. }
-  local trans_target to has_key("TransTarget", Mun).
+
+  local trans_target to has_key("TransTarget", false).
+  if trans_target:istype("Body")
+    set trans_target to BODY(trans_target:name).
+  else if trans_target:istype("Vessel")
+    set trans_target to VESSEL(trans_target:name).
+  local inc to 0.
+  local lan to false.
+
+  if notfalse(trans_target) {
+    set inc to round(trans_target:obt:inclination).
+    set lan to trans_target:obt:LAN.
+  }
   local lp to lex(
     "PitchExp", has_key("LaunchPitchExp", 0.35),
     "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
-    "Inc", has_key("LaunchInc", round(trans_target:obt:inclination)),
-    "LAN", has_key("LaunchLAN", trans_target:obt:LAN),
+    "Inc", has_key("LaunchInc", inc),
+    "LAN", has_key("LaunchLAN", lan),
     "AStage", has_key("LaunchAutoStage", true),
     "MAXQ", has_key("LaunchMaxQ", false)
   ).
+
   local oalt to has_key("OrbitAlt", lp["Alt"]).
   local op to lex(
     "Alt", oalt,
     "Power", has_key("OrbitPower", true),
     "AP", has_key("OrbitAP", oalt),
     "PE", has_key("OrbitPE", oalt),
-    "Inc", has_key("OrbitInc", lp["Inc"]),
-    "LAN", has_key("OrbitLAN", lp["LAN"]),
+    "Inc", has_key("OrbitInc", 0),
+    "LAN", has_key("OrbitLAN", false),
     "Vessel", trans_target,
     "Offset", has_key("OrbitOffset", 0)
   ).

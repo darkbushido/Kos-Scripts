@@ -22,7 +22,6 @@
   }
   FUNCTION launch_window {
     PARAMETER tgt.
-    print tgt.
     LOCAL lat IS SHIP:LATITUDE.
     LOCAL eN IS VCRS(tgt:POSITION - tgt:OBT:BODY:POSITION, tgt:PROGRADE:FOREVECTOR):NORMALIZED.
     LOCAL pN IS HEADING(0,lat):VECTOR.
