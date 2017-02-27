@@ -1,6 +1,9 @@
 function set_launch_inc_lan {
-  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
-  else node_set_inc_lan["create_node"](p["L"]["Inc"]).
-  node_exec["exec"](true).
-  next().
+  if round(ship:obt:inclination,1) = p["L"]["Inc"] {
+    next().
+  } else {
+    if notfalse(p["L"]["LAN"]) node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
+    else node_set_inc_lan["create_node"](p["L"]["Inc"]).
+    node_exec["exec"](true).
+  }
 }

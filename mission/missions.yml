@@ -22,21 +22,25 @@ launch_to_orbit:
 kerbal_rescue_low:
   - *ATMOLAUNCH
   - hohmann_transfer
+  - circularize_ap
+  - hohmann_transfer_target
   - circularize_pe
   - finish
 kerbal_rescue_high:
   - *ATMOLAUNCH
   - hohmann_transfer
   - circularize_ap
+  - hohmann_transfer_target
+  - circularize_ap
   - finish
 remote_tech_network:
   - *ATMOLAUNCH
-  - hohmann_transfer
+  - hohmann_transfer_target
   - circularize_ap
   - finish
 remote_tech_moon_uplink:
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
@@ -46,7 +50,6 @@ remote_tech_moon_uplink:
 remote_tech_moon_network:
   - wait_until_only_core
   - wait_until_active_vessel
-  - set_orbit_inc_lan
   - set_orbit_inc_lan
   - circularize_ap
   - hohmann_transfer
@@ -72,7 +75,7 @@ kerbin_land_on_target:
   - *RETURNTOKERBIN
 moon_flyby:
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
@@ -83,12 +86,12 @@ moon_flyby:
   - *RETURNTOKERBIN
 moon_crash:
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
 moon_orbit:
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
@@ -101,7 +104,7 @@ moon_orbit:
   - *RETURNTOKERBIN
 moon_crash_at:
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody
@@ -111,7 +114,7 @@ moon_crash_at:
   - deorbit_node
 moon_land_at: &MOONLANDAT
   - *ATMOLAUNCH
-  - hohmann_transfer_body
+  - hohmann_transfer_target
   - hohmann_correction
   - exec_node
   - wait_for_soi_change_tbody

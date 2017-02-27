@@ -40,12 +40,13 @@ function wait_until_active_vessel {
   }
 }
 function set_orbit_inc_lan {
-  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["O"]["Inc"],p["L"]["LAN"]).
-  else node_set_inc_lan["create_node"](p["O"]["Inc"]).
-  local nn to nextnode.
-  if nn:deltav:mag < 0.1 remove nn.
-  else node_exec["exec"](true).
-  next().
+  if round(ship:obt:inclination,1) = p["O"]["Inc"] {
+    next().
+  } else {
+    if notfalse(p["O"]["LAN"]) node_set_inc_lan["create_node"](p["O"]["Inc"],p["O"]["LAN"]).
+    else node_set_inc_lan["create_node"](p["O"]["Inc"]).
+    node_exec["exec"](true).
+  }
 }
 function circularize_ap {
   local sma to ship:obt:SEMIMAJORAXIS. local ecc to ship:obt:ECCENTRICITY.
@@ -56,10 +57,6 @@ function circularize_ap {
 function hohmann_transfer {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
   local d_time to eta:periapsis.
-  if notfalse(p["O"]["Vessel"]) {
-    print "Hohmann Transfer to Vessel: " + p["O"]["Vessel"] + " Offset: " + p["O"]["Vessel"].
-    set d_time to hohmann["time"](r1,r2, p["O"]["Vessel"],p["O"]["Offset"]).
-  }
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".
@@ -77,7 +74,6 @@ function finish {
 }
   seq:add(wait_until_only_core@).
   seq:add(wait_until_active_vessel@).
-  seq:add(set_orbit_inc_lan@).
   seq:add(set_orbit_inc_lan@).
   seq:add(circularize_ap@).
   seq:add(hohmann_transfer@).

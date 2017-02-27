@@ -2,7 +2,7 @@ function hohmann_correction {
   set ct to time:seconds + (eta:transition * 0.7).
   local data is list(0,0,0).
   print "Correction Fitness".
-  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_fit"](ct, p["T"]["Body"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_fit"](ct, p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   local nn to nextnode.
   if nn:deltav:mag < 0.3 remove nn.
   next().

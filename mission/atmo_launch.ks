@@ -22,7 +22,7 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if p["L"]["Inc"] <> 0 {
+  if notfalse(p["O"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
     warpto(lan_t).
@@ -67,10 +67,13 @@ function circularize_ap {
   else node_exec["circularize"]().
 }
 function set_launch_inc_lan {
-  if p["L"]["Inc"] <> 0 node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
-  else node_set_inc_lan["create_node"](p["L"]["Inc"]).
-  node_exec["exec"](true).
-  next().
+  if round(ship:obt:inclination,1) = p["L"]["Inc"] {
+    next().
+  } else {
+    if notfalse(p["L"]["LAN"]) node_set_inc_lan["create_node"](p["L"]["Inc"],p["L"]["LAN"]).
+    else node_set_inc_lan["create_node"](p["L"]["Inc"]).
+    node_exec["exec"](true).
+  }
 }
   seq:add(pre_launch@).
   seq:add(launch@).
