@@ -9,6 +9,6 @@ set params to lex(
   "LaunchPitchExp", 0.28,
   "LaunchMaxQ", 25,
   "OrbitAlt", 120000,
-  "TransTarget", vessel("Elliot's Shipwreck")
+  "TransTarget", vessel("Dudfrod's Craft")
 ).
 writejson(params, "params.json").

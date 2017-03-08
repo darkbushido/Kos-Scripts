@@ -7,6 +7,9 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
+local hohmann_return is import("lib/hohmann_return.ks").
+local transfit is import("lib/fitness_transfer.ks").
+local science is import("lib/science.ks").
 print "Mission Params".
 print p.
 list files.
@@ -78,13 +81,89 @@ function set_launch_inc_lan {
     node_exec["exec"](true).
   }
 }
-function adjust_pe {
-  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["PE"] + SHIP:OBT:BODY:RADIUS.
-  local d_time to time:seconds + eta:apoapsis.
-  hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
-  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 1).
-  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 0.1).
+function hohmann_transfer_target {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS.
+  local r2 TO p["T"]["Target"]:obt:semimajoraxis.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
+  set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  hohmann["transfer"](r1,r2,d_time).
+  if p["T"]["Target"]:istype("body") {
+    local nn to nextnode.
+    local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+    for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  }
   node_exec["exec"](true).
+  next().
+}
+function hohmann_correction {
+  set ct to time:seconds + (eta:transition * 0.7).
+  local data is list(0,0,0).
+  print "Correction Fitness".
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_fit"](ct, p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  local nn to nextnode.
+  if nn:deltav:mag < 0.3 remove nn.
+  next().
+}
+function exec_node {
+  if hasnode
+    node_exec["exec"]().
+  next().
+}
+function wait_for_soi_change_tbody {
+  wait 5.
+  lock steering to lookdirup(v(0,1,0), sun:position).
+  if ship:body = p["T"]["Target"] {
+    wait 30.
+    next().
+}}
+function collect_science {
+  print "Gathering Science".
+  science["collect"]().
+  next().
+}
+function circularize_pe {
+  local sma to ship:obt:SEMIMAJORAXIS.
+  local ecc to ship:obt:ECCENTRICITY.
+  if hasnode node_exec["exec"](true).
+  else if (ecc < 0.0015) or (600000 > sma and ecc < 0.005) next().
+  else node_exec["circularize"](true).
+}
+function set_orbit_inc_lan {
+  if round(ship:obt:inclination,1) = p["O"]["Inc"] {
+    next().
+  } else {
+    if notfalse(p["O"]["LAN"]) node_set_inc_lan["create_node"](p["O"]["Inc"],p["O"]["LAN"]).
+    else node_set_inc_lan["create_node"](p["O"]["Inc"]).
+    node_exec["exec"](true).
+  }
+}
+function hohmann_transfer {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to eta:periapsis.
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
+  local t to time:seconds + nn:eta. local data is list(nn:prograde).
+  print "Hillclimbing".
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
+  node_exec["exec"](true). next().
+}
+function hohmann_transfer_return {
+  hohmann_return["return"]().
+  local nn to nextnode.
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 10).
+  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 1).
+  node_exec["exec"](true).
+  next().
+}
+function return_correction {
+  set ct to time:seconds + (eta:transition * 0.7).
+  local data is list(0,0,0).
+  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_per_fit"](ct, p["T"]["Target"], p["T"]["Alt"]), step).}
+  local nn to nextnode.
+  if nn:deltav:mag < 0.1 remove nn.
+  else node_exec["exec"](true).
   next().
 }
 function wait_for_soi_change_kerbin {
@@ -121,7 +200,18 @@ function finish {
   seq:add(coast_to_atm@).
   seq:add(circularize_ap@).
   seq:add(set_launch_inc_lan@).
-  seq:add(adjust_pe@).
+  seq:add(hohmann_transfer_target@).
+  seq:add(hohmann_correction@).
+  seq:add(exec_node@).
+  seq:add(wait_for_soi_change_tbody@).
+  seq:add(collect_science@).
+  seq:add(circularize_pe@).
+  seq:add(set_orbit_inc_lan@).
+  seq:add(hohmann_transfer@).
+  seq:add(circularize_ap@).
+  seq:add(collect_science@).
+  seq:add(hohmann_transfer_return@).
+  seq:add(return_correction@).
   seq:add(wait_for_soi_change_kerbin@).
   seq:add(atmo_reentry@).
   seq:add(finish@).

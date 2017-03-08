@@ -13,7 +13,8 @@
 
   if notfalse(trans_target) {
     set inc to round(trans_target:obt:inclination).
-    set lan to trans_target:obt:LAN.
+    if inc <> 0
+      set lan to trans_target:obt:LAN.
   }
   local lp to lex(
     "PitchExp", has_key("LaunchPitchExp", 0.35),
@@ -36,7 +37,7 @@
   local transfer_params to lex(
     "Alt", has_key("TransAlt", 15000),
     "Target", trans_target,
-    "Offset", has_key("OrbitOffset", 0)
+    "Offset", has_key("OrbitOffset", 0),
     "Inc", has_key("TransInc", op["Inc"])
   ).
   if trans_target:istype("Body")

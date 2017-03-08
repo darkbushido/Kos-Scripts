@@ -26,7 +26,7 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if notfalse(p["O"]["LAN"]) {
+  if notfalse(p["L"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
     warpto(lan_t).
@@ -101,6 +101,7 @@ function hohmann_transfer_target {
     local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   }
+  print 100/0.
   node_exec["exec"](true).
   next().
 }

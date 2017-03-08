@@ -22,7 +22,7 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if notfalse(p["O"]["LAN"]) {
+  if notfalse(p["L"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
     warpto(lan_t).

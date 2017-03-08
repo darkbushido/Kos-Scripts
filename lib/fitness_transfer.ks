@@ -10,7 +10,7 @@
       parameter data.
       local n is make_node(data).
       if not t_to(n, tb) return 0.
-      return m["gaussian2"](
+      return mg["gaussian2"](
         n:orbit:nextpatch:inclination, ti, 180,
         n:orbit:nextpatch:periapsis, tp, tb:soiradius/2
       ).
@@ -23,7 +23,7 @@
       parameter data.
       local n is make_node(list(ct,data[0],data[1],data[2])).
       if not t_to(n, tb) return 0.
-      return m["gaussian2"](
+      return mg["gaussian2"](
         n:orbit:nextpatch:inclination, ti, 180,
         n:orbit:nextpatch:periapsis, tp, tb:soiradius/2
       ).
@@ -36,7 +36,7 @@
       parameter data.
       local n is make_node(list(ct,data[0],data[1],data[2])).
       if not t_to(n, tb) return 0.
-      return m["gaussian"](n:orbit:nextpatch:periapsis, tp, tb:soiradius/2).
+      return mg["gaussian"](n:orbit:nextpatch:periapsis, tp, tb:soiradius/2).
     }
     return fitness_fn@.
   }

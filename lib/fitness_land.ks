@@ -15,7 +15,7 @@
       if not addons:tr:hasimpact { return -2^64. }
       local deltav to -SHIP:VELOCITY:SURFACE:MAG/2.
       if BODY:ATM:EXISTS { set deltav to -SHIP:VELOCITY:SURFACE:MAG/20.}
-      return round(m["gaussian2"](
+      return round(mg["gaussian2"](
         cn["distance"](target_latlng, addons:tr:impactpos, ship:body:radius),0,ship:body:radius,
         n:deltav:mag, deltav, 2*ship:velocity:surface:mag),4).
     }

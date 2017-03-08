@@ -89,7 +89,7 @@ moon_crash:
   - hohmann_transfer_target
   - hohmann_correction
   - exec_node
-moon_orbit:
+moon_orbit: &MOONORBIT
   - *ATMOLAUNCH
   - hohmann_transfer_target
   - hohmann_correction
@@ -98,6 +98,10 @@ moon_orbit:
   - collect_science
   - circularize_pe
   - set_orbit_inc_lan
+  - hohmann_transfer
+  - circularize_ap
+moon_orbit_return:
+  - *MOONORBIT
   - collect_science
   - hohmann_transfer_return
   - return_correction

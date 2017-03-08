@@ -7,7 +7,6 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
-local hohmann_return is import("lib/hohmann_return.ks").
 local transfit is import("lib/fitness_transfer.ks").
 local science is import("lib/science.ks").
 print "Mission Params".
@@ -28,7 +27,7 @@ function pre_launch {
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
   lock steering to heading(dir, 88).
-  if notfalse(p["O"]["LAN"]) {
+  if notfalse(p["L"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
     warpto(lan_t).
@@ -138,52 +137,15 @@ function set_orbit_inc_lan {
     node_exec["exec"](true).
   }
 }
-function hohmann_transfer_return {
-  hohmann_return["return"]().
-  local nn to nextnode.
-  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
-  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 10).
-  hc["seek"](data, transfit["trans_fit"](Kerbin, 0, 35000), 1).
-  node_exec["exec"](true).
-  next().
-}
-function return_correction {
-  set ct to time:seconds + (eta:transition * 0.7).
-  local data is list(0,0,0).
-  for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["cor_per_fit"](ct, p["T"]["Target"], p["T"]["Alt"]), step).}
-  local nn to nextnode.
-  if nn:deltav:mag < 0.1 remove nn.
-  else node_exec["exec"](true).
-  next().
-}
-function wait_for_soi_change_kerbin {
-  wait 5.
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if ship:body = Kerbin {
-    wait 30.
-    next().
-}}
-function atmo_reentry {
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
-    lock steering to srfretrograde.
-    until stage:number <= 1 {
-      if STAGE:READY {STAGE.}
-      else {wait 1.}
-    }
-    ev:remove("Power"). ship_utils["disable"](). wait 5.
-  } else if not ev:haskey("Power") {
-    ev:add("Power", ship_utils["power"]). wait 5.
-  }
-  if (NOT CHUTESSAFE) { unlock steering. CHUTESSAFE ON. next().}
-}
-function finish {
-  ship_utils["enable"]().
-  deletepath("startup.ks").
-  if notfalse(p["NextShip"]) {
-    local template to KUniverse:GETCRAFT(p["NextShip"], "VAB"). KUniverse:LAUNCHCRAFT(template).
-  } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
-  reboot.
+function hohmann_transfer {
+  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to eta:periapsis.
+  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
+  local t to time:seconds + nn:eta. local data is list(nn:prograde).
+  print "Hillclimbing".
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
+  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
+  node_exec["exec"](true). next().
 }
   seq:add(pre_launch@).
   seq:add(launch@).
@@ -197,11 +159,7 @@ function finish {
   seq:add(collect_science@).
   seq:add(circularize_pe@).
   seq:add(set_orbit_inc_lan@).
-  seq:add(collect_science@).
-  seq:add(hohmann_transfer_return@).
-  seq:add(return_correction@).
-  seq:add(wait_for_soi_change_kerbin@).
-  seq:add(atmo_reentry@).
-  seq:add(finish@).
+  seq:add(hohmann_transfer@).
+  seq:add(circularize_ap@).
 }
 export(mission_base).

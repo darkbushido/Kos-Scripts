@@ -4,7 +4,7 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/moon_orbit.ks", "1:/startup.ks").
+COPYPATH("0:/mission/moon_orbit_return.ks", "1:/startup.ks").
 set params to lex(
   "TransTarget", Mun,
   "TransInc", 0,
