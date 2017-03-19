@@ -23,7 +23,7 @@ kerbal_rescue_low:
   - *ATMOLAUNCH
   - hohmann_transfer
   - circularize_ap
-  - hohmann_transfer_target
+  - hohmann_transfer
   - circularize_pe
   - finish
 kerbal_rescue_high:
@@ -35,7 +35,7 @@ kerbal_rescue_high:
   - finish
 remote_tech_network:
   - *ATMOLAUNCH
-  - hohmann_transfer_target
+  - hohmann_transfer
   - circularize_ap
   - finish
 remote_tech_moon_uplink:

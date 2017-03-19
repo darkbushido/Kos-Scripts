@@ -29,7 +29,7 @@ function pre_launch {
 }
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
-  lock steering to heading(dir, 88).
+  lock steering to heading(dir, 89).
   if notfalse(p["L"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
@@ -51,7 +51,7 @@ function launch {
     lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
   }
   lock throttle to thrott.
-  wait until ship:velocity:surface:mag > 50.
+  wait until ship:velocity:surface:mag > 100.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
@@ -86,9 +86,9 @@ function set_launch_inc_lan {
 function hohmann_transfer_target {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
   local r2 TO p["T"]["Target"]:obt:semimajoraxis.
-  lock steering to lookdirup(v(0,1,0), sun:position).
   print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
   set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  lock steering to lookdirup(v(0,1,0), sun:position).
   hohmann["transfer"](r1,r2,d_time).
   if p["T"]["Target"]:istype("body") {
     local nn to nextnode.

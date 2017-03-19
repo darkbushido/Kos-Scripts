@@ -21,7 +21,7 @@ function pre_launch {
 }
 function launch {
   local dir to lazcalc["LAZ"](p["L"]["Alt"], p["L"]["Inc"]).
-  lock steering to heading(dir, 88).
+  lock steering to heading(dir, 89).
   if notfalse(p["L"]["LAN"]) {
     print "waiting for Launch window.".
     local lan_t to lazcalc["window"](p["T"]["Target"]).
@@ -43,7 +43,7 @@ function launch {
     lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
   }
   lock throttle to thrott.
-  wait until ship:velocity:surface:mag > 50.
+  wait until ship:velocity:surface:mag > 100.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
