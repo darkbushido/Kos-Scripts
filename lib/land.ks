@@ -184,16 +184,16 @@
   function error_h { return Vmax_h() - speed_diff_h(). }
 
   function calcedAccel {
-    LOCAL currVel TO SHIP:VELOCITY:ORBIT.
-    LOCAL currTime TO TIME:SECONDS.
+    local currVel TO SHIP:VELOCITY:ORBIT.
+    local currTime TO TIME:SECONDS.
     wait 0.02.
-    LOCAL prevVel TO currVel.
-    LOCAL prevTime TO currTime.
+    local prevVel TO currVel.
+    local prevTime TO currTime.
     LOCK gravitationalAcc TO SHIP:BODY:MU / (SHIP:BODY:RADIUS + SHIP:ALTITUDE)^2.
     GLOBAL acc TO V(0, 0, 0).
     SET currVel TO SHIP:VELOCITY:ORBIT.
     SET currTime TO TIME:SECONDS.
-    LOCAL timeDelta TO currTime - prevTime.
+    local timeDelta TO currTime - prevTime.
     IF timeDelta <> 0 { SET acc TO (currVel - prevVel) * (1 / timeDelta) + UP:FOREVECTOR * gravitationalAcc. }
     SET prevVel TO currVel. SET prevTime TO currTime.
     return acc:mag.
@@ -207,7 +207,7 @@
   	RETURN V(eastComp, upComp, northComp).
   }
   function velPitch {
-  	LOCAL cardVelFlat IS V(cardVelCached:X, 0, cardVelCached:Z).
+  	local cardVelFlat IS V(cardVelCached:X, 0, cardVelCached:Z).
   	RETURN VANG(cardVelCached, cardVelFlat).
   }
   function velDir { return ARCTAN2(cardVelCached:X, cardVelCached:Y). }
@@ -231,11 +231,11 @@
   function steeringPIDs {
   	SET eastVelPID:SETPOINT TO eastPosPID:UPDATE(TIME:SECONDS, SHIP:GEOPOSITION:LNG).
   	SET northVelPID:SETPOINT TO northPosPID:UPDATE(TIME:SECONDS,SHIP:GEOPOSITION:LAT).
-  	LOCAL eastVelPIDOut IS eastVelPID:UPDATE(TIME:SECONDS, cardVelCached:X).
-  	LOCAL northVelPIDOut IS northVelPID:UPDATE(TIME:SECONDS, cardVelCached:Z).
-  	LOCAL eastPlusNorth is MAX(ABS(eastVelPIDOut), ABS(northVelPIDOut)).//SQRT(eastVelPIDOut^2 + northVelPIDOut^2).
+  	local eastVelPIDOut IS eastVelPID:UPDATE(TIME:SECONDS, cardVelCached:X).
+  	local northVelPIDOut IS northVelPID:UPDATE(TIME:SECONDS, cardVelCached:Z).
+  	local eastPlusNorth is MAX(ABS(eastVelPIDOut), ABS(northVelPIDOut)).//SQRT(eastVelPIDOut^2 + northVelPIDOut^2).
   	SET steeringPitch TO 90 - eastPlusNorth.
-  	LOCAL steeringDirNonNorm IS ARCTAN2(eastVelPID:OUTPUT, northVelPID:OUTPUT). //might be negative
+  	local steeringDirNonNorm IS ARCTAN2(eastVelPID:OUTPUT, northVelPID:OUTPUT). //might be negative
   	if steeringDirNonNorm >= 0 {
   		SET steeringDir TO steeringDirNonNorm.
   	} else {

@@ -17,12 +17,12 @@
   }
   function circularize {
     parameter peri is false.
-    LOCAL co TO ship:orbit. LOCAL cobr to co:body:radius.
+    local co TO ship:orbit. local cobr to co:body:radius.
     if peri { set cot to co:periapsis. set ttb to ETA:PERIAPSIS.}
     else { set cot to co:apoapsis. set ttb to ETA:APOAPSIS.}
-    LOCAL cotcobr to (cot + cobr).
-    LOCAL vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
-    LOCAL cv TO sqrt(co:body:mu * (1 / cotcobr)).
+    local cotcobr to (cot + cobr).
+    local vat TO sqrt(co:body:mu * (2 / cotcobr - 1 / (co:semimajoraxis))).
+    local cv TO sqrt(co:body:mu * (1 / cotcobr)).
     ADD NODE(TIME:SECONDS + ttb, 0, 0, cv - vat).
   }
   function mnv_time {

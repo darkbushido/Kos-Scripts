@@ -1,5 +1,5 @@
 {
-  local m is import("lib/math_gaussian.ks").
+  local mg is import("lib/math_gaussian.ks").
   local node_exec is import("lib/node_exec.ks").
   local fitness is lex(
     "trans_fit",trans_fit@,"cor_fit",cor_fit@, "cor_per_fit", cor_per_fit@
