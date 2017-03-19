@@ -6,9 +6,9 @@ for file in fileList {
 }
 COPYPATH("0:/mission/kerbal_rescue_low.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.28,
-  "OrbitAlt", 120000,
-  "TransTarget", vessel("Elbald's Heap")
-
+  "LaunchPitchExp", 0.3,
+  "OrbitAlt", 125000,
+  // "TransTarget", vessel("CommSat Minmus-Sat-I")
+  "TransTarget", vessel("Nelald's Scrap")
 ).
 writejson(params, "params.json").
