@@ -23,15 +23,15 @@ kerbal_rescue_low:
   - *ATMOLAUNCH
   - hohmann_transfer
   - circularize_ap
-  - hohmann_transfer
+  - hohmann_transfer_target
   - circularize_pe
+  - rendezvous
   - finish
 kerbal_rescue_high:
   - *ATMOLAUNCH
-  - hohmann_transfer
-  - circularize_ap
   - hohmann_transfer_target
   - circularize_ap
+  - rendezvous
   - finish
 remote_tech_network:
   - *ATMOLAUNCH

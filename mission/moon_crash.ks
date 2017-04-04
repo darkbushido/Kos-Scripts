@@ -81,9 +81,13 @@ function set_launch_inc_lan {
 }
 function hohmann_transfer_target {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
-  local r2 TO p["T"]["Target"]:obt:semimajoraxis.
-  print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
-  set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  local r2 to p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to eta:periapsis.
+  if notfalse(p["T"]["Target"]) {
+    set r2 TO p["T"]["Target"]:obt:semimajoraxis.
+    print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
+    set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  }
   lock steering to lookdirup(v(0,1,0), sun:position).
   hohmann["transfer"](r1,r2,d_time).
   if p["T"]["Target"]:istype("body") {

@@ -8,6 +8,7 @@ local hohmann is import("lib/hohmann_transfer.ks").
 local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
 local transfit is import("lib/fitness_transfer.ks").
+local rndz is import("lib/rendezvous.ks").
 print "Mission Params".
 print p.
 list files.
@@ -79,21 +80,15 @@ function set_launch_inc_lan {
     node_exec["exec"](true).
   }
 }
-function hohmann_transfer {
-  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
-  local d_time to eta:periapsis.
-  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
-  local t to time:seconds + nn:eta. local data is list(nn:prograde).
-  print "Hillclimbing".
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
-  node_exec["exec"](true). next().
-}
 function hohmann_transfer_target {
   local r1 to SHIP:OBT:SEMIMAJORAXIS.
-  local r2 TO p["T"]["Target"]:obt:semimajoraxis.
-  print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
-  set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  local r2 to p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
+  local d_time to eta:periapsis.
+  if notfalse(p["T"]["Target"]) {
+    set r2 TO p["T"]["Target"]:obt:semimajoraxis.
+    print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
+    set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
+  }
   lock steering to lookdirup(v(0,1,0), sun:position).
   hohmann["transfer"](r1,r2,d_time).
   if p["T"]["Target"]:istype("body") {
@@ -102,6 +97,15 @@ function hohmann_transfer_target {
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
   }
   node_exec["exec"](true).
+  next().
+}
+function rendezvous {
+  until p["T"]["Target"]:distance < 500 {
+    rndz["cancel"](p["T"]["Target"]).
+    rndz["approach"](p["T"]["Target"], 30).
+    rndz["await_nearest"](p["T"]["Target"], 500).
+  }
+  rndz["cancel"](p["T"]["Target"]).
   next().
 }
 function finish {
@@ -117,10 +121,9 @@ function finish {
   seq:add(coast_to_atm@).
   seq:add(circularize_ap@).
   seq:add(set_launch_inc_lan@).
-  seq:add(hohmann_transfer@).
-  seq:add(circularize_ap@).
   seq:add(hohmann_transfer_target@).
   seq:add(circularize_ap@).
+  seq:add(rendezvous@).
   seq:add(finish@).
 }
 export(mission_base).

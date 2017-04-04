@@ -35,6 +35,9 @@ local land is import("lib/land.ks").
 <% if (@steps & ['suicide_burn']).any? -%>
 local suicide is import("lib/suicide_burn.ks").
 <% end -%>
+<% if (@steps & ['rendezvous']).any? -%>
+local rndz is import("lib/rendezvous.ks").
+<% end -%>
 print "Mission Params".
 print p.
 list files.
