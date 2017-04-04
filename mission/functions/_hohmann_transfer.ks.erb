@@ -1,11 +1,6 @@
 function hohmann_transfer {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
   local d_time to eta:periapsis.
-  if notfalse(p["T"]["Target"]) {
-    set r2 TO p["T"]["Target"]:obt:semimajoraxis.
-    print "Hohmann Transfer to Vessel: " + p["T"]["Target"] + " Offset: " + p["T"]["Offset"].
-    set d_time to hohmann["time"](r1,r2, p["T"]["Target"],p["T"]["Offset"]).
-  }
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".

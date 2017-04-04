@@ -1,0 +1,9 @@
+function rendezvous {
+  until p["T"]["Target"]:distance < 500 {
+    rndz["cancel"](p["T"]["Target"]).
+    rndz["approach"](p["T"]["Target"], 30).
+    rndz["await_nearest"](p["T"]["Target"], 500).
+  }
+  rndz["cancel"](p["T"]["Target"]).
+  next().
+}
