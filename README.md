@@ -13,3 +13,8 @@ https://www.youtube.com/watch?v=Y5b0oZYStKg
 https://www.youtube.com/watch?v=L7Mlc1JyM1w
 https://www.youtube.com/watch?v=NHnVXEdGAh8
 https://www.youtube.com/watch?v=QHx2CnIEPFc
+
+https://www.youtube.com/watch?v=_JJfeu2IG0M
+
+https://youtu.be/OfPhq1JiETg?t=3565
+https://youtu.be/OfPhq1JiETg?t=4120
