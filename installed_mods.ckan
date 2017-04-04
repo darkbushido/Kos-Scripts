@@ -3,7 +3,7 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2017.02.24.06.09.27",
+	"version": "2017.04.02.05.30.10",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
@@ -113,7 +113,7 @@
 			"name": "ConfigurableContainers"
 		},
 		{
-			"name": "TextureReplacer"
+			"name": "USIKolClassSuits"
 		},
 		{
 			"name": "SafeChute"
@@ -179,10 +179,10 @@
 			"name": "KerbalInventorySystemNoFun"
 		},
 		{
-			"name": "Konstruction"
+			"name": "USI-FTT"
 		},
 		{
-			"name": "MalemuteRover"
+			"name": "USI-Core"
 		},
 		{
 			"name": "KEI"
@@ -197,13 +197,13 @@
 			"name": "ContractConfigurator-Tourism"
 		},
 		{
-			"name": "USITools"
+			"name": "Mk2Expansion"
 		},
 		{
 			"name": "MiniAVC"
 		},
 		{
-			"name": "PoodsMilkyWaySkybox"
+			"name": "TextureReplacer"
 		},
 		{
 			"name": "SpaceY-Expanded"
@@ -215,19 +215,19 @@
 			"name": "RCSBuildAid"
 		},
 		{
-			"name": "USI-Core"
+			"name": "Karbonite"
 		},
 		{
 			"name": "ContractConfigurator-RemoteTech"
 		},
 		{
-			"name": "USI-ART"
+			"name": "UKS"
 		},
 		{
 			"name": "surfacelights"
 		},
 		{
-			"name": "Karbonite"
+			"name": "USI-LS"
 		},
 		{
 			"name": "StageRecovery"
@@ -236,7 +236,7 @@
 			"name": "ScienceRelay"
 		},
 		{
-			"name": "ModularFlightIntegrator"
+			"name": "InterstellarFuelSwitch-Core"
 		},
 		{
 			"name": "KerbalAlarmClock"
@@ -275,10 +275,10 @@
 			"name": "KerboKatzUtilities"
 		},
 		{
-			"name": "BonVoyage"
+			"name": "USITools"
 		},
 		{
-			"name": "Mk2Expansion"
+			"name": "BonVoyage"
 		},
 		{
 			"name": "ModularRocketSystem"
@@ -290,7 +290,7 @@
 			"name": "SpaceXLegs"
 		},
 		{
-			"name": "InterstellarFuelSwitch-Core"
+			"name": "ModularFlightIntegrator"
 		},
 		{
 			"name": "SpaceY-Lifters"
@@ -308,13 +308,10 @@
 			"name": "ColorCodedCans"
 		},
 		{
-			"name": "USI-LS"
+			"name": "MalemuteRover"
 		},
 		{
 			"name": "JanitorsCloset"
-		},
-		{
-			"name": "MinAmbience"
 		},
 		{
 			"name": "KHWearableKISProps"
@@ -347,7 +344,28 @@
 			"name": "WhoAmI"
 		},
 		{
-			"name": "USI-FTT"
+			"name": "Konstruction"
+		},
+		{
+			"name": "DockingPortAlignmentIndicator"
+		},
+		{
+			"name": "RasterPropMonitor"
+		},
+		{
+			"name": "USI-ART"
+		},
+		{
+			"name": "GroundConstruction-Core"
+		},
+		{
+			"name": "GroundConstruction"
+		},
+		{
+			"name": "CrewManifest"
+		},
+		{
+			"name": "PoodsCalmNebulaSkybox"
 		}
 	]
 }
