@@ -1,0 +1,22 @@
+function dock_with_ship {
+  RCS ON.
+  lock rv TO ship:velocity:orbit - target:velocity:orbit.
+  until rv:mag < 0.01 {
+    dock["translate"](-1 * rv).
+  }
+  dock["translate"](V(0,0,0)).
+
+  local tgt TO VESSEL("SkyLab - Core").
+  local dp to ship:dockingports[0].
+  dp:CONTROLFROM.
+  local tp to get_port(tgt).
+
+  dock["sideswipe"](tp, dp, 100, 1).
+  dock["approach"](tp, dp, 100, 1).
+  dock["approach"](tp, dp, 50, 1).
+  dock["approach"](tp, dp, 20, 1).
+  dock["approach"](tp, dp, 10, 0.5).
+  dock["approach"](tp, dp, 0, 0.5).
+  RCS OFF.
+  next().
+}

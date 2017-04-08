@@ -7,7 +7,8 @@ lib/knu.ks -- moved to boot/basic.ks
 lib/mission.ks
 lib/node_exec.ks
 lib/transfer.ks
-mission/rt_network.ks
+lib/dock.ks
+mission/remote_tech_network.ks
 
 The MIT License (MIT)
 

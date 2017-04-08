@@ -9,7 +9,7 @@
     parameter target_latlng.
     function fitness_fn {
       parameter data.
-      local n is make_node(list(data[0],data[1],data[2],data[3])).
+      local n is node_exec["make"](list(data[0],data[1],data[2],data[3])).
       node_exec["clean"]().
       add n. wait 0.1.
       if not addons:tr:hasimpact { return -2^64. }
@@ -21,6 +21,5 @@
     }
     return fitness_fn@.
   }
-  function make_node { parameter d. return node(d[0], d[1], d[2], d[3]). }
   export(fitness).
 }

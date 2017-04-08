@@ -1,5 +1,8 @@
 {
-  local node_exec to lex( "exec", exec@, "circularize", circularize@, "clean", clean@ ).
+  local node_exec to lex(
+    "exec", exec@, "circularize", circularize@,
+    "clean", clean@, "make", make_node@
+   ).
   function exec {
     parameter autowarp is 0, tmod is 0.45, n is nextnode, v is n:burnvector,
               starttime is (time:seconds + n:eta - mnv_time(v:mag)*tmod).
@@ -39,5 +42,6 @@
     } else { return 0.}
   }
   function clean {until not hasnode {remove nextnode. wait 0.01.}}
+  function make_node { parameter d. return node(d[0], d[1], d[2], d[3]). }
   export(node_exec).
 }
