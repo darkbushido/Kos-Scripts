@@ -38,6 +38,10 @@ local suicide is import("lib/suicide_burn.ks").
 <% if (@steps & ['rendezvous']).any? -%>
 local rndz is import("lib/rendezvous.ks").
 <% end -%>
+<% if (@steps & ['dock']).any? -%>
+local dock is import("lib/dock.ks").
+<% end -%>
+
 print "Mission Params".
 print p.
 list files.

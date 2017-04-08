@@ -9,6 +9,7 @@ local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
 local transfit is import("lib/fitness_transfer.ks").
 local rndz is import("lib/rendezvous.ks").
+
 print "Mission Params".
 print p.
 list files.
@@ -101,10 +102,12 @@ function hohmann_transfer_target {
   }
   lock steering to lookdirup(v(0,1,0), sun:position).
   hohmann["transfer"](r1,r2,d_time).
+  local nn to nextnode.
+  local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
   if p["T"]["Target"]:istype("body") {
-    local nn to nextnode.
-    local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
+  } else {
+    for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["rndvz_fit"](p["T"]["Target"]), step).}
   }
   node_exec["exec"](true).
   next().

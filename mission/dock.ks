@@ -9,6 +9,7 @@ local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
 local transfit is import("lib/fitness_transfer.ks").
 local rndz is import("lib/rendezvous.ks").
+
 print "Mission Params".
 print p.
 list files.
@@ -110,13 +111,26 @@ function rendezvous {
   rndz["cancel"](p["T"]["Target"]).
   next().
 }
-function dock {
-  until p["T"]["Target"]:distance < 500 {
-    rndz["cancel"](p["T"]["Target"]).
-    rndz["approach"](p["T"]["Target"], 30).
-    rndz["await_nearest"](p["T"]["Target"], 500).
+function dock_with_ship {
+  RCS ON.
+  lock rv TO ship:velocity:orbit - target:velocity:orbit.
+  until rv:mag < 0.01 {
+    dock["translate"](-1 * rv).
   }
-  rndz["cancel"](p["T"]["Target"]).
+  dock["translate"](V(0,0,0)).
+
+  local tgt TO VESSEL("SkyLab - Core").
+  local dp to ship:dockingports[0].
+  dp:CONTROLFROM.
+  local tp to get_port(tgt).
+
+  dock["sideswipe"](tp, dp, 100, 1).
+  dock["approach"](tp, dp, 100, 1).
+  dock["approach"](tp, dp, 50, 1).
+  dock["approach"](tp, dp, 20, 1).
+  dock["approach"](tp, dp, 10, 0.5).
+  dock["approach"](tp, dp, 0, 0.5).
+  RCS OFF.
   next().
 }
 function finish {
@@ -135,7 +149,7 @@ function finish {
   seq:add(hohmann_transfer_target@).
   seq:add(circularize_ap@).
   seq:add(rendezvous@).
-  seq:add(dock@).
+  seq:add(dock_with_ship@).
   seq:add(finish@).
 }
 export(mission_base).

@@ -2,6 +2,7 @@ local mission is import("lib/mission.ks").
 local ship_utils is import("lib/ship_utils.ks").
 local p is import("lib/params.ks").
 local suicide is import("lib/suicide_burn.ks").
+
 print "Mission Params".
 print p.
 list files.
