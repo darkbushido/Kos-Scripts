@@ -9,6 +9,7 @@ local hc is import("lib/hillclimb.ks").
 local orbitfit is import("lib/fitness_orbit.ks").
 local transfit is import("lib/fitness_transfer.ks").
 local rndz is import("lib/rendezvous.ks").
+local dock is import("lib/dock.ks").
 
 print "Mission Params".
 print p.
@@ -94,43 +95,60 @@ function hohmann_transfer_target {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  print p["T"]["Target"]:TYPENAME.
   if p["T"]["Target"]:istype("body") {
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
-  } else {
+  } else if p["T"]["Target"]:istype("vessel") and p["T"]["Offset"] = 0 {
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["rndvz_fit"](p["T"]["Target"]), step).}
+  } else {
+    local t to time:seconds + nn:eta. local data to list(nn:prograde).
+    for step in list(5,1,0.1) {set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), step).}
   }
   node_exec["exec"](true).
   next().
 }
 function rendezvous {
-  until p["T"]["Target"]:distance < 500 {
+  until p["T"]["Target"]:distance < 250 {
     rndz["cancel"](p["T"]["Target"]).
-    rndz["approach"](p["T"]["Target"], 30).
-    rndz["await_nearest"](p["T"]["Target"], 500).
+    if p["T"]["Target"]:distance > 1000
+      rndz["approach"](p["T"]["Target"], 30).
+    else
+      rndz["approach"](p["T"]["Target"], 10).
+    rndz["await_nearest"](p["T"]["Target"], 250).
   }
   rndz["cancel"](p["T"]["Target"]).
   next().
 }
 function dock_with_ship {
-  RCS ON.
-  lock rv TO ship:velocity:orbit - target:velocity:orbit.
-  until rv:mag < 0.01 {
+  rcs on.
+  lock rv to ship:velocity:orbit - p["t"]["target"]:velocity:orbit.
+  print "canceling realative velocity.".
+  until rv:mag < 0.1 {
     dock["translate"](-1 * rv).
   }
-  dock["translate"](V(0,0,0)).
-
-  local tgt TO VESSEL("SkyLab - Core").
+  dock["translate"](v(0,0,0)).
+  print "done".
   local dp to ship:dockingports[0].
-  dp:CONTROLFROM.
-  local tp to get_port(tgt).
-
-  dock["sideswipe"](tp, dp, 100, 1).
-  dock["approach"](tp, dp, 100, 1).
+  dp:controlfrom.
+  print "setting target port".
+  local tp to dock["get_port"](p["t"]["target"], dp:name).
+  print tp.
+  set target to tp.
+  print "approaching at 100m".
+  dock["approach"](tp, dp, 100, 2).
+  print "approaching at 50m".
   dock["approach"](tp, dp, 50, 1).
+  print "approaching at 20m".
   dock["approach"](tp, dp, 20, 1).
+  print "approaching at 10m".
   dock["approach"](tp, dp, 10, 0.5).
-  dock["approach"](tp, dp, 0, 0.5).
-  RCS OFF.
+  print "approaching at 2m".
+  dock["approach"](tp, dp, 2, 0.5).
+  print "approaching at 0.1m".
+  dock["approach"](tp, dp, 0.1, 0.1).
+  rcs off.
+  until list("ready","preattached"):contains(dp:state) { print "waiting for dock, " + dp:state. }
+  print "docked".
   next().
 }
 function finish {

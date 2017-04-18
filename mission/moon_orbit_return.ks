@@ -95,10 +95,14 @@ function hohmann_transfer_target {
   hohmann["transfer"](r1,r2,d_time).
   local nn to nextnode.
   local data to list(time:seconds + nn:eta, nn:radialout, nn:normal, nn:prograde).
+  print p["T"]["Target"]:TYPENAME.
   if p["T"]["Target"]:istype("body") {
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["trans_fit"](p["T"]["Target"], p["T"]["Inc"], p["T"]["Alt"]), step).}
-  } else {
+  } else if p["T"]["Target"]:istype("vessel") and p["T"]["Offset"] = 0 {
     for step in list(10,1,0.1) {set data to hc["seek"](data, transfit["rndvz_fit"](p["T"]["Target"]), step).}
+  } else {
+    local t to time:seconds + nn:eta. local data to list(nn:prograde).
+    for step in list(5,1,0.1) {set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), step).}
   }
   node_exec["exec"](true).
   next().
@@ -151,8 +155,8 @@ function hohmann_transfer {
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
+  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.1).
+  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.01).
   node_exec["exec"](true). next().
 }
 function hohmann_transfer_return {

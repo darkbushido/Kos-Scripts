@@ -33,7 +33,7 @@ kerbal_rescue_high:
   - circularize_ap
   - rendezvous
   - finish
-dock:
+dock_with_target:
   - *ATMOLAUNCH
   - hohmann_transfer_target
   - circularize_ap
@@ -42,7 +42,7 @@ dock:
   - finish
 remote_tech_network:
   - *ATMOLAUNCH
-  - hohmann_transfer
+  - hohmann_transfer_target
   - circularize_ap
   - finish
 remote_tech_moon_uplink:

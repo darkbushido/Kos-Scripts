@@ -4,7 +4,7 @@
     "transfer_fit", transfer_fit@
   ).
   function transfer_fit {
-    parameter t, target_dist.
+    parameter t, target_ap.
     function fitness_fn {
       parameter d. local n is node_exec["make"](list(t,0,0,d[0])). node_exec["clean"](). add n. wait 0.01.
       return -abs(n:orbit:apoapsis - target_ap).}

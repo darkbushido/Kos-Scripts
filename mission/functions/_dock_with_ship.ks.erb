@@ -1,22 +1,32 @@
 function dock_with_ship {
-  RCS ON.
-  lock rv TO ship:velocity:orbit - target:velocity:orbit.
-  until rv:mag < 0.01 {
+  rcs on.
+  lock rv to ship:velocity:orbit - p["t"]["target"]:velocity:orbit.
+  print "canceling realative velocity.".
+  until rv:mag < 0.1 {
     dock["translate"](-1 * rv).
   }
-  dock["translate"](V(0,0,0)).
-
-  local tgt TO VESSEL("SkyLab - Core").
+  dock["translate"](v(0,0,0)).
+  print "done".
   local dp to ship:dockingports[0].
-  dp:CONTROLFROM.
-  local tp to get_port(tgt).
-
-  dock["sideswipe"](tp, dp, 100, 1).
-  dock["approach"](tp, dp, 100, 1).
+  dp:controlfrom.
+  print "setting target port".
+  local tp to dock["get_port"](p["t"]["target"], dp:name).
+  print tp.
+  set target to tp.
+  print "approaching at 100m".
+  dock["approach"](tp, dp, 100, 2).
+  print "approaching at 50m".
   dock["approach"](tp, dp, 50, 1).
+  print "approaching at 20m".
   dock["approach"](tp, dp, 20, 1).
+  print "approaching at 10m".
   dock["approach"](tp, dp, 10, 0.5).
-  dock["approach"](tp, dp, 0, 0.5).
-  RCS OFF.
+  print "approaching at 2m".
+  dock["approach"](tp, dp, 2, 0.5).
+  print "approaching at 0.1m".
+  dock["approach"](tp, dp, 0.1, 0.1).
+  rcs off.
+  until list("ready","preattached"):contains(dp:state) { print "waiting for dock, " + dp:state. }
+  print "docked".
   next().
 }

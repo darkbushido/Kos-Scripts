@@ -61,8 +61,8 @@ function hohmann_transfer {
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
   local t to time:seconds + nn:eta. local data is list(nn:prograde).
   print "Hillclimbing".
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.1).
-  set data to hc["seek"](data, orbitfit["apo_fit"](t, p["O"]["Alt"]), 0.01).
+  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.1).
+  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.01).
   node_exec["exec"](true). next().
 }
 function finish {
