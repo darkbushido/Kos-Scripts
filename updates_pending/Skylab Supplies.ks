@@ -4,10 +4,12 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/kerbal_rescue_high.ks", "1:/startup.ks").
+COPYPATH("0:/boot/basic.ks", "1:/boot/basic.ks").
+COPYPATH("0:/mission/dock_with_target.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.26,
-  "LaunchMaxQ", 30,
+  "LaunchAlt", 120000,
+  "LaunchPitchExp", 0.20,
+  "LaunchMaxQ", 25,
   "TransTarget", vessel("SkyLab - Core")
 ).
 writejson(params, "params.json").

@@ -4,9 +4,11 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/dock.ks", "1:/startup.ks").
+COPYPATH("0:/mission/dock_with_target.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.3,
+  "LaunchAlt", 120000,
+  "LaunchPitchExp", 0.20,
+  "LaunchMaxQ", 25,
   "TransTarget", vessel("SkyLab - Core")
 ).
 writejson(params, "params.json").
