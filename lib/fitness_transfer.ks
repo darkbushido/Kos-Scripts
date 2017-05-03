@@ -9,7 +9,7 @@
     parameter trgt.
     function fitness_fn {
       parameter data.
-      local n is node_exec["make"](data). node_exec["clean"](). add n. wait 0. local n is nextnode.
+      node_exec["clean"](). local n is node_exec["make"](data).
       local m_ap_time is time:seconds + nextnode:eta + (nextnode:orbit:period / 2).
       local trgt_pos is positionat(trgt, m_ap_time).local ship_pos is positionat(ship, m_ap_time).
       local dist to mg["gaussian"]((trgt_pos - ship_pos):mag, 500, abs(trgt:orbit:semimajoraxis - ship:orbit:semimajoraxis) / 2).
@@ -34,7 +34,7 @@
     parameter ct, tb, ti, tp.
     function fitness_fn {
       parameter data.
-      local n is node_exec["make"](list(ct,data[0],data[1],data[2])).
+      node_exec["clean"](). local n is node_exec["make"](list(ct,data[0],data[1],data[2])).
       if not t_to(n, tb) return 0.
       return mg["gaussian2"](
         n:orbit:nextpatch:inclination, ti, 180,
@@ -53,6 +53,6 @@
     }
     return fitness_fn@.
   }
-  function t_to {parameter m, tb. return (m:orbit:hasnextpatch and m:orbit:nextpatch:body = tb).}
+  function t_to {parameter n, tb. return (n:orbit:hasnextpatch and n:orbit:nextpatch:body = tb).}
   export(fitness).
 }

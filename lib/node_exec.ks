@@ -42,6 +42,6 @@
     } else { return 0.}
   }
   function clean {until not hasnode {remove nextnode. wait 0.01.}}
-  function make_node { parameter d. return node(d[0], d[1], d[2], d[3]). }
+  function make_node { parameter d. clean(). local n to node(d[0], d[1], d[2], d[3]). add n. wait 0. return n.}
   export(node_exec).
 }

@@ -21,8 +21,7 @@
     local sod is SHIP:ORBIT:VELOCITY:ORBIT:DIRECTION:YAW.
     local lpd is (bod - 180 + la).
     local node_eta is mod((360+ sod - lpd),360)/360 * SHIP:OBT:PERIOD.
-    local n to NODE(time:seconds + node_eta, 0, 0, dv).
-    ADD n. wait 0.1.
+    local n to node_exec["make"](time:seconds + node_eta, 0, 0, dv).
   }
   export(hohmann_return).
 }
