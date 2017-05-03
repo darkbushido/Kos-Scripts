@@ -33,7 +33,6 @@ function launch {
     warpto(lan_t).
     wait until time:seconds >= lan_t.
   }
-  stage.
   SET TPID TO PIDLOOP(0.01, 0.006, 0.006, 0, 1).
   SET TPID:SETPOINT TO p["L"]["Alt"].
   if ship:body:atm:exists and notfalse(p["L"]["MAXQ"]) {
@@ -48,6 +47,7 @@ function launch {
     lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
   }
   lock throttle to thrott.
+  stage.
   wait until ship:velocity:surface:mag > 100.
   lock pct_alt to (alt:radar / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
