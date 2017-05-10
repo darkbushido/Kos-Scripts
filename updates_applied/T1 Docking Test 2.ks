@@ -4,10 +4,11 @@ for file in fileList {
     DELETEPATH(file).
   }
 }
-COPYPATH("0:/mission/kerbin_land_on_target.ks", "1:/startup.ks").
+COPYPATH("0:/mission/dock_with_target.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.45,
-  "RadarOffset", 4.14,
-  "LandLatLng", latlng(-0.0972127658787422, -74.5576065845002)
+  "OrbitAlt", 200000,
+  "LaunchPitchExp", 0.26,
+  "LaunchMaxQ", 30,
+  "TransTarget", vessel("T1 Docking Test")
 ).
 writejson(params, "params.json").
