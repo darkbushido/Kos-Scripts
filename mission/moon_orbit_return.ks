@@ -149,16 +149,6 @@ function set_orbit_inc_lan {
     node_exec["exec"](true).
   }
 }
-function hohmann_transfer {
-  local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["Alt"] + SHIP:OBT:BODY:RADIUS.
-  local d_time to eta:periapsis.
-  hohmann["transfer"](r1,r2,d_time). local nn to nextnode.
-  local t to time:seconds + nn:eta. local data is list(nn:prograde).
-  print "Hillclimbing".
-  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.1).
-  set data to hc["seek"](data, orbitfit["transfer_fit"](t, p["O"]["Alt"]), 0.01).
-  node_exec["exec"](true). next().
-}
 function hohmann_transfer_return {
   hohmann_return["return"]().
   local nn to nextnode.
@@ -218,8 +208,6 @@ function finish {
   seq:add(collect_science@).
   seq:add(circularize_pe@).
   seq:add(set_orbit_inc_lan@).
-  seq:add(hohmann_transfer@).
-  seq:add(circularize_ap@).
   seq:add(collect_science@).
   seq:add(hohmann_transfer_return@).
   seq:add(return_correction@).

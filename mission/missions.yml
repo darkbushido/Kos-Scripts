@@ -105,8 +105,6 @@ moon_orbit: &MOONORBIT
   - collect_science
   - circularize_pe
   - set_orbit_inc_lan
-  - hohmann_transfer
-  - circularize_ap
 moon_orbit_return:
   - *MOONORBIT
   - collect_science
