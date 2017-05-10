@@ -83,8 +83,7 @@ function adjust_pe {
   local r1 to SHIP:OBT:SEMIMAJORAXIS. local r2 TO p["O"]["PE"] + SHIP:OBT:BODY:RADIUS.
   local d_time to time:seconds + eta:apoapsis.
   hohmann["transfer"](r1,r2,d_time). local nn to nextnode. local data is list(nn:prograde).
-  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 1).
-  set data to hc["seek"](data, orbitfit["per_fit"](d_time, p["O"]["PE"]), 0.1).
+  for step in list(1,0.1) {set data to hc["seek"](data, orbitfit["transfer_fit"](d_time, p["O"]["PE"], false), step).}
   node_exec["exec"](true).
   next().
 }
