@@ -4,12 +4,15 @@
     "transfer_fit", transfer_fit@
   ).
   function transfer_fit {
-    parameter t, target_ap.
+    parameter t, target_alt, a is true.
     function fitness_fn {
-      parameter d. local n is node_exec["make"](list(t,0,0,d[0])). node_exec["clean"](). add n. wait 0.01.
-      return -abs(n:orbit:apoapsis - target_ap).}
+      parameter d. local n is node_exec["make"](list(t,0,0,d[0])).
+      if a
+        return -abs(n:orbit:apoapsis - target_alt).
+      else
+        return -abs(n:orbit:periapsis - target_alt).
+    }
     return fitness_fn@.
   }
-  function make_node { parameter d. return node(d[0], d[1], d[2], d[3]). }
   export(fitness).
 }
