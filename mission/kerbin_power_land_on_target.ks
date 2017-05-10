@@ -7,6 +7,7 @@ local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
 local science is import("lib/science.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
+local landfit is import("lib/fitness_land.ks").
 
 print "Mission Params".
 print p.

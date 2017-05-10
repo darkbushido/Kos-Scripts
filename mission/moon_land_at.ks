@@ -10,6 +10,7 @@ local orbitfit is import("lib/fitness_orbit.ks").
 local transfit is import("lib/fitness_transfer.ks").
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
+local landfit is import("lib/fitness_land.ks").
 
 print "Mission Params".
 print p.

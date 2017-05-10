@@ -31,6 +31,7 @@ local science is import("lib/science.ks").
 <% if (@steps & ['deorbit_node', 'land_on_target']).any? -%>
 local cn is import("lib/circle_nav.ks").
 local land is import("lib/land.ks").
+local landfit is import("lib/fitness_land.ks").
 <% end -%>
 <% if (@steps & ['suicide_burn']).any? -%>
 local suicide is import("lib/suicide_burn.ks").

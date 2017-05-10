@@ -3,7 +3,7 @@
   local node_exec is import("lib/node_exec.ks").
   local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
   local hc is import("lib/hillclimb.ks").
-  local fit is import("lib/fitness_land.ks").
+  local landfit is import("lib/fitness_land.ks").
   local landing to lex(
     "FlyOverTarget", fly_over_target@,
     "DeorbitNode", deorbit@,
@@ -27,13 +27,14 @@
     local dv to -SHIP:VELOCITY:SURFACE:MAG/2.
     if BODY:ATM:EXISTS { set dv to dv/10. }
     if node_eta < OBT:PERIOD/8 { set node_eta to node_eta + OBT:PERIOD.}
-    ADD NODE(time:seconds + node_eta,0,0,dv).
+    local data to list(time:seconds + node_eta,0,0,dv).
+    for step in list(10,1,0.1) {set data to hc["seek"](data, landfit["deorbit_fit"](p["LND"]["LatLng"]), step).}
   }
   function deorbit {
     addons:tr:settarget(landing_pos()).
     set Fuel_Factor to 1.25.
     // set landing_per_buffer to (50290*(TWR*Fuel_Factor)^(-2.232) + 222.1)*(0.99)^(landing_pos():terrainheight/2000).
-    set landing_per_buffer to 3000.
+    set landing_per_buffer to 4000.
     set R_per_landing to ship:body:radius + max(4500,landing_pos():terrainheight + landing_per_buffer).
     set SMA_landing to (R_ship():mag + R_per_landing)/2.
     set ecc_landing to (R_ship():mag - R_per_landing)/(R_ship():mag + R_per_landing).
@@ -52,9 +53,7 @@
       set eta_node to (TimePeriod_landing/2*position_speed_h())/speed_diff_h() + ((constant:pi)*R_ship():mag+dist_diff_h())/speed_diff_h().
     }
     set deltaV_landing to V_apo - velocityat(ship,time:seconds + eta_node):orbit:mag.
-    set deorbit_node to NODE(TIME:seconds + eta_node,  0, 0, deltaV_landing).
-    node_exec["clean"](). wait 0.
-    ADD deorbit_node.
+    node_exec["make"](TIME:seconds + eta_node,  0, 0, deltaV_landing).
     node_exec["exec"](true).
   }
   function on_target {
