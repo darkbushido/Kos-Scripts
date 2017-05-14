@@ -42,8 +42,10 @@
   ).
   if trans_target:istype("Body")
     set transfer_params["Alt"] to has_key("TransAlt", trans_target:ATM:HEIGHT + 15000).
+
+  local lnd_lat_lng to has_key("LandLatLng", latlng(-0.097,-74.557)).
   local lnd to lex(
-    "LatLng", has_key("LandLatLng", latlng(-0.097,-74.557)),
+    "LatLng", latlng(lnd_lat_lng:lat, lnd_lat_lng:lng),
     "HSMOD", has_key("LandHSMOD", 1),
     "RadarOffset", has_key("RadarOffset", 2.2),
     "EngineSpool", has_key("EngineSpool", 0),
