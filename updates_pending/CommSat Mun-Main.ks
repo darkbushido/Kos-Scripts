@@ -8,7 +8,8 @@ COPYPATH("0:/mission/remote_tech_moon_uplink.ks", "1:/startup.ks").
 set params to lex(
   "LaunchPitchExp", 0.26,
   "LaunchMaxQ", 35,
-  "TransTarget", Mun,
+  "TransTarget", "Mun",
+  "TransType", "Body",
   "TransInc", 90,
   "OrbitInc", 90,
   "OrbitLAN", false,

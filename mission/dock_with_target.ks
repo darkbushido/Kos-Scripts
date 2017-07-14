@@ -50,8 +50,8 @@ function launch {
   }
   lock throttle to thrott.
   stage.
-  wait until ship:velocity:surface:mag > 100.
-  lock pct_alt to (alt:radar / p["L"]["Alt"]).
+  wait until alt:radar > p["L"]["OffSet"].
+  lock pct_alt to (alt:APOAPSIS / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
   if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -108,6 +108,8 @@ function hohmann_transfer_target {
   next().
 }
 function rendezvous {
+  print p["T"]["Target"]:distance.
+  local fail to 100/0.
   until p["T"]["Target"]:distance < 250 {
     rndz["cancel"](p["T"]["Target"]).
     if p["T"]["Target"]:distance > 1000

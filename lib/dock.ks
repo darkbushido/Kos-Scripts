@@ -5,14 +5,10 @@
     "approach", approach@
   ).
   function init_pids {
-    parameter s is 1.
+    parameter s is 5.
     set pid_fore to pidloop(5,0.5,5,-s,s).
     set pid_top  to pidloop(5,0.5,5,-s,s).
     set pid_star to pidloop(5,0.5,5,-s,s).
-
-    set pid_speed_fore to pidloop(1,5,0,-1,1).
-    set pid_speed_top  to pidloop(1,5,0,-1,1).
-    set pid_speed_star to pidloop(1,5,0,-1,1).
   }
   function translate {
     parameter vector.
@@ -56,12 +52,9 @@
       set vd_top to vecdraw(dp:position,dp:facing:topvector*10,blue,"top",1.0,true,0.2).
       set vd_star to vecdraw(dp:position,dp:facing:starvector*10,green,"star",1.0,true,0.2).
 
-      set pid_speed_fore:setpoint to pid_fore:update(time:seconds,fore_error).
-      set pid_speed_top:setpoint  to pid_top:update(time:seconds,top_error).
-      set pid_speed_star:setpoint to pid_star:update(time:seconds,star_error).
-      set ship:control:fore       to pid_speed_fore:update(time:seconds, rel_v * ship:facing:forevector).
-      set ship:control:top        to pid_speed_top:update(time:seconds, rel_v * ship:facing:topvector).
-      set ship:control:starboard  to pid_speed_star:update(time:seconds, rel_v * ship:facing:starvector).
+      set ship:control:fore       to pid_fore:update(time:seconds,fore_error).
+      set ship:control:top        to pid_top:update(time:seconds,top_error).
+      set ship:control:starboard  to pid_star:update(time:seconds,star_error).
 
        print "sf: " + rp(pid_speed_fore:setpoint) + " st: " + rp(pid_speed_top:setpoint) + " ss: " + rp(pid_speed_star:setpoint) +
        " cf: " + rp(ship:control:fore) + " ct: " + rp(ship:control:top) + " cs: "+ rp(ship:control:starboard).

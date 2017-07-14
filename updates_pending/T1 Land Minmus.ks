@@ -11,6 +11,7 @@ set params to lex(
   "TransInc", 0,
   "TransAlt", 50000,
   "OrbitAlt", 50000,
-  "LandLatLng", latlng(0,94)
+  "LandLat", 0,
+  "LandLng", 84
 ).
 writejson(params, "params.json").

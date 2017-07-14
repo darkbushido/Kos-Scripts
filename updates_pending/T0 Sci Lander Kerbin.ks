@@ -8,6 +8,7 @@ COPYPATH("0:/mission/kerbin_land_on_target.ks", "1:/startup.ks").
 set params to lex(
   "LaunchPitchExp", 0.45,
   "RadarOffset", 4.14,
-  "LandLatLng", latlng(-0.0972127658787422, -74.5576065845002)
+  "LandLat", -0.0972127658787422,
+  "LandLng", -74.5576065845002
 ).
 writejson(params, "params.json").

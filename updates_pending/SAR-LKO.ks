@@ -8,6 +8,7 @@ COPYPATH("0:/mission/kerbal_rescue_low.ks", "1:/startup.ks").
 set params to lex(
   "LaunchPitchExp", 0.3,
   "OrbitAlt", 125000,
-  "TransTarget", vessel("Kerrim's Wreckage")
+  "TransTarget", "Kerrim's Wreckage",
+  "TransType", "Vessel"
 ).
 writejson(params, "params.json").

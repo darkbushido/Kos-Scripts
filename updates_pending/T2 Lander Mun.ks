@@ -6,10 +6,11 @@ for file in fileList {
 }
 COPYPATH("0:/mission/moon_land_at_return.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.2375,
+  "LaunchPitchExp", 0.25,
+  "LaunchMaxQ", 25,
   "TransTarget", Mun,
-  "TransAlt", 100000,
+  "TransAlt", 150000,
   "LandLatLng", waypoint("Impact Target"):GEOPOSITION,
-  "RadarOffset", 7.83
+  "RadarOffset", 80
 ).
 writejson(params, "params.json").

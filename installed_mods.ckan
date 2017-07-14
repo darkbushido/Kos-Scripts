@@ -3,7 +3,7 @@
 	"abstract": "A list of modules installed on the default KSP instance",
 	"name": "installed-default",
 	"license": "unknown",
-	"version": "2017.04.02.05.30.10",
+	"version": "2017.07.01.07.16.31",
 	"identifier": "installed-default",
 	"spec_version": "v1.6",
 	"recommends": [
@@ -11,7 +11,7 @@
 			"name": "AsteroidDay"
 		},
 		{
-			"name": "SelectableDataTransmitter"
+			"name": "DockingPortAlignmentIndicator"
 		},
 		{
 			"name": "BetterCrewAssignment"
@@ -29,7 +29,7 @@
 			"name": "ConfigurableContainers-Core"
 		},
 		{
-			"name": "ProgressParser"
+			"name": "KEI"
 		},
 		{
 			"name": "ContractParser"
@@ -77,13 +77,13 @@
 			"name": "SCANsat"
 		},
 		{
-			"name": "AT-Utils"
+			"name": "ThrottleControlledAvionics"
 		},
 		{
 			"name": "OctosatContinued"
 		},
 		{
-			"name": "ContractConfigurator-KerbinSpaceStation"
+			"name": "RasterPropMonitor-Core"
 		},
 		{
 			"name": "TransferWindowPlanner"
@@ -92,7 +92,7 @@
 			"name": "QuizTechAeroPackContinued"
 		},
 		{
-			"name": "ThrottleControlledAvionics"
+			"name": "AT-Utils"
 		},
 		{
 			"name": "Kopernicus"
@@ -185,7 +185,7 @@
 			"name": "USI-Core"
 		},
 		{
-			"name": "KEI"
+			"name": "ProgressParser"
 		},
 		{
 			"name": "MechJebForAll"
@@ -198,9 +198,6 @@
 		},
 		{
 			"name": "Mk2Expansion"
-		},
-		{
-			"name": "MiniAVC"
 		},
 		{
 			"name": "TextureReplacer"
@@ -236,7 +233,7 @@
 			"name": "ScienceRelay"
 		},
 		{
-			"name": "InterstellarFuelSwitch-Core"
+			"name": "RasterPropMonitor"
 		},
 		{
 			"name": "KerbalAlarmClock"
@@ -245,10 +242,10 @@
 			"name": "PersistentDynamicPodNames"
 		},
 		{
-			"name": "CoherentContracts"
+			"name": "UniversalStorage"
 		},
 		{
-			"name": "RasterPropMonitor-Core"
+			"name": "ContractConfigurator-KerbinSpaceStation"
 		},
 		{
 			"name": "TacFuelBalancer"
@@ -260,7 +257,7 @@
 			"name": "Toolbar"
 		},
 		{
-			"name": "UniversalStorage"
+			"name": "CoherentContracts"
 		},
 		{
 			"name": "Trajectories"
@@ -282,9 +279,6 @@
 		},
 		{
 			"name": "ModularRocketSystem"
-		},
-		{
-			"name": "RealPlume"
 		},
 		{
 			"name": "SpaceXLegs"
@@ -311,9 +305,6 @@
 			"name": "MalemuteRover"
 		},
 		{
-			"name": "JanitorsCloset"
-		},
-		{
 			"name": "KHWearableKISProps"
 		},
 		{
@@ -329,15 +320,6 @@
 			"name": "PlanetShine-Config-Default"
 		},
 		{
-			"name": "EnvironmentalVisualEnhancements"
-		},
-		{
-			"name": "EnvironmentalVisualEnhancements-HR"
-		},
-		{
-			"name": "DistantObject"
-		},
-		{
 			"name": "DistantObject-default"
 		},
 		{
@@ -347,10 +329,10 @@
 			"name": "Konstruction"
 		},
 		{
-			"name": "DockingPortAlignmentIndicator"
+			"name": "SelectableDataTransmitter"
 		},
 		{
-			"name": "RasterPropMonitor"
+			"name": "InterstellarFuelSwitch-Core"
 		},
 		{
 			"name": "USI-ART"
@@ -366,6 +348,30 @@
 		},
 		{
 			"name": "PoodsCalmNebulaSkybox"
+		},
+		{
+			"name": "RealPlume"
+		},
+		{
+			"name": "DistantObject"
+		},
+		{
+			"name": "AblativeAirbrake"
+		},
+		{
+			"name": "AnimatedDecouplers"
+		},
+		{
+			"name": "NavHud"
+		},
+		{
+			"name": "Mk3Expansion"
+		},
+		{
+			"name": "SVT-HighResolution"
+		},
+		{
+			"name": "HyperEdit"
 		}
 	]
 }

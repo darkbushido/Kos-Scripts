@@ -6,7 +6,8 @@ for file in fileList {
 }
 COPYPATH("0:/mission/moon_orbit.ks", "1:/startup.ks").
 set params to lex(
-  "TransTarget", Minmus,
+  "TransTarget", "Minmus",
+  "TransType", "Body",
   "TransInc", 90,
   "TransAlt", 50000,
   "OrbitInc", 90,

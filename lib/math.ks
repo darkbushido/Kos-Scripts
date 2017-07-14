@@ -31,10 +31,10 @@
   	return deg.
   }
   function geo_pos_at {
-    parameter geo, etaGeo.
+    parameter etaGeo, geo.
     local lonShift is etaGeo * 360 / ship:body:rotationperiod.
     local geoThen is latlng(geo:lat, geo:lng - lonShift).
-    return geoThen:position.
+    return geoThen.
   }
   export(math).
 }

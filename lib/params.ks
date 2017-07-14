@@ -4,10 +4,11 @@
   function has_key { parameter k, d. if jp:haskey(k) set v to jp[k]. else set v to d. return v. }
 
   local trans_target to has_key("TransTarget", false).
-  if trans_target:istype("Body")
-    set trans_target to BODY(trans_target:name).
-  else if trans_target:istype("Vessel")
-    set trans_target to VESSEL(trans_target:name).
+  local trans_type to has_key("TransType",false).
+  if trans_type = "Body"
+    set trans_target to BODY(trans_target).
+  else if trans_type = "Vessel"
+    set trans_target to VESSEL(trans_target).
   local inc to 0.
   local lan to false.
 
@@ -18,6 +19,7 @@
   }
   local lp to lex(
     "PitchExp", has_key("LaunchPitchExp", 0.35),
+    "OffSet", has_key("LaunchOffset", 3000),
     "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
     "Inc", has_key("LaunchInc", inc),
     "LAN", has_key("LaunchLAN", lan),
@@ -43,9 +45,11 @@
   if trans_target:istype("Body")
     set transfer_params["Alt"] to has_key("TransAlt", trans_target:ATM:HEIGHT + 15000).
 
-  local lnd_lat_lng to has_key("LandLatLng", latlng(-0.097,-74.557)).
+  local lnd_lat to has_key("LandLat", -0.097).
+  local lnd_lng to has_key("LandLng", -74.557).
+
   local lnd to lex(
-    "LatLng", latlng(lnd_lat_lng:lat, lnd_lat_lng:lng),
+    "LatLng", latlng(lnd_lat, lnd_lng),
     "HSMOD", has_key("LandHSMOD", 1),
     "RadarOffset", has_key("RadarOffset", 2.2),
     "EngineSpool", has_key("EngineSpool", 0),

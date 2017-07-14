@@ -7,8 +7,8 @@ for file in fileList {
 COPYPATH("0:/mission/dock_with_target.ks", "1:/startup.ks").
 set params to lex(
   "OrbitAlt", 200000,
-  "LaunchPitchExp", 0.26,
-  "LaunchMaxQ", 30,
-  "TransTarget", vessel("T1 Docking Test")
+  "LaunchPitchExp", 0.25,
+  "LaunchMaxQ", 40,
+  "TransTarget", vessel("T1 Docking Test 3")
 ).
 writejson(params, "params.json").

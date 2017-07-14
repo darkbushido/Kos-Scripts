@@ -133,12 +133,7 @@ moon_land_at: &MOONLANDAT
   - deorbit_node
   - cancel_surface_speed
   - hoverslam
-moon_land_at_return:
-  - *MOONLANDAT
-  - sleep
-  - collect_science
-  - transfer_science
-  - pre_launch_moon
+moon_return: &MOONRETURN
   - launch_moon
   - coast_to_alt
   - circularize_ap
@@ -146,3 +141,10 @@ moon_land_at_return:
   - hohmann_transfer_return
   - return_correction
   - *RETURNTOKERBIN
+moon_land_at_return:
+  - *MOONLANDAT
+  - sleep
+  - collect_science
+  - transfer_science
+  - pre_launch_moon
+  - *MOONRETURN
