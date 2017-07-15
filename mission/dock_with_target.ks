@@ -16,7 +16,7 @@ print p.
 list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {
-  parameter seq, ev, next.
+  parameter seq, seqn, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
   SET thrott to 0.
@@ -50,8 +50,8 @@ function launch {
   }
   lock throttle to thrott.
   stage.
-  wait until alt:radar > p["L"]["OffSet"].
-  lock pct_alt to (alt:APOAPSIS / p["L"]["Alt"]).
+  wait until alt:radar > 10000.
+  lock pct_alt to ((alt:radar - 10000) / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
   if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -108,8 +108,6 @@ function hohmann_transfer_target {
   next().
 }
 function rendezvous {
-  print p["T"]["Target"]:distance.
-  local fail to 100/0.
   until p["T"]["Target"]:distance < 250 {
     rndz["cancel"](p["T"]["Target"]).
     if p["T"]["Target"]:distance > 1000
@@ -161,15 +159,15 @@ function finish {
   } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
   reboot.
 }
-  seq:add(pre_launch@).
-  seq:add(launch@).
-  seq:add(coast_to_atm@).
-  seq:add(circularize_ap@).
-  seq:add(set_launch_inc_lan@).
-  seq:add(hohmann_transfer_target@).
-  seq:add(circularize_ap@).
-  seq:add(rendezvous@).
-  seq:add(dock_with_ship@).
-  seq:add(finish@).
+  seq:add(pre_launch@). seqn:add("pre_launch").
+  seq:add(launch@). seqn:add("launch").
+  seq:add(coast_to_atm@). seqn:add("coast_to_atm").
+  seq:add(circularize_ap@). seqn:add("circularize_ap").
+  seq:add(set_launch_inc_lan@). seqn:add("set_launch_inc_lan").
+  seq:add(hohmann_transfer_target@). seqn:add("hohmann_transfer_target").
+  seq:add(circularize_ap@). seqn:add("circularize_ap").
+  seq:add(rendezvous@). seqn:add("rendezvous").
+  seq:add(dock_with_ship@). seqn:add("dock_with_ship").
+  seq:add(finish@). seqn:add("finish").
 }
 export(mission_base).

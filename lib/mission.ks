@@ -5,6 +5,7 @@
     local r is 0.
     if exists(f) set r to import("runmode.ks").
     local s is list().
+    local sn is list().
     local e is lex().
     local n is{
       parameter m is r+1.
@@ -13,9 +14,9 @@
       h:clear().
       h:write("export("+m+").").
       set r to m.
-      print "Runmode: " +r.
+      print "Runmode: " + r + " - " + sn[r].
     }.
-    d(s,e,n).
+    d(s,sn,e,n).
     return{
       until r>=s:length{s[r]().
         for k in e:keys e[k]().

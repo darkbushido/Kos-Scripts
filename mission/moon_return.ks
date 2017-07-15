@@ -11,7 +11,7 @@ print p.
 list files.
 local mission_base is mission(mission_definition@).
 function mission_definition {
-  parameter seq, ev, next.
+  parameter seq, seqn, ev, next.
   SET pT TO AVAILABLETHRUST.
   ev:add("Power", ship_utils["power"]).
   SET thrott to 0.
@@ -98,14 +98,14 @@ function finish {
   } else if notfalse(p["SwitchToShp"]) { set KUniverse:ACTIVEVESSEL to p["SwitchToShp"].}
   reboot.
 }
-  seq:add(launch_moon@).
-  seq:add(coast_to_alt@).
-  seq:add(circularize_ap@).
-  seq:add(set_orbit_inc_lan@).
-  seq:add(hohmann_transfer_return@).
-  seq:add(return_correction@).
-  seq:add(wait_for_soi_change_kerbin@).
-  seq:add(atmo_reentry@).
-  seq:add(finish@).
+  seq:add(launch_moon@). seqn:add("launch_moon").
+  seq:add(coast_to_alt@). seqn:add("coast_to_alt").
+  seq:add(circularize_ap@). seqn:add("circularize_ap").
+  seq:add(set_orbit_inc_lan@). seqn:add("set_orbit_inc_lan").
+  seq:add(hohmann_transfer_return@). seqn:add("hohmann_transfer_return").
+  seq:add(return_correction@). seqn:add("return_correction").
+  seq:add(wait_for_soi_change_kerbin@). seqn:add("wait_for_soi_change_kerbin").
+  seq:add(atmo_reentry@). seqn:add("atmo_reentry").
+  seq:add(finish@). seqn:add("finish").
 }
 export(mission_base).
