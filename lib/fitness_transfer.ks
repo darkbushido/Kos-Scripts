@@ -9,7 +9,7 @@
     parameter trgt.
     function fitness_fn {
       parameter data.
-      node_exec["clean"](). local n is node_exec["make"](data).
+      node_exec["clean"](). node_exec["make"](data).
       local m_ap_time is time:seconds + nextnode:eta + (nextnode:orbit:period / 2).
       local trgt_pos is positionat(trgt, m_ap_time).local ship_pos is positionat(ship, m_ap_time).
       local dist to mg["gaussian"]((trgt_pos - ship_pos):mag, 500, abs(trgt:orbit:semimajoraxis - ship:orbit:semimajoraxis) / 2).

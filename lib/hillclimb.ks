@@ -1,23 +1,26 @@
 {
   local hillclimb is lex("seek", seek@).
-  local fitness_lookup is lex().
+  local fit_csh is lex().
   function seek {
     parameter d, f_fn, ss is 1.
     local nd is best_n(d, f_fn, ss).
-    until f_fn(nd) <= f_fn(d) { set d to nd. set nd to best_n(d, f_fn, ss). }
+    until f_fn(nd) <= f_fn(d) {
+      print "running a cycle.".
+      set d to nd. set nd to best_n(d, f_fn, ss). wait 0.
+    }
     return d.
   }
   function best_n {
     parameter d, f_fn, ss.
-    local best_fitness is -2^64.
-    local best is 0. local ch to false.
+    local best_fit is -2^64.
+    local best is 0.
     for n in ns(d, ss) {
-      set ch to false.
+      local ch to false.
       local n_key to hash_key(n).
-      if fitness_lookup:haskey(n_key) { set fitness to fitness_lookup[n_key]. set ch to true. }
-      else { set fitness to f_fn(n). fitness_lookup:add(n_key, fitness).}
-      print_log(n, fitness, ch).
-      if fitness > best_fitness { set best to n. set best_fitness to fitness.}
+      if fit_csh:haskey(n_key) { set fit to fit_csh[n_key]. set ch to true. }
+      else { set fit to f_fn(n). fit_csh:add(n_key, fit).}
+      print_log(n, fit, ch).
+      if fit > best_fit { set best to n. set best_fit to fit.}
     }
     return best.
   }

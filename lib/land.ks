@@ -1,5 +1,6 @@
 {
   local p is import("lib/params.ks").
+  local cn is import("lib/circle_nav.ks").
   local node_exec is import("lib/node_exec.ks").
   local node_set_inc_lan is import("lib/node_set_inc_lan.ks").
   local hc is import("lib/hillclimb.ks").
@@ -19,19 +20,13 @@
     node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90+rot_angle).
     if nextnode:deltav:mag > 1 { node_exec["exec"](true). }
     else { remove nextnode.}
-    // print "Creating deorbit node".
-    // local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
-    // local ship_2_node to mod((720 + node_lng+rot_angle - ship_ref),360).
-    // local node_eta to ship_2_node*OBT:PERIOD/360.
-    // local dv to -SHIP:VELOCITY:SURFACE:MAG/2.
-    // if BODY:ATM:EXISTS { set dv to dv/10. }
-    // if node_eta < OBT:PERIOD/8 { set node_eta to node_eta + OBT:PERIOD.}
   }
   function deorbit {
     addons:tr:settarget(p["LND"]["LatLng"]).
-    set Fuel_Factor to 1.25.
-    // set landing_per_buffer to (50290*(TWR*Fuel_Factor)^(-2.232) + 222.1)*(0.99)^(landing_pos():terrainheight/2000).
-    set landing_per_buffer to 4000.
+    if ship:body:atm:exists
+      set landing_per_buffer to 55000.
+    else
+      set landing_per_buffer to 2000.
     set R_per_landing to ship:body:radius + max(4500,p["LND"]["LatLng"]:terrainheight + landing_per_buffer).
     set SMA_landing to (R_ship():mag + R_per_landing)/2.
     set ecc_landing to (R_ship():mag - R_per_landing)/(R_ship():mag + R_per_landing).
@@ -49,10 +44,29 @@
     } else {
       set eta_node to (TimePeriod_landing/2*position_speed_h())/speed_diff_h() + ((constant:pi)*R_ship():mag+dist_diff_h())/speed_diff_h().
     }
-    set deltaV_landing to V_apo - velocityat(ship,time:seconds + eta_node):orbit:mag.
-    node_exec["make"](list(TIME:seconds + eta_node,  0, 0, deltaV_landing)).
-    // local data to list(TIME:seconds + eta_node,  0, 0, deltaV_landing).
-    // for step in list(10,1,0.1) {set data to hc["seek"](data, landfit["deorbit_fit"](p["LND"]["LatLng"]), step).}
+    set deltaV to V_apo - velocityat(ship,time:seconds + eta_node):orbit:mag.
+    local data to list(round(TIME:seconds + eta_node,2), 0, 0, deltaV).
+    if ship:body:atm:exists {
+      node_exec["make"](data).
+      local wait_t to TIME:seconds + 5.
+      wait until TIME:seconds > wait_t OR addons:tr:hasImpact.
+      local dist to round(cn["distance"](addons:tr:impactpos, p["LND"]["LatLng"], ship:body:radius),2).
+      local circ to ship:body:radius * constant():PI *2.
+      local diff to dist/circ.
+      local offset to ship:obt:period * diff * 1.1.
+      set data[0] to data[0] + offset * 1.05.
+      node_exec["clean"](). node_exec["make"](data).
+      local wait_t to TIME:seconds + 5.
+      wait until TIME:seconds > wait_t OR addons:tr:hasImpact.
+      local dist2 to round(cn["distance"](addons:tr:impactpos, p["LND"]["LatLng"], ship:body:radius),2).
+      if dist2 > dist {
+        print "Overshoot, Trying the other way".
+        set data[0] to data[0] - offset * 2.
+        node_exec["clean"](). node_exec["make"](data).
+      }
+    } else {
+      for step in list(10,1,0.1) {set data to hc["seek"](data, landfit["deorbit_fit"](p["LND"]["LatLng"]), step).}
+    }
     node_exec["exec"](true).
   }
   function g0 { return ship:body:mu/(ship:body:radius)^2. }
