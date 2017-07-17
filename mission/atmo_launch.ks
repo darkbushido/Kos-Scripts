@@ -39,9 +39,7 @@ function launch {
       TPID:UPDATE(TIME:SECONDS, APOAPSIS),
       QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
     ).
-  } else {
-    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
-  }
+  } else { lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS). }
   lock throttle to thrott.
   stage.
   wait until alt:radar > 10000.

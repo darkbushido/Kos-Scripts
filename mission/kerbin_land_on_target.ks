@@ -42,9 +42,7 @@ function launch {
       TPID:UPDATE(TIME:SECONDS, APOAPSIS),
       QPID:UPDATE(TIME:SECONDS, SHIP:Q * constant:ATMtokPa)
     ).
-  } else {
-    lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS).
-  }
+  } else { lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS). }
   lock throttle to thrott.
   stage.
   wait until alt:radar > 10000.
@@ -87,13 +85,6 @@ function deorbit_node {
   land["DeorbitNode"]().
   next().
 }
-function wait_for_soi_change_kerbin {
-  wait 5.
-  lock steering to lookdirup(v(0,1,0), sun:position).
-  if ship:body = Kerbin {
-    wait 30.
-    next().
-}}
 function atmo_reentry {
   lock steering to lookdirup(v(0,1,0), sun:position).
   if Altitude < SHIP:BODY:ATM:HEIGHT + 10000 {
@@ -123,7 +114,6 @@ function finish {
   seq:add(set_launch_inc_lan@). seqn:add("set_launch_inc_lan").
   seq:add(fly_over_target@). seqn:add("fly_over_target").
   seq:add(deorbit_node@). seqn:add("deorbit_node").
-  seq:add(wait_for_soi_change_kerbin@). seqn:add("wait_for_soi_change_kerbin").
   seq:add(atmo_reentry@). seqn:add("atmo_reentry").
   seq:add(finish@). seqn:add("finish").
 }
