@@ -3,6 +3,7 @@
     "gaussian",gaussian@,
     "gaussian2",gaussian2@
   ).
+  // Value, Target, Width
   function gaussian { parameter v, t, w. return constant:e^(-1 * (v-t)^2 / (2*w^2)). }
   function gaussian2 {
     parameter v1, t1, w1, v2, t2, w2.
