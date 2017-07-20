@@ -1,4 +1,4 @@
-# https://gist.github.com/chippydip/75d67e902a3a88b9534fa809c3fe78b4
+// https://gist.github.com/chippydip/75d67e902a3a88b9534fa809c3fe78b4
 @lazyglobal off.
 
 function countdown {

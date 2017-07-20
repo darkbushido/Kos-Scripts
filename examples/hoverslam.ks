@@ -1,5 +1,5 @@
-# https://www.reddit.com/r/Kos/comments/5rvyoe/how_do_i_calculate_suicide_burn_altitude/
-# https://github.com/mrbradleyjh/KOS-Hoverslam/blob/master/hoverslam.ks
+// https://www.reddit.com/r/Kos/comments/5rvyoe/how_do_i_calculate_suicide_burn_altitude/
+// https://github.com/mrbradleyjh/KOS-Hoverslam/blob/master/hoverslam.ks
 clearscreen.
 set radarOffset to 9.184.	 				// The value of alt:radar when landed (on gear)
 lock trueRadar to alt:radar - radarOffset.			// Offset radar to get distance from gear to ground

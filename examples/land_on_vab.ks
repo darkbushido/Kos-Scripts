@@ -11,7 +11,7 @@ set tare_altitude to alt:radar.
 // Geoposition for the VAB.  This latitude-longitude pair is nicely above the
 // helipad.
 set vablat to -(5.0 + 48.0/60)/60.
-set vablon to -(74.0 + (37.0 + 06.0/60)/60).
+set vablon to -(74.0 + (37.0 + 17.5/60)/60).
 set vabel to 200.0.
 
 lock vabtarget to latlng(vablat,vablon):altitudeposition(vabel).
@@ -39,7 +39,7 @@ set apexalt to 250.
 set vabflat to latlng(vablat,vablon):altitudeposition(ship:altitude).
 
 // Geoposition of the desired ballistic apex
-set apexgeo to ship:body:geopositionof(0.5*vabflat).
+set apexgeo to ship:body:geopositionof(0.8*vabflat).
 
 // Vector to the ballistic apex.  This is referred to throughout flight, so it must
 // be defined as a 'lock' since these positions are all relative to the moving ship.
