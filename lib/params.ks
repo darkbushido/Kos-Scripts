@@ -21,12 +21,12 @@
     "PitchExp", has_key("LaunchPitchExp", 0.35),
     "OffSet", has_key("LaunchOffset", 3000),
     "Alt", has_key("LaunchAlt", BODY:ATM:HEIGHT + 10000),
+    "GTAlt", has_key("LaunchGTAlt", 8000),
     "Inc", has_key("LaunchInc", inc),
     "LAN", has_key("LaunchLAN", lan),
     "AStage", has_key("LaunchAutoStage", true),
     "MAXQ", has_key("LaunchMaxQ", false)
   ).
-
   local oalt to has_key("OrbitAlt", lp["Alt"]).
   local op to lex(
     "Alt", oalt,
@@ -50,6 +50,7 @@
 
   local lnd to lex(
     "LatLng", latlng(lnd_lat, lnd_lng),
+    "RAlt", has_key("LandRAlt", 35000),
     "HSMOD", has_key("LandHSMOD", 1),
     "RadarOffset", has_key("RadarOffset", 2.2),
     "EngineSpool", has_key("EngineSpool", 0),
@@ -60,7 +61,8 @@
     "L", lp, "O", op, "T", transfer_params,
     "LND", lnd, "NextShip", has_key("NextShip", false),
     "SwitchToShp", has_key("SwitchToShp", false),
-    "RenameShip", has_key("RenameShip", false)
+    "RenameShip", has_key("RenameShip", false),
+    "PrintLog", has_key("PrintLog", true)
   ).
   if notfalse(params["SwitchToShp"])
     set params["SwitchToShp"] to vessel(params["SwitchToShp"]).

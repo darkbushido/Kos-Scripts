@@ -24,7 +24,7 @@
   function deorbit {
     addons:tr:settarget(p["LND"]["LatLng"]).
     if ship:body:atm:exists
-      set landing_per_buffer to 55000.
+      set landing_per_buffer to p["LND"]["RAlt"].
     else
       set landing_per_buffer to 2000.
     set R_per_landing to ship:body:radius + max(4500,p["LND"]["LatLng"]:terrainheight + landing_per_buffer).

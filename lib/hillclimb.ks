@@ -1,11 +1,11 @@
 {
+  local p is import("lib/params.ks").
   local hillclimb is lex("seek", seek@).
   local fit_csh is lex().
   function seek {
     parameter d, f_fn, ss is 1.
     local nd is best_n(d, f_fn, ss).
     until f_fn(nd) <= f_fn(d) {
-      print "running a cycle.".
       set d to nd. set nd to best_n(d, f_fn, ss). wait 0.
     }
     return d.
@@ -19,7 +19,8 @@
       local n_key to hash_key(n).
       if fit_csh:haskey(n_key) { set fit to fit_csh[n_key]. set ch to true. }
       else { set fit to f_fn(n). fit_csh:add(n_key, fit).}
-      print_log(n, fit, ch).
+      if p["PrintLog"]
+        print_log(n, fit, ch).
       if fit > best_fit { set best to n. set best_fit to fit.}
     }
     return best.
