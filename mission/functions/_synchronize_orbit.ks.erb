@@ -1,0 +1,14 @@
+function synchronize_orbit {
+  if p["T"]["Target"] and p["T"]["Offset"] <> 0 {
+    local tsma to p["T"]["Target"]:obt:semimajoraxis.
+    print vessel("CommSat Mk-I"):obt:semimajoraxis.
+    print ship:obt:semimajoraxis.
+
+
+    print vessel("CommSat Mk-I"):obt:period.
+    print ship:obt:period.
+
+  }
+
+  next().
+}

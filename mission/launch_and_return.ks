@@ -45,8 +45,8 @@ function launch {
   } else { lock thrott to TPID:UPDATE(TIME:SECONDS, APOAPSIS). }
   lock throttle to thrott.
   stage.
-  wait until alt:radar > 10000.
-  lock pct_alt to ((alt:radar - 10000) / p["L"]["Alt"]).
+  wait until alt:radar > p["L"]["GTAlt"].
+  lock pct_alt to ((alt:radar - p["L"]["GTAlt"]) / p["L"]["Alt"]).
   lock target_pitch to 90 - (90* pct_alt^p["L"]["PitchExp"]).
   lock steering to heading(dir, target_pitch).
   if not ev:haskey("AutoStage") and p["L"]["AStage"] ev:add("AutoStage", ship_utils["auto_stage"]).
@@ -100,6 +100,7 @@ function atmo_reentry {
       if STAGE:READY {STAGE.}
       else {wait 1.}
     }
+    RADIATORS ON.
     ev:remove("Power"). ship_utils["disable"](). wait 5.
   } else if not ev:haskey("Power") {
     ev:add("Power", ship_utils["power"]). wait 5.

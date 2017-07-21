@@ -27,6 +27,7 @@ function atmo_reentry {
       if STAGE:READY {STAGE.}
       else {wait 1.}
     }
+    RADIATORS ON.
     ev:remove("Power"). ship_utils["disable"](). wait 5.
   } else if not ev:haskey("Power") {
     ev:add("Power", ship_utils["power"]). wait 5.
