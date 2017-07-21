@@ -6,9 +6,11 @@ for file in fileList {
 }
 COPYPATH("0:/mission/kerbin_land_on_target.ks", "1:/startup.ks").
 set params to lex(
-  "LaunchPitchExp", 0.45,
-  "RadarOffset", 4.14,
-  "LandLat", -0.0972127658787422,
-  "LandLng", -74.5576065845002
+  "LaunchPitchExp", 0.4,
+  "LaunchGTAlt", 1000,
+  "LandRAlt", 30000,
+  // Kerbin Badlands?
+  "LandLat", -6.69991665842456,
+  "LandLng", 46.2574576786025
 ).
 writejson(params, "params.json").
