@@ -4,7 +4,7 @@
     "true_anom", eta_true_anom@
   ).
   function create_node {
-    parameter incl_t is 0, lan_t is SHIP:OBT:LAN.
+    parameter incl_t is 0, lan_t is SHIP:OBT:LAN, longway is false.
     local incl_i to SHIP:OBT:INCLINATION. local lan_i to SHIP:OBT:LAN.
     local Va to V(sin(incl_i)*cos(lan_i+90),sin(incl_i)*sin(lan_i+90),cos(incl_i)).
     local Vb to V(sin(incl_t)*cos(lan_t+90),sin(incl_t)*sin(lan_t+90),cos(incl_t)).
@@ -12,7 +12,9 @@
     local node_lng to mod(arctan2(Vc:Y,Vc:X)+360,360).
     local ship_ref to mod(obt:lan+obt:argumentofperiapsis+obt:trueanomaly,360).
     local ship_2_node to mod((720 + node_lng - ship_ref),360).
-    if ship_2_node > 180 { print "Switching to DN". set dv_factor to -1. set node_lng to mod(node_lng + 180,360). }
+    if (ship_2_node > 180 and not longway) or (longway and ship_2_node < 180) {
+      print "Switching to DN". set dv_factor to -1. set node_lng to mod(node_lng + 180,360).
+    }
     local node_true_anom to 360- mod(720 + (obt:lan + obt:argumentofperiapsis) - node_lng , 360 ).
     local ecc to OBT:ECCENTRICITY.
     local mr to OBT:SEMIMAJORAXIS * (( 1 - ecc^2)/ (1 + ecc*cos(node_true_anom)) ).

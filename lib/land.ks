@@ -12,12 +12,12 @@
   function fly_over_target {
     print "Adjusting Inclination and Lan to fly over target".
     local node_lng to mod(360+Body:ROTATIONANGLE+p["LND"]["LatLng"]:LNG,360).
-    node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90).
+    node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90, true).
     local n to NEXTNODE.
     local t_wait_burn to n:ETA + OBT:PERIOD/4.
     local rot_angle to t_wait_burn*360/Body:ROTATIONPERIOD.
     remove n.
-    node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90+rot_angle).
+    node_set_inc_lan["create_node"](p["LND"]["LatLng"]:LAT, node_lng-90+rot_angle, true).
     if nextnode:deltav:mag > 1 { node_exec["exec"](true). }
     else { remove nextnode.}
   }
