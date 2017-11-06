@@ -16,7 +16,10 @@ function download_updates {
   if list("","Dock"):contains(core:tag) local us to ship:name + ".ks".
   else local us to ship:name + "-" + core:tag + ".ks".
   PRINT "Looking for /updates_pending/" + us.
-  IF exists("0:/updates_pending/" + us) {
+  if exists("0:/routine_missions/" + core:tag) and not exists("1:/startup.ks") {
+    COPYPATH("0:/updates_pending/" + us, "1:/update.ks").
+    RUNPATH("1:/update.ks"). DELETEPATH("1:/update.ks").
+  } ELSE IF exists("0:/updates_pending/" + us) {
     IF exists("1:/update.ks") DELETEPATH("1:/update.ks").
     COPYPATH("0:/updates_pending/" + us, "1:/update.ks").
     MOVEPATH("0:/updates_pending/" + us, "0:/updates_applied/" + us).

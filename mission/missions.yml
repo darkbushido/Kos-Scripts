@@ -67,13 +67,14 @@ kerbin_power_land_on_target:
   - fly_over_target
   - deorbit_node
   - hoverslam
-  - collect_science
   - finish
 kerbin_land_on_target:
   - *ATMOLAUNCH
   - fly_over_target
   - deorbit_node
-  - *ATMOREENTRY
+  - atmo_reentry
+  - collect_science
+  - finish
 suicide_burn:
   - suicide_burn
   - finish
